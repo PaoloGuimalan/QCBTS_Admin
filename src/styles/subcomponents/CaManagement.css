@@ -1,0 +1,253 @@
+#div_camanagement{
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+#nav_camanagement{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0px;
+    height: 100%;
+}
+
+#header_nav_camanagement{
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    min-height: 100px;
+}
+
+.li_header_nav{
+    width: 50%;
+    background-color: transparent;
+}
+
+.li_header_nav:last-of-type{
+    background-color: transparent;
+}
+
+#admin_img_default{
+    width: 100%;
+    height: 100%;
+    max-width: 90px;
+    max-height: 90px;
+}
+
+#div_header{
+    background: transparent;
+    display: flex;
+    padding: 20px;
+    align-items: center;
+}
+
+#div_admin_info{
+    width: auto;
+    margin-left: 20px;
+}
+
+.label_admin_info{
+    color: white;
+    margin: 5px;
+}
+
+.label_admin_info:first-of-type{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.label_admin_info:last-of-type{
+    font-size: 15px;
+    text-align: left;
+}
+
+#notifbar_div{
+    background-color: transparent;
+    display: flex;
+    height: 100%;
+    justify-content: flex-end;
+    padding-right: 20px;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn_notifbar{
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border: solid 0px black;
+    border-radius: 10px;
+}
+
+.btn_notifbar:hover{
+    box-shadow: 0px 0px 5px black;
+}
+
+#nav_table_intro{
+    background-color: transparent;
+    display: flex;
+    margin-top: 10px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.li_table_intro{
+    width: 50%;
+}
+
+.li_table_intro:last-of-type{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.label_table_intro{
+    margin: 0px;
+    color: white;
+}
+
+.label_table_intro:first-of-type{
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.label_table_intro:last-of-type{
+    font-size: 12px;
+}
+
+#div_table_intro{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 20px;
+}
+
+#add_account_btn{
+    height: 35px;
+    width: 100%;
+    max-width: 120px;
+    border-radius: 10px;
+    font-size: 12px;
+    border: solid 0px white;
+    box-shadow: 0px 0px 5px black;
+    font-weight: bold;
+    color: #2b4273;
+    background-color: #ffbf00;
+    cursor: pointer;
+}
+
+#nav_list_section{
+    background-color: transparent;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+    padding-left: 30px;
+}
+
+#div_searchbar{
+    background: transparent;
+    display: flex;
+    height: 40px;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 5px black;
+    border-radius: 10px;
+}
+
+#search_input{
+    width: calc(100% - 50px);
+    border-radius: 10px 0px 0px 10px;
+    border: solid 0px black;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#btn_search{
+    width: 50px;
+    cursor: pointer;
+    border: solid 0px black;
+    border-radius: 0px 10px 10px 0px;
+    background-color: white;
+}
+
+#div_table_holder{
+    background: #ffbf00;
+    border-radius: 10px;
+    min-height: 55vh;
+    margin-bottom: 0px;
+}
+
+#table_company_list{
+    background: #ffbf00;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+    border-radius: 10px;
+    padding-bottom: 10px;
+    overflow-y: scroll;
+}
+
+#tr_header_company_list{
+    height: 40px;
+}
+
+.th_header_company_list{
+    width: 18%;
+    color: white;
+    font-size: 15px;
+    height: 40px;
+}
+
+.th_header_company_list:first-of-type{
+    width: 50px;
+}
+
+#tr_body_company_list{
+    background-color: #2b4273;
+    width: 100%;
+    height: 40px;
+}
+
+#li_company_list{
+    overflow-y: overlay;
+    height: 55vh;
+    margin-bottom: 20px;
+    background-color: #ffbf00;
+    margin-top: 15px;
+    border-radius: 10px;
+    border: solid 2px #ffbf00;
+}
+
+/* Scrollbar */
+
+/* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+/* Scrollbar End */

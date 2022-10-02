@@ -2,7 +2,7 @@ import React from 'react'
 import MainIndex from '../../maincomponents/MainIndex'
 import '../../../styles/subcomponents/Mapmanagement.css'
 
-function index() {
+function Index() {
   return (
     <div id='div_submap'>
         <MainIndex />
@@ -10,4 +10,4 @@ function index() {
   )
 }
 
-export default index
+export default Index
