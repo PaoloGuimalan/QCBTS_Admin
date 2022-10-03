@@ -1,4 +1,4 @@
-import { SET_AUTH, SET_COMPANY_LIST } from "../types";
+import { SET_AUTH, SET_COMPANY_LIST, SET_COMPANY_REG_LIST } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -20,6 +20,15 @@ export const setcompanylist = (state = [], action) => {
     switch(action.type){
         case SET_COMPANY_LIST:
             return action.companylist;
+        default:
+            return state;
+    }
+}
+
+export const setcompanyreglist = (state = [], action) => {
+    switch(action.type){
+        case SET_COMPANY_REG_LIST:
+            return action.companyreglist;
         default:
             return state;
     }

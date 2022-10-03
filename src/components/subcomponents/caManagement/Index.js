@@ -42,9 +42,9 @@ function Index() {
     })
   }
 
-  const updateCompanyStatus = (cmpID, sts) => {
+  const updateCompanyStatus = (cmpAdID, sts) => {
     Axios.post(`${URL}/admin/updatecompanystatus`, {
-        companyID: cmpID,
+        companyAdminID: cmpAdID,
         status: sts
     },{
         headers:{
@@ -114,7 +114,7 @@ function Index() {
                                         <th className='th_header_company_list'></th>
                                         <th className='th_header_company_list'>Company Name</th>
                                         <th className='th_header_company_list'>Company ID</th>
-                                        <th className='th_header_company_list'>Contact Number</th>
+                                        <th className='th_header_company_list'>Admin Fullname</th>
                                         <th className='th_header_company_list'>Email</th>
                                         <th className='th_header_company_list'>Status</th>
                                     </tr>
@@ -123,8 +123,8 @@ function Index() {
                                             <tr key={i} id='tr_body_company_list'>
                                                 <td className='td_data_company_list'>{/*data.preview*/}____</td>
                                                 <td className='td_data_company_list'>{data.companyName}</td>
-                                                <td className='td_data_company_list'>{data.companyID}</td>
-                                                <td className='td_data_company_list'>{data.companyNumber}</td>
+                                                <td className='td_data_company_list'>{data.companyID}<br />{data.companyAdminID}</td>
+                                                <td className='td_data_company_list'>{data.companyAdmin.firstname} {data.companyAdmin.lastname}</td>
                                                 <td className='td_data_company_list'>
                                                     <a className='link_conf' href={`mailto:${data.email}`}>{data.email}</a>
                                                 </td>
@@ -133,7 +133,7 @@ function Index() {
                                                         color: data.status? "lime" : "red"
                                                     }} className='p_status_label'>{data.status? "Activated" : "Deactivated"}</motion.p>
                                                     <motion.button onClick={() => {
-                                                        updateCompanyStatus(data.companyID, data.status? false : true);
+                                                        updateCompanyStatus(data.companyAdminID, data.status? false : true);
                                                     }} animate={{
                                                         backgroundColor: data.status? "red" : "lime"
                                                     }} id='btn_activation'>{data.status? "Deactivate?" : "Activate?"}</motion.button>
