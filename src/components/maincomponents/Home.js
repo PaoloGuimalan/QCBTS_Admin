@@ -10,6 +10,7 @@ import { motion } from 'framer-motion'
 import SubHome from '../subcomponents/home/Index';
 import SubMap from '../subcomponents/mapmanagement/Index'
 import SubCAManagement from '../subcomponents/caManagement/Index'
+import AddCompany from '../subcomponents/caManagement/AddCompany';
 
 function Home() {
 
@@ -139,6 +140,7 @@ function Home() {
                 <Route path='/' element={<SubHome />} />
                 <Route path='/map' element={<SubMap />} />
                 <Route path='/camanagement' element={<SubCAManagement />} />
+                <Route path='/camanagement/addcompany' element={<AddCompany />} />
               </Routes>
             </li>
           </nav>

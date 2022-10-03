@@ -1,19 +1,66 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import DefaultImg from '../../../resources/defaultimg.png'
 import '../../../styles/subcomponents/CaManagement.css';
 import BellIcon from '@material-ui/icons/Notifications'
 import MessagesIcon from '@material-ui/icons/Message'
 import SearchIcon from '@material-ui/icons/Search'
 import { useNavigate } from 'react-router-dom';
+import Axios from 'axios';
+import { URL } from '../../../json/urlconfig'
+import { SET_COMPANY_LIST } from '../../../redux/types';
+import { motion } from 'framer-motion'
 
 function Index() {
 
   const auth = useSelector(state => state.authdetails);
+  const companylist = useSelector(state => state.companylist);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const goToModule = (path) => {
     navigate(path)
+  }
+
+  useEffect(() => {
+    fetchCompanyList()
+  }, [])
+
+  const fetchCompanyList = () => {
+    Axios.get(`${URL}/admin/companylist`, {
+        headers:{
+            "x-access-token": localStorage.getItem("token")
+        }
+    }).then((response) => {
+        if(response.data.status){
+            // console.log(response.data)
+            dispatch({type: SET_COMPANY_LIST, companylist: response.data.result});
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
+  }
+
+  const updateCompanyStatus = (cmpID, sts) => {
+    Axios.post(`${URL}/admin/updatecompanystatus`, {
+        companyID: cmpID,
+        status: sts
+    },{
+        headers:{
+            "x-access-token": localStorage.getItem("token")
+        }
+    }).then((response) => {
+        if(response.data.status){
+            fetchCompanyList();
+            // console.log(response.data.result);
+        }
+        else{
+            // console.log(response.data.result);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
   }
 
   return (
@@ -47,7 +94,7 @@ function Index() {
                         </div>
                     </li>
                     <li className='li_table_intro'>
-                        <button id='add_account_btn'>ADD ACCOUNT</button>
+                        <button onClick={() => { goToModule("/home/camanagement/addcompany") }} id='add_account_btn'>ADD ACCOUNT</button>
                     </li>
                 </nav>
             </li>
@@ -71,14 +118,29 @@ function Index() {
                                         <th className='th_header_company_list'>Email</th>
                                         <th className='th_header_company_list'>Status</th>
                                     </tr>
-                                    <tr id='tr_body_company_list'>
-                                        <td>Hello</td>
-                                        <td>Hello</td>
-                                        <td>Hello</td>
-                                        <td>Hello</td>
-                                        <td>Hello</td>
-                                        <td>Hello</td>
-                                    </tr>
+                                    {companylist.map((data, i) => {
+                                        return(
+                                            <tr key={i} id='tr_body_company_list'>
+                                                <td className='td_data_company_list'>{/*data.preview*/}____</td>
+                                                <td className='td_data_company_list'>{data.companyName}</td>
+                                                <td className='td_data_company_list'>{data.companyID}</td>
+                                                <td className='td_data_company_list'>{data.companyNumber}</td>
+                                                <td className='td_data_company_list'>
+                                                    <a className='link_conf' href={`mailto:${data.email}`}>{data.email}</a>
+                                                </td>
+                                                <td className='td_data_company_list'>
+                                                    <motion.p animate={{
+                                                        color: data.status? "lime" : "red"
+                                                    }} className='p_status_label'>{data.status? "Activated" : "Deactivated"}</motion.p>
+                                                    <motion.button onClick={() => {
+                                                        updateCompanyStatus(data.companyID, data.status? false : true);
+                                                    }} animate={{
+                                                        backgroundColor: data.status? "red" : "lime"
+                                                    }} id='btn_activation'>{data.status? "Deactivate?" : "Activate?"}</motion.button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </table>
                         </div>
