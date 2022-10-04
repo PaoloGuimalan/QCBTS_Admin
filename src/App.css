@@ -6,6 +6,27 @@
   overflow-y: auto;
 }
 
+#alert_div{
+  position: fixed;
+  background-color: #ffbf00;
+  width: 90%;
+  height: auto;
+  min-height: 70px;
+  max-width: 250px;
+  bottom: 10px;
+  right: -270px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 13px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px 1px black;
+  z-index: 5;
+  font-weight: bold;
+  opacity: 0.9;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

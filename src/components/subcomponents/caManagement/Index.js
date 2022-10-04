@@ -8,7 +8,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { URL } from '../../../json/urlconfig'
-import { SET_COMPANY_LIST } from '../../../redux/types';
+import { SET_ALERT, SET_COMPANY_LIST } from '../../../redux/types';
 import { motion } from 'framer-motion'
 
 function Index() {
@@ -26,6 +26,28 @@ function Index() {
   useEffect(() => {
     fetchCompanyList()
   }, [])
+
+  const alertPrompt = (statusPrompt, messagePrompt) => {
+    dispatch({ type: SET_ALERT, alert: {
+        trigger: true,
+        status: statusPrompt,
+        message: messagePrompt
+    } })
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: statusPrompt,
+            message: messagePrompt
+        } })
+    }, 3000)
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: false,
+            message: "..."
+        } })
+    }, 4000)
+  }
 
   const fetchCompanyList = () => {
     Axios.get(`${URL}/admin/companylist`, {
@@ -53,12 +75,15 @@ function Index() {
     }).then((response) => {
         if(response.data.status){
             fetchCompanyList();
+            alertPrompt(true, `${cmpAdID} account has been ${sts? "Activated" : "Deactivated"}`)
             // console.log(response.data.result);
         }
         else{
+            alertPrompt(false, `${sts? "Activation" : "Deactivation"} of ${cmpAdID} account failed`)
             // console.log(response.data.result);
         }
     }).catch((err) => {
+        alertPrompt(false, `Update Request Error`)
         console.log(err);
     })
   }

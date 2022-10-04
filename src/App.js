@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SET_AUTH } from './redux/types';
 import Axios from 'axios'
 import { URL } from './json/urlconfig'
+import { motion } from 'framer-motion';
 
 function App() {
   
@@ -17,6 +18,7 @@ function App() {
   const navigate = useNavigate();
 
   const auth = useSelector(state => state.authdetails);
+  const alert = useSelector(state => state.alert);
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
 
@@ -56,6 +58,17 @@ function App() {
 
   return (
     <div className="App">
+      <motion.div
+      animate={{
+        right: alert.trigger? "10px" : "-270px",
+        backgroundColor: alert.status? "green" : "red"
+      }}
+      transition={{
+        duration: 0.5
+      }}
+      id='alert_div'>
+        <p>{alert.message}</p>
+      </motion.div>
       <Routes>
         <Route path='/login' element={auth.status? <Navigate to='/home' /> : <Login />} />
         <Route path='/home/*' element={auth.status? <Home /> : <Navigate to='/login' />} />

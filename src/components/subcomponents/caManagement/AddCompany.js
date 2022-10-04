@@ -6,7 +6,7 @@ import DefaultIconComp from '../../../resources/defaultcompany.png'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_COMPANY_REG_LIST } from '../../../redux/types'
+import { SET_ALERT, SET_COMPANY_REG_LIST } from '../../../redux/types'
 
 function AddCompany() {
 
@@ -33,6 +33,28 @@ function AddCompany() {
     fetchCompanyRegList()
   }, [])
 
+  const alertPrompt = (statusPrompt, messagePrompt) => {
+    dispatch({ type: SET_ALERT, alert: {
+        trigger: true,
+        status: statusPrompt,
+        message: messagePrompt
+    } })
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: statusPrompt,
+            message: messagePrompt
+        } })
+    }, 3000)
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: false,
+            message: "..."
+        } })
+    }, 4000)
+  }
+
   const fetchCompanyRegList = () => {
     Axios.get(`${URL}/admin/companyreglist`, {
       headers:{
@@ -50,54 +72,79 @@ function AddCompany() {
   //MAKE DATA VALIDATION BEFORE SENDING TO SERVER
 
   const saveCompanyDetails = () => {
-    Axios.post(`${URL}/admin/createcompanyreg`, {
-        companyName: companyNameAC,
-        companyAddress: companyAddressAC,
-        companyNumber: companyNumberAC,
-        companyEmail: companyEmailAC,
-        preview: previewAC
-    },{
-      headers:{
-        "x-access-token": localStorage.getItem("token")
-      }
-    }).then((response) => {
-      if(response.data.status){
-        setcompanyNameAC("")
-        setcompanyNumberAC("")
-        setcompanyEmailAC("")
-        setcompanyAddressAC("")
-        setpreviewAC("none")
-        fetchCompanyRegList()
-      }
-    }).catch((err) => {
-      console.log(err);
-    })
+    if(companyNameAC == " " || companyNumberAC == " " || 
+      companyEmailAC == " " || companyAddressAC == " " || 
+      companyNameAC == "" || companyNumberAC == "" || 
+      companyEmailAC == "" || companyAddressAC == ""){
+      alertPrompt(false, `Please complete all fields`)
+    }
+    else{
+      Axios.post(`${URL}/admin/createcompanyreg`, {
+          companyName: companyNameAC,
+          companyAddress: companyAddressAC,
+          companyNumber: companyNumberAC,
+          companyEmail: companyEmailAC,
+          preview: previewAC
+      },{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          setcompanyNameAC("")
+          setcompanyNumberAC("")
+          setcompanyEmailAC("")
+          setcompanyAddressAC("")
+          setpreviewAC("none")
+          fetchCompanyRegList()
+          alertPrompt(true, `New Company/Operator has been Added`)
+        }
+        else{
+          alertPrompt(false, `Cannot process New Company`)
+        }
+      }).catch((err) => {
+        alertPrompt(false, `New Company Request failed`)
+        console.log(err);
+      })
+    }
   }
 
   const saveCompanyAdmin = () => {
-    Axios.post(`${URL}/admin/createcompanyadmin`, {
-      companyID: companyIDACA,
-      companyName: companyNameACA,
-      firstname: firstname,
-      lastname: lastname,
-      email: companyEmailACA,
-      password: password
-    }, {
-      headers:{
-        "x-access-token": localStorage.getItem("token")
-      }
-    }).then((response) => {
-      if(response.data.status){
-        setcompanyIDACA(null);
-        setcompanyNameACA(null);
-        setfirstname("");
-        setlastname("");
-        setcompanyEmailACA("");
-        setpassword("");
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
+    if(companyIDACA == null || companyNameACA == null || companyEmailACA == " " || password == " " || 
+    firstname == " " || lastname == " " || companyIDACA == "" || companyNameACA == "" || 
+    companyEmailACA == "" || password == "" || firstname == "" || lastname == ""){
+      alertPrompt(false, `Please complete all fields`)
+    }
+    else{
+      Axios.post(`${URL}/admin/createcompanyadmin`, {
+        companyID: companyIDACA,
+        companyName: companyNameACA,
+        firstname: firstname,
+        lastname: lastname,
+        email: companyEmailACA,
+        password: password
+      }, {
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          setcompanyIDACA(null);
+          setcompanyNameACA(null);
+          setfirstname("");
+          setlastname("");
+          setcompanyEmailACA("");
+          setpassword("");
+          alertPrompt(true, `New Admin has been Added`)
+        }
+        else{
+          alertPrompt(false, `New Admin failed to process`)
+        }
+      }).catch((err) => {
+        alertPrompt(false, `New Admin Request failed`)
+        console.log(err)
+      })
+    }
   }
 
   return (
