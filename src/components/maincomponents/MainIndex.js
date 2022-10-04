@@ -44,7 +44,7 @@ function Map(){
         minZoom: 12,
         disableDefaultUI: true,
         style: IconsDisplay,
-        mapTypeId: 'roadmap' //roadmap, satellite, terrain, hybrid
+        mapTypeId: 'satellite' //roadmap, satellite, terrain, hybrid
       }}
       onClick={(data) => {
         reverseGeoAPICall(data)

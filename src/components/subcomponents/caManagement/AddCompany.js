@@ -6,11 +6,14 @@ import DefaultIconComp from '../../../resources/defaultcompany.png'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ALERT, SET_COMPANY_REG_LIST } from '../../../redux/types'
+import { SET_ALERT, SET_COMPANY_DETAILS, SET_COMPANY_REG_LIST } from '../../../redux/types'
+import { companydetailsState } from '../../../redux/actions'
+import { motion } from 'framer-motion';
 
 function AddCompany() {
 
   const companyreglist = useSelector(state => state.companyreglist);
+  const companydetails = useSelector(state => state.companydetails);
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
@@ -136,6 +139,7 @@ function AddCompany() {
           setcompanyEmailACA("");
           setpassword("");
           alertPrompt(true, `New Admin has been Added`)
+          dispatch({ type: SET_COMPANY_DETAILS, companydetails: companydetailsState })
         }
         else{
           alertPrompt(false, `New Admin failed to process`)
@@ -144,6 +148,30 @@ function AddCompany() {
         alertPrompt(false, `New Admin Request failed`)
         console.log(err)
       })
+    }
+  }
+
+  const fetchCompanyDetails = (compID) => {
+    if(compID != null && compID != ""){
+      Axios.get(`${URL}/admin/companydetails/${compID}`, {
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          // console.log(response.data.result)
+          dispatch({ type: SET_COMPANY_DETAILS, companydetails: response.data.result })
+        }
+        else{
+          alertPrompt(false, `Request Error!`)
+        }
+      }).catch((err) => {
+        console.log(err);
+        alertPrompt(false, `Unable to Fetch Request!`)
+      })
+    }
+    else{
+      dispatch({ type: SET_COMPANY_DETAILS, companydetails: companydetailsState })
     }
   }
 
@@ -203,11 +231,36 @@ function AddCompany() {
           ) : (
             <nav id='div_addcompany_details'>
               <li>
+                  <motion.div
+                  animate={{
+                    minHeight: companydetails.companyID == ""? "0px" : "150px",
+                    transition:{
+                      delay: companydetails.companyID == ""? 1 : 0
+                    }
+                  }}
+                  id='div_selected_company_preview'>
+                    <motion.img
+                    animate={{
+                      width: companydetails.companyID == ""? "0%" : "100%",
+                      height: companydetails.companyID == ""? "0%" : "100%",
+                      transition:{
+                        delay: companydetails.companyID == ""? 0 : 0.5,
+                        duration: 1
+                      }
+                    }} 
+                    src={companydetails.preview == "" || "none"? DefaultIconComp : companydetails.preview} id='selected_company_img' />
+                    <div id='div_selected_company_data_holder'>
+                      <p id='p_selected_company_companyName'>{companydetails.companyName}</p>
+                      <p id='p_selected_company_companyAddress'>{companydetails.companyAddress}</p>
+                    </div>
+                  </motion.div>
+              </li>
+              <li>
                 <nav id='nav_company_inputs'>
                   <li>
                     <div id='company_name_holder'>
                       <p id='company_name_input_label'>Select a Company</p>
-                      <select type='text' onChange={(e) => { setcompanyNameACA(e.target.value.split(",")[0]); setcompanyIDACA(e.target.value.split(",")[1]) }} value={[companyNameACA, companyIDACA]} id='companyNameInput' name='companyNameInput'>
+                      <select type='text' onChange={(e) => { setcompanyNameACA(e.target.value.split(",")[0]); setcompanyIDACA(e.target.value.split(",")[1]); fetchCompanyDetails(e.target.value.split(",")[1]) }} value={[companyNameACA, companyIDACA]} id='companyNameInput' name='companyNameInput'>
                         <option value={[null, null]}>----Select a Company/Operator----</option>
                         {companyreglist.map((data, i) => {
                           return(
