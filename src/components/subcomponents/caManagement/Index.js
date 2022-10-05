@@ -10,6 +10,7 @@ import Axios from 'axios';
 import { URL } from '../../../json/urlconfig'
 import { SET_ALERT, SET_COMPANY_LIST } from '../../../redux/types';
 import { motion } from 'framer-motion'
+import DefaultIconComp from '../../../resources/defaultcompany.png'
 
 function Index() {
 
@@ -88,6 +89,16 @@ function Index() {
     })
   }
 
+  const redirectToCompDet = (compID) => {
+    // alert(compID);
+    navigate(`/home/camanagement/companyDetails/${compID}`)
+  }
+
+  const redirectToCompAdDet = (compAdID) => {
+    // alert(compAdID);
+    navigate(`/home/camanagement/companyAdminDetails/${compAdID}`)
+  }
+
   return (
     <div id='div_camanagement'>
         <nav id='nav_camanagement'>
@@ -146,9 +157,15 @@ function Index() {
                                     {companylist.map((data, i) => {
                                         return(
                                             <tr key={i} id='tr_body_company_list'>
-                                                <td className='td_data_company_list'>{/*data.preview*/}____</td>
-                                                <td className='td_data_company_list'>{data.companyName}</td>
-                                                <td className='td_data_company_list'>{data.companyID}<br />{data.companyAdminID}</td>
+                                                <td className='td_data_company_list'>
+                                                    <p>___</p>
+                                                    {/* <img src={data.preview == "" || "none"? DefaultIconComp : data.preview} id='selected_company_img' /> */}
+                                                </td>
+                                                <td className='td_data_company_list'><p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyName}</p></td>
+                                                <td className='td_data_company_list'>
+                                                    <p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyID}</p>
+                                                    <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdminID}</p>
+                                                </td>
                                                 <td className='td_data_company_list'>{data.companyAdmin.firstname} {data.companyAdmin.lastname}</td>
                                                 <td className='td_data_company_list'>
                                                     <a className='link_conf' href={`mailto:${data.email}`}>{data.email}</a>

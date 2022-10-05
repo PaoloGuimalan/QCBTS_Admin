@@ -11,6 +11,8 @@ import SubHome from '../subcomponents/home/Index';
 import SubMap from '../subcomponents/mapmanagement/Index'
 import SubCAManagement from '../subcomponents/caManagement/Index'
 import AddCompany from '../subcomponents/caManagement/AddCompany';
+import CompDetails from '../subcomponents/caManagement/CompDetails';
+import CompAdDetails from '../subcomponents/caManagement/CompAdDetails';
 
 function Home() {
 
@@ -141,6 +143,8 @@ function Home() {
                 <Route path='/map' element={<SubMap />} />
                 <Route path='/camanagement' element={<SubCAManagement />} />
                 <Route path='/camanagement/addcompany' element={<AddCompany />} />
+                <Route path='/camanagement/companyDetails/:companyID' element={<CompDetails />} />
+                <Route path='/camanagement/companyAdminDetails/:companyAdID' element={<CompAdDetails />} />
               </Routes>
             </li>
           </nav>
