@@ -36,6 +36,27 @@ function AddCompany() {
     fetchCompanyRegList()
   }, [])
 
+  useEffect(() => {
+    clearFields();
+  }, [formswitch]);
+
+  const clearFields = () => {
+      //Add Company
+      setcompanyNameAC("")
+      setcompanyNumberAC("")
+      setcompanyEmailAC("")
+      setcompanyAddressAC("")
+      setpreviewAC("none")
+      //Add Admin
+      setcompanyIDACA(null);
+      setcompanyNameACA(null);
+      setfirstname("");
+      setlastname("");
+      setcompanyEmailACA("");
+      setpassword("");
+      dispatch({ type: SET_COMPANY_DETAILS, companydetails: companydetailsState })
+  }
+
   const alertPrompt = (statusPrompt, messagePrompt) => {
     dispatch({ type: SET_ALERT, alert: {
         trigger: true,
