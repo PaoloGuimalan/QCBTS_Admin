@@ -158,7 +158,11 @@ function Index() {
                                         return(
                                             <tr key={i} id='tr_body_company_list'>
                                                 <td className='td_data_company_list'>
-                                                    <p>___</p>
+                                                    <motion.div
+                                                    animate={{
+                                                        backgroundColor: data.status? "lime" : "red"
+                                                    }}
+                                                    className='div_status_icon'>&nbsp;</motion.div>
                                                     {/* <img src={data.preview == "" || "none"? DefaultIconComp : data.preview} id='selected_company_img' /> */}
                                                 </td>
                                                 <td className='td_data_company_list'><p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyName}</p></td>
