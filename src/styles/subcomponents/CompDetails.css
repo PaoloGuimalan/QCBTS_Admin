@@ -1,0 +1,205 @@
+#div_addcompany{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    overflow-y: auto;
+}
+
+#nav_addcompany{
+    display: flex;
+    background-color: transparent;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+#div_addcompany_navigations{
+    background-color: transparent;
+    display: flex;
+    padding: 10px;
+    gap: 5px;
+    align-items: center;
+}
+
+#label_addcompany{
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    margin-top: 12px;
+}
+
+#btn_backicon{
+    width: 40px;
+    cursor: pointer;
+    background-color: transparent;
+    border: solid 0px black;
+}
+
+#nav_details_page{
+    background-color: white;
+    width: 90%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    flex-direction: column;
+}
+
+#nav_header_details{
+    background-color: transparent;
+    list-style-type: none;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-bottom: solid 1px #B2BEB5;
+}
+
+#img_header_details{
+    width: 100%;
+    height: 100%;
+    max-width: 100px;
+    max-height: 100px;
+}
+
+#div_header_labels{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.p_header_labels{
+    margin: 0px;
+    margin-bottom: 5px;
+    color: black;
+}
+
+.p_header_labels:first-of-type{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.p_header_labels:last-of-type{
+    font-size: 15px;
+}
+
+#li_header_middle_filler{
+    display: flex;
+    background-color: transparent;
+    flex: 1;
+}
+
+#div_header_contacts{
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    min-width: 120px;
+    height: 100%;
+    min-height: 40px;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.btn_header_companydata{
+    width: 100%;
+    height: 100%;
+    max-width: 40px;
+    min-height: 40px;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 5px;
+    border: solid 0px black
+}
+
+.btn_header_companydata:hover{
+    box-shadow: 0px 0px 2px black;
+}
+
+#nav_informations_company{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    padding-top: 5px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: flex-start;
+}
+
+.label_informations_company{
+    color: black;
+    font-size: 17px;
+    font-weight: bold;
+    /* margin-top: 10px; */
+    margin-bottom: 20px;
+    margin-top: 0px;
+}
+
+.p_data_labels{
+    font-size: 15px;
+    font-weight: normal;
+    margin: 0px;
+    font-weight: 600;
+}
+
+.p_data_record{
+    font-size: 13px;
+    padding-left: 20px;
+    margin: 10px;
+}
+
+#div_data_information_holder{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 00px;
+    width: 100%;
+    background-color: transparent;
+}
+
+#nav_information_section{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.li_holder_data{
+    width: calc(100% - 20px);
+}
+
+.li_information_section{
+    width: 50%;
+}
+
+.li_information_section:last-of-type{
+    border-left: solid 1px #B2BEB5;
+}
+
+#tbl_data_information{
+    width: calc(100% - 20px);
+    background-color: transparent;
+}
+
+.th_table_information{
+    text-align: left;
+    width: 20%;
+    min-width: 120px;
+    font-size: 13px;
+    background-color: transparent;
+}
+
+.td_table_information{
+    text-align: left;
+    font-size: 13px;
+    width: 100%;
+    display: flex;
+    flex: 1;
+    background-color: transparent;
+}

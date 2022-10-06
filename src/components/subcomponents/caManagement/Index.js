@@ -170,7 +170,9 @@ function Index() {
                                                     <p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyID}</p>
                                                     <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdminID}</p>
                                                 </td>
-                                                <td className='td_data_company_list'>{data.companyAdmin.firstname} {data.companyAdmin.lastname}</td>
+                                                <td className='td_data_company_list'>
+                                                    <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdmin.firstname} {data.companyAdmin.lastname}</p>
+                                                </td>
                                                 <td className='td_data_company_list'>
                                                     <a className='link_conf' href={`mailto:${data.email}`}>{data.email}</a>
                                                 </td>
