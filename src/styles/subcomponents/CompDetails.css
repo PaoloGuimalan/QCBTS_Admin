@@ -45,6 +45,7 @@
     padding: 10px;
     border-radius: 10px;
     flex-direction: column;
+    margin-bottom: 20px;
 }
 
 #nav_header_details{
@@ -202,4 +203,103 @@
     display: flex;
     flex: 1;
     background-color: transparent;
+}
+
+#div_adminslist{
+    background-color: transparent;
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    display: flex;
+}
+
+.div_lists{
+    background-color: #ffbf00;
+    width: calc(100% - 10px);
+    display: flex;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 250px;
+    overflow-y: scroll;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.tbl_lists{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.th_adminlist{
+    background-color: #2b4273;
+    height: 35px;
+    width: 20%;
+    color: white;
+}
+
+.th_adminlist:first-of-type{
+    border-top-left-radius: 10px;
+}
+
+.th_adminlist:last-of-type{
+    border-top-right-radius: 10px;
+}
+
+.td_adminlist{
+    font-size: 13px;
+    color: #36454F;
+}
+
+.link_conf_lists{
+    font-size: 13px;
+    color: #36454F;
+    text-decoration: underline;
+}
+
+.td_adminlist:nth-of-type(4){
+    font-weight: bold;
+}
+
+.td_adminlist:nth-of-type(1){
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.td_adminlist:nth-of-type(2){
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.td_adminlist:nth-of-type(1):hover{
+    text-decoration: underline;
+}
+
+.td_adminlist:nth-of-type(2):hover{
+    text-decoration: underline;
+}
+
+.btns_list{
+    margin: 2px;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    border: solid 0px black;
+}
+
+.btns_list:hover{
+    box-shadow: 0px 0px 2px black;
 }
