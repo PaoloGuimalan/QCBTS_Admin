@@ -2,7 +2,7 @@ import React from 'react'
 
 function Index() {
   return (
-    <div>HomeIndex</div>
+    <div>HomeI</div>
   )
 }
 
