@@ -5,7 +5,7 @@ import BackIcon from '@material-ui/icons/KeyboardArrowLeft'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_COMPANY_RECORD } from '../../../redux/types'
+import { SET_ALERT, SET_COMPANY_RECORD } from '../../../redux/types'
 import { companyRecordState } from '../../../redux/actions'
 import DefaultIconComp from '../../../resources/defaultcompany.png'
 import MessageIcon from '@material-ui/icons/Message';
@@ -13,6 +13,7 @@ import MailIcon from '@material-ui/icons/Mail'
 import CheckIcon from '@material-ui/icons/Check'
 import UncheckIcon from '@material-ui/icons/Close'
 import EditIcon from '@material-ui/icons/Edit'
+import InfoIcon from '@material-ui/icons/Info'
 import { motion } from 'framer-motion'
 
 function CompDetails() {
@@ -24,15 +25,33 @@ function CompDetails() {
   const companyID = params["companyID"];
 
   const companyrecord = useSelector(state => state.companyrecord);
+  const [editForm, seteditForm] = useState(false);
+
+  const [companyNameEdit, setcompanyNameEdit] = useState("");
+  const [companyEmailEdit, setcompanyEmailEdit] = useState("");
+  const [companyNumberEdit, setcompanyNumberEdit] = useState("");
+  const [companyAddressEdit, setcompanyAddressEdit] = useState("");
 
   useEffect(() => {
     // console.log(params["companyID"])
-    fetchCompanyData()
+    fetchCompanyData();
+    setDefaultEditValues();
 
     return () => {
       dispatch({ type: SET_COMPANY_RECORD, companyrecord: companyRecordState })
     }
-  }, [companyID])
+  }, [companyID]);
+
+  useEffect(() => {
+    setDefaultEditValues()
+  }, [companyrecord])
+
+  const setDefaultEditValues = () => {
+    setcompanyNameEdit(companyrecord.companydata.companyName);
+    setcompanyEmailEdit(companyrecord.companydata.email);
+    setcompanyNumberEdit(companyrecord.companydata.companyNumber);
+    setcompanyAddressEdit(companyrecord.companydata.companyAddress);
+  }
 
   const fetchCompanyData = () => {
     Axios.get(`${URL}/admin/allcompanydata/${companyID}`, {
@@ -71,6 +90,57 @@ function CompDetails() {
     })
   }
 
+  const alertPrompt = (statusPrompt, messagePrompt) => {
+    dispatch({ type: SET_ALERT, alert: {
+        trigger: true,
+        status: statusPrompt,
+        message: messagePrompt
+    } })
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: statusPrompt,
+            message: messagePrompt
+        } })
+    }, 3000)
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: false,
+            message: "..."
+        } })
+    }, 4000)
+  }
+
+  const updateCompanyData = () => {
+    Axios.post(`${URL}/admin/updateCompanyData`, {
+      companyID: companyID,
+      companyName: companyNameEdit,
+      companyNumber: companyNumberEdit,
+      companyEmail: companyEmailEdit,
+      companyAddress: companyAddressEdit
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        alertPrompt(true, response.data.result.message);
+        fetchCompanyData();
+        setDefaultEditValues();
+        seteditForm(false);
+      }
+      else{
+        fetchCompanyData();
+        setDefaultEditValues();
+        alertPrompt(false, response.data.result.message);
+      }
+    }).catch((err) => {
+      alertPrompt(false, "Unable to establish connection for update!");
+      console.log(err);
+    })
+  }
+
   const redirectToMessages = (compadID) => {
     navigate(`/home/messages/${compadID}`)
   }
@@ -105,7 +175,7 @@ function CompDetails() {
                 </li>
                 <li>
                   <div id='div_header_contacts'>
-                    <button title='Edit Details' className='btn_header_companydata'><EditIcon /></button>
+                    <button title='Edit Details' onClick={() => { seteditForm(!editForm); setDefaultEditValues(); }} className='btn_header_companydata'><EditIcon /></button>
                     <button title='Email' className='btn_header_companydata' onClick={() => { window.location.href = `mailto:${companyrecord.companydata.email}` }} ><MailIcon /></button>
                   </div>
                 </li>
@@ -168,6 +238,48 @@ function CompDetails() {
           </nav>
         </li>
         <li>
+          <motion.nav
+          animate={{
+            padding: editForm? "10px" : "0px",
+            height: editForm? "auto" : "0px"
+          }}
+          id='nav_details_page_edit'>
+            <li>
+              <div id='div_adminslist'>
+                <p className='label_informations_company'>Edit Info</p>
+              </div>
+            </li>
+            <li>
+              <div id='div_inputsedit'>
+                <div id='div_editinputs'>
+                  <div id='div_inputholder'>
+                    <div className='div_inputcontainers'>
+                      <p className='p_label_inputsedit'>Company Name</p>
+                      <input type='text' onChange={(e) => { setcompanyNameEdit(e.target.value) }} value={companyNameEdit} name='companyName' id='companyName' placeholder='Company Name' className='inputsedit' />
+                    </div>
+                    <div className='div_inputcontainers'>
+                      <p className='p_label_inputsedit'>Email</p>
+                      <input type='text' onChange={(e) => { setcompanyEmailEdit(e.target.value) }} value={companyEmailEdit} name='companyEmail' id='companyEmail' placeholder='Email' className='inputsedit' />
+                    </div>
+                    <div className='div_inputcontainers'>
+                      <p className='p_label_inputsedit'>Number</p>
+                      <input type='text' onChange={(e) => { setcompanyNumberEdit(e.target.value) }} value={companyNumberEdit} name='companyNumber' id='companyNumber' placeholder='Number' className='inputsedit' />
+                    </div>
+                    <div className='div_inputcontainers'>
+                      <p className='p_label_inputsedit'>Address</p>
+                      <textarea onChange={(e) => { setcompanyAddressEdit(e.target.value) }} value={companyAddressEdit} placeholder='Input Company Address here' id='address_textarea'></textarea>
+                    </div>
+                  </div>
+                  <div id='div_btns'>
+                    <button className='btn_edit_navs' onClick={() => { updateCompanyData() }}>Save</button>
+                    <button className='btn_edit_navs' onClick={() => { seteditForm(!editForm); setDefaultEditValues(); }}>Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </motion.nav>
+        </li>
+        <li>
           <nav id='nav_details_page'>
             <li>
               <div id='div_adminslist'>
@@ -202,6 +314,7 @@ function CompDetails() {
                             }}
                             className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
                             <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button>
+                            <button className='btns_list' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}><InfoIcon style={{fontSize: "15px"}} /></button>
                           </td>
                         </tr>
                       )
@@ -220,10 +333,39 @@ function CompDetails() {
               </div>
             </li>
             <li>
-              <div className='div_lists'>
-                <p>Hello</p>
-                <p>Hello</p>
-                <p>Hello</p>
+            <div className='div_lists'>
+                <table className='tbl_lists'>
+                  <tbody>
+                    <tr>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                    </tr>
+                    {/* {companyrecord.adminlist.map((records, i) => {
+                      return(
+                        <tr key={i}>
+                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdminID}</td>
+                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdmin.firstname} {records.companyAdmin.lastname}</td>
+                          <td className='td_adminlist'><a className='link_conf_lists' href={`mailto:${records.email}`}>{records.email}</a></td>
+                          <motion.td
+                          animate={{
+                            color: records.status? "green" : "red"
+                          }} 
+                          className='td_adminlist'>{records.status? "Activated" : "Deactivated"}</motion.td>
+                          <td>
+                            <button onClick={() => {
+                              updateCompanyStatus(records.companyAdminID, records.status? false : true)
+                            }}
+                            className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
+                            <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button>
+                          </td>
+                        </tr>
+                      )
+                    })} */}
+                  </tbody>
+                </table>
               </div>
             </li>
           </nav>

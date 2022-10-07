@@ -48,6 +48,42 @@
     margin-bottom: 20px;
 }
 
+#nav_details_page_edit{
+    background-color: white;
+    width: 90%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding: 0px;
+    border-radius: 10px;
+    flex-direction: column;
+    margin-bottom: 20px;
+    overflow-y: scroll;
+    height: 0px;
+}
+
+#div_inputsedit{
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#div_editinputs{
+    width: 100%;
+    background-color: transparent;
+}
+
+#div_inputholder{
+    background-color: transparent;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
 #nav_header_details{
     background-color: transparent;
     list-style-type: none;
@@ -225,6 +261,7 @@
     overflow-y: scroll;
     flex-direction: column;
     border-radius: 10px;
+    min-height: 70px;
 }
 
 .tbl_lists{
@@ -302,4 +339,76 @@
 
 .btns_list:hover{
     box-shadow: 0px 0px 2px black;
+}
+
+.div_inputcontainers{
+    background-color: transparent;
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.p_label_inputsedit{
+    margin: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-size: 13px;
+    font-weight: bold;
+    padding-left: 2px;
+}
+
+.inputsedit{
+    width: 100%;
+    max-width: 200px;
+    height: 25px;
+    border-radius: 5px;
+    border: solid 0px black;
+    box-shadow: 0px 0px 2px black;
+    padding: 5px;
+}
+
+#address_textarea{
+    width: 100%;
+    max-width: 300px;
+    min-width: 100px;
+    min-height: 70px;
+    border-radius: 10px;
+    border: solid 0px black;
+    box-shadow: 0px 0px 2px black;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
+}
+
+#div_btns{
+    background-color: transparent;
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.btn_edit_navs{
+    width: 90%;
+    max-width: 120px;
+    height: 35px;
+    border-radius: 5px;
+    border: solid 0px black;
+    box-shadow: 0px 0px 3px black;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+.btn_edit_navs:first-of-type{
+    background-color: lime;
+}
+
+.btn_edit_navs:last-of-type{
+    background-color: red;
 }
