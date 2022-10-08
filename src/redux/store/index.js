@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { setalert, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, userAuth } from '../actions';
+import { setalert, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, userAuth } from '../actions';
 
 const combiner = combineReducers({
     authdetails: userAuth,
@@ -7,7 +7,8 @@ const combiner = combineReducers({
     companyreglist: setcompanyreglist,
     alert: setalert,
     companydetails: setcompanydetails,
-    companyrecord: setcompanyrecord
+    companyrecord: setcompanyrecord,
+    compadmindetails: setcompadmindetails
 })
 
 const store = createStore(combiner);

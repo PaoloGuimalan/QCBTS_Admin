@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_AUTH, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST } from "../types";
+import { SET_ALERT, SET_AUTH, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -85,6 +85,27 @@ export const setcompanyrecord = (state = companyRecordState, action) => {
     switch(action.type){
         case SET_COMPANY_RECORD:
             return action.companyrecord;
+        default:
+            return state;
+    }
+}
+
+export const compAdminDetailsState = {
+    compAdDetails: {
+        companyAdmin: { firstname: '', lastname: '' }, 
+        companyID: '',
+        companyAdminID: '',
+        companyName: '',
+        status: null,
+        dateRegistered: '',
+        email: ''
+      }
+}
+
+export const setcompadmindetails = (state = compAdminDetailsState, action) => {
+    switch(action.type){
+        case SET_COMPADMIN_DETAILS:
+            return action.compadmindetails;
         default:
             return state;
     }
