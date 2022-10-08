@@ -13,7 +13,7 @@ import InfoIcon from '@material-ui/icons/Info'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_COMPADMIN_DETAILS } from '../../../redux/types'
+import { SET_ALERT, SET_COMPADMIN_DETAILS } from '../../../redux/types'
 import { compAdminDetailsState } from '../../../redux/actions'
 import { motion } from 'framer-motion'
 
@@ -27,10 +27,15 @@ function CompAdDetails() {
   const compadmindetails = useSelector(state => state.compadmindetails)
 
   const [editForm, seteditForm] = useState(false);
+  const [passwordForm, setpasswordForm] = useState(false);
 
   const [firstNameEdit, setfirstNameEdit] = useState("");
   const [lastNameEdit, setlastNameEdit] = useState("");
   const [emailEdit, setemailEdit] = useState("");
+
+  const [adminPassword, setadminPassword] = useState("");
+  const [newPassword, setnewPassword] = useState("");
+  const [newPasswordConfirm, setnewPasswordConfirm] = useState("");
 
   useEffect(() => {
     fetchCompAdminData()
@@ -90,6 +95,10 @@ function CompAdDetails() {
     setfirstNameEdit(compadmindetails.compAdDetails.companyAdmin.firstname);
     setlastNameEdit(compadmindetails.compAdDetails.companyAdmin.lastname);
     setemailEdit(compadmindetails.compAdDetails.email);
+
+    setadminPassword("");
+    setnewPassword("");
+    setnewPasswordConfirm("");
   }
 
   const updateCompAdminDetails = () => {
@@ -107,17 +116,75 @@ function CompAdDetails() {
         if(response.data.status){
           fetchCompAdminData()
           seteditForm(!editForm)
+          alertPrompt(true, response.data.result.message)
         }
         else{
-          console.log(response.data.result.message)
+          alertPrompt(false, response.data.result.message)
         }
       }).catch((err) => {
         console.log(err)
       })
     }
     else{
-      console.log("Please fill up all fields")
+      alertPrompt(false, "Please fill up all fields")
     }
+  }
+
+  const updateCompAdminPassword = () => {
+    if(newPassword != "" && adminPassword != "" && newPasswordConfirm != ""){
+      if(newPassword == newPasswordConfirm){
+        Axios.post(`${URL}/admin/updateCompanyAdminPassword`, {
+          compAdID: companyAdID,
+          adminPassword: adminPassword,
+          newPassword: newPassword
+        },{
+          headers:{
+            "x-access-token": localStorage.getItem("token")
+          }
+        }).then((response) => {
+          if(response.data.status){
+            setpasswordForm(false);
+            fetchCompAdminData();
+            setDefaultEditValues();
+            alertPrompt(true, response.data.result.message)
+          }
+          else{
+            alertPrompt(false, response.data.result.message)
+          }
+        }).catch((err) => {
+          alertPrompt(false, "Cannot connect to server!")
+          console.log(err);
+        })
+      }
+      else{
+        alertPrompt(false, "Password and Confirm Password do not match")
+      }
+    }
+    else{
+      alertPrompt(false, "Please complete all fields")
+    }
+  }
+
+  const alertPrompt = (statusPrompt, messagePrompt) => {
+    dispatch({ type: SET_ALERT, alert: {
+        trigger: true,
+        status: statusPrompt,
+        message: messagePrompt
+    } })
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: statusPrompt,
+            message: messagePrompt
+        } })
+    }, 3000)
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: false,
+            message: "..."
+        } })
+    }, 4000)
   }
 
   return (
@@ -146,7 +213,7 @@ function CompAdDetails() {
                 </li>
                 <li>
                   <div id='div_header_contacts'>
-                    <button title='Edit Details' onClick={() => { seteditForm(!editForm); setDefaultEditValues(); }} className='btn_header_companydata'><EditIcon /></button>
+                    <button title='Edit Details' onClick={() => { seteditForm(!editForm); setpasswordForm(false); setDefaultEditValues(); }} className='btn_header_companydata'><EditIcon /></button>
                     <button title='Email' className='btn_header_companydata' onClick={() => { window.location.href = `mailto:${compadmindetails.compAdDetails.email}` }} ><MailIcon /></button>
                   </div>
                 </li>
@@ -243,6 +310,41 @@ function CompAdDetails() {
         <li>
           <motion.nav
             animate={{
+              padding: passwordForm? "10px" : "0px",
+              height: passwordForm? "auto" : "0px"
+            }}
+            id='nav_details_page_edit'>
+            <li>
+              <div id='div_adminslist'>
+                <p className='label_informations_company'>Update Password</p>
+              </div>
+            </li>
+            <li>
+              <div id='div_inputsedit'>
+                <div id='div_editinputs'>
+                  <div id='div_inputholder'>
+                    <div className='div_inputcontainers'>
+                      <p className='p_label_inputsedit'>Admin Password</p>
+                      <input type='password' onChange={(e) => { setadminPassword(e.target.value) }} value={adminPassword} name='companyEmail' id='companyEmail' placeholder='Your password for authorization' className='inputsedit' />
+                    </div>
+                    <div className='div_inputcontainers'>
+                      <p className='p_label_inputsedit'>New Password</p>
+                      <input type='password' onChange={(e) => { setnewPassword(e.target.value) }} value={newPassword} name='firstNameAdmin' id='firstNameAdmin' placeholder='New Password' className='inputsedit' />
+                      <input type='password' onChange={(e) => { setnewPasswordConfirm(e.target.value) }} value={newPasswordConfirm} name='lastNameAdmin' id='lastNameAdmin' placeholder='Confirm Password' className='inputsedit' />
+                    </div>
+                  </div>
+                  <div id='div_btns'>
+                    <button className='btn_update_navs' onClick={() => { updateCompAdminPassword() }}>Update</button>
+                    <button className='btn_edit_navs' onClick={() => { seteditForm(false); setDefaultEditValues(); setpasswordForm(false) }}>Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </motion.nav>
+        </li>
+        <li>
+          <motion.nav
+            animate={{
               padding: editForm? "10px" : "0px",
               height: editForm? "auto" : "0px"
             }}
@@ -266,7 +368,7 @@ function CompAdDetails() {
                       <input type='text' onChange={(e) => { setemailEdit(e.target.value) }} value={emailEdit} name='companyEmail' id='companyEmail' placeholder='Email' className='inputsedit' />
                     </div>
                     <div className='div_inputcontainers div_inputcontainers_centered'>
-                      <button id='change_paswword_btn'>Change Password</button>
+                      <button id='change_paswword_btn' onClick={() => { setpasswordForm(true); seteditForm(false); setDefaultEditValues(); }}>Change Password</button>
                     </div>
                   </div>
                   <div id='div_btns'>
