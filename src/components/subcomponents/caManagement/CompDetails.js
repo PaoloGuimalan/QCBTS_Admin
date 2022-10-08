@@ -113,32 +113,37 @@ function CompDetails() {
   }
 
   const updateCompanyData = () => {
-    Axios.post(`${URL}/admin/updateCompanyData`, {
-      companyID: companyID,
-      companyName: companyNameEdit,
-      companyNumber: companyNumberEdit,
-      companyEmail: companyEmailEdit,
-      companyAddress: companyAddressEdit
-    },{
-      headers:{
-        "x-access-token": localStorage.getItem("token")
-      }
-    }).then((response) => {
-      if(response.data.status){
-        alertPrompt(true, response.data.result.message);
-        fetchCompanyData();
-        setDefaultEditValues();
-        seteditForm(false);
-      }
-      else{
-        fetchCompanyData();
-        setDefaultEditValues();
-        alertPrompt(false, response.data.result.message);
-      }
-    }).catch((err) => {
-      alertPrompt(false, "Unable to establish connection for update!");
-      console.log(err);
-    })
+    if(companyNameEdit != "" && companyEmailEdit != "" && companyNumberEdit != "" && companyAddressEdit != ""){
+      Axios.post(`${URL}/admin/updateCompanyData`, {
+        companyID: companyID,
+        companyName: companyNameEdit,
+        companyNumber: companyNumberEdit,
+        companyEmail: companyEmailEdit,
+        companyAddress: companyAddressEdit
+      },{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          alertPrompt(true, response.data.result.message);
+          fetchCompanyData();
+          setDefaultEditValues();
+          seteditForm(false);
+        }
+        else{
+          fetchCompanyData();
+          setDefaultEditValues();
+          alertPrompt(false, response.data.result.message);
+        }
+      }).catch((err) => {
+        alertPrompt(false, "Unable to establish connection for update!");
+        console.log(err);
+      })
+    }
+    else{
+      alertPrompt(false, "Please fill up all fields")
+    }
   }
 
   const redirectToMessages = (compadID) => {
@@ -154,7 +159,9 @@ function CompDetails() {
       <nav id='nav_addcompany'>
         <li>
           <div id='div_addcompany_navigations'>
-            <button id='btn_backicon' onClick={() => { navigate("/home/camanagement") }} ><BackIcon style={{ fontSize: "35px", color: "white" }} /></button>
+            <button id='btn_backicon' onClick={() => { 
+              navigate(-1) 
+            }} ><BackIcon style={{ fontSize: "35px", color: "white" }} /></button>
             <p id='label_addcompany'>Company Details</p>
           </div>
         </li>

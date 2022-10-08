@@ -201,7 +201,7 @@ function AddCompany() {
       <nav id='nav_addcompany'>
         <li>
           <div id='div_addcompany_navigations'>
-            <button id='btn_backicon' onClick={() => { navigate("/home/camanagement") }} ><BackIcon style={{ fontSize: "35px", color: "white" }} /></button>
+            <button id='btn_backicon' onClick={() => { navigate(-1) }} ><BackIcon style={{ fontSize: "35px", color: "white" }} /></button>
             <p id='label_addcompany'>Add / Register Details | {formswitch? "Add Company" : "Add Company Admin"}</p>
           </div>
         </li>
