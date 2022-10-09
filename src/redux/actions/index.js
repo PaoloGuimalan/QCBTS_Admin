@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_AUTH, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST } from "../types";
+import { SET_ALERT, SET_AUTH, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_MAP_MODE } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -106,6 +106,15 @@ export const setcompadmindetails = (state = compAdminDetailsState, action) => {
     switch(action.type){
         case SET_COMPADMIN_DETAILS:
             return action.compadmindetails;
+        default:
+            return state;
+    }
+}
+
+export const setmapmode = (state = "none", action) => {
+    switch(action.type){
+        case SET_MAP_MODE:
+            return action.mapmode;
         default:
             return state;
     }
