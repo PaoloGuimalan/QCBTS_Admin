@@ -7,7 +7,8 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_MAP_MODE } from '../../../redux/types/index'
+import { SET_MAP_MODE, SET_SELECTED_AREA } from '../../../redux/types/index'
+import { selectedAreaState } from '../../../redux/actions'
 
 function Index() {
 
@@ -22,6 +23,11 @@ function Index() {
       dispatch({ type: SET_MAP_MODE, mapmode: "none" })
     }
   },[])
+
+  const BusStopMenuClose = () => {
+    dispatch({ type: SET_MAP_MODE, mapmode: "none" })
+    dispatch({ type: SET_SELECTED_AREA, selectedarea: selectedAreaState })
+  }
 
   return (
     <div id='div_submap'>
@@ -61,7 +67,7 @@ function Index() {
             <li id='li_bus_stops_menu_header'>
               <div id='div_bus_stops_header'>
                 <p id='div_bus_stops_label'>Bus Stops Menu</p>
-                <button id='btn_bus_stops_close' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "none" }) }}><CloseIcon /></button>
+                <button id='btn_bus_stops_close' onClick={() => { BusStopMenuClose() }}><CloseIcon /></button>
               </div>
             </li>
             <li id='li_bus_stops_data_holder'>

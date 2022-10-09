@@ -2,3 +2,41 @@
     width: 100%;
     height: 100%;
 }
+
+#div_selected_area{
+    width: 200px;
+    display: flex;
+    background-color: transparent;
+    flex-direction: column;
+    text-align: left;
+}
+
+#p_label_window{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.full_address_label{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.p_data_area{
+    margin-top: 5px;
+}
+
+.p_data_area_coords{
+    margin: 0px;
+}
+
+.p_data_area_coords:last-of-type{
+    margin-bottom: 10px;
+}
+
+/* .gm-style-iw + div {display: none;} */
+
+button.gm-ui-hover-effect {
+    visibility: hidden;
+}
