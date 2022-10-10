@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_AUTH, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_MAP_MODE, SET_SELECTED_AREA } from "../types";
+import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_MARKER } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -135,6 +135,49 @@ export const setselectedarea = (state = selectedAreaState, action) => {
     switch(action.type){
         case SET_SELECTED_AREA:
             return action.selectedarea;
+        default:
+            return state;
+    }
+}
+
+export const selectedAreaInputState = {
+    longitude: "",
+    latitude: "",
+    stationName: "",
+    stationAddress: "",
+}
+
+export const setselectedareainput = (state = selectedAreaInputState, action) => {
+    switch(action.type){
+        case SET_SELECTED_AREA_INPUT:
+            return action.selectedareainput;
+        default:
+            return state;
+    }
+}
+
+export const setbusstopslist = (state = [], action) => {
+    switch(action.type){
+        case SET_BUS_STOPS_LIST:
+            return action.busstopslist;
+        default:
+            return state;
+    }
+}
+
+export const setcentermap = (state = { lat: 14.647296, lng: 121.061376 }, action) => {
+    switch(action.type){
+        case SET_CENTER_MAP:
+            return action.centermap;
+        default:
+            return state;
+    }
+}
+
+export const setselectedmarker = (state = null, action) => {
+    switch(action.type){
+        case SET_SELECTED_MARKER:
+            return action.selectedmarker;
         default:
             return state;
     }

@@ -25,6 +25,7 @@
 
 .p_data_area{
     margin-top: 5px;
+    text-align: left;
 }
 
 .p_data_area_coords{
@@ -37,6 +38,74 @@
 
 /* .gm-style-iw + div {display: none;} */
 
-button.gm-ui-hover-effect {
+/* button.gm-ui-hover-effect {
     visibility: hidden;
+} */
+
+#div_btns_infowinfow{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn_infoWindow{
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: solid 0px black;
+    color: white;
+}
+
+.btn_infoWindow:first-of-type{
+    background-color: #ffbf00;
+}
+
+.btn_infoWindow:last-of-type{
+    background-color: red;
+}
+
+.div_infowindow_existing_bs{
+    background-color: transparent;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#p_stationName{
+    font-weight: bold;
+    margin-top: 5px;
+    border-bottom: solid 1px #ffbf00;
+}
+
+.subdata_existing_bs{
+    margin: 0px;
+    text-align: left;
+}
+
+#table_existing_bs{
+    background-color: transparent;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.btn_infoWindow_existing_bs{
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: solid 0px black;
+    color: white;
+}
+
+.btn_infoWindow_existing_bs:first-of-type{
+    background-color: #ffbf00;
+}
+
+.btn_infoWindow_existing_bs:last-of-type{
+    background-color: #ffbf00;
 }
