@@ -187,7 +187,7 @@ function Index() {
                             return(
                               <tr onClick={() => {
                                 dispatch({ type: SET_CENTER_MAP, centermap: { lat: parseFloat(list.coordinates.latitude), lng: parseFloat(list.coordinates.longitude) }})
-                                dispatch({ type: SET_SELECTED_MARKER, selectedmarker: list })
+                                dispatch({ type: SET_SELECTED_MARKER, selectedmarker: list.busStopID })
                               }} key={i} className='tr_content_bus_stops_list'>
                                 <td>{list.busStopID}</td>
                                 <td>{list.stationName}</td>

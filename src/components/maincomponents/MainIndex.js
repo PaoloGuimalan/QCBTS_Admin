@@ -164,11 +164,11 @@ function Map(){
               anchor: new google.maps.Point(25, 25),
               scaledSize: new google.maps.Size(25, 25),
             }}
-            onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data }) }}
+            onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
             key={i}
             position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
           >
-            {selectedMarker == data? (
+            {selectedMarker == data.busStopID? (
               <InfoWindow onCloseClick={() => {
                 dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
               }}>
