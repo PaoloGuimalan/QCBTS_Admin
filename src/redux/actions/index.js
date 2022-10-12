@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_MARKER } from "../types";
+import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -178,6 +178,31 @@ export const setselectedmarker = (state = null, action) => {
     switch(action.type){
         case SET_SELECTED_MARKER:
             return action.selectedmarker;
+        default:
+            return state;
+    }
+}
+
+export const selectedDetailsState = {
+    status: false,
+    busStopID: "",
+    data: {
+        stationName: "",
+        stationAddress: "",
+        coordinates: {
+            longitude: "",
+            latitude: ""
+        },
+        dateAdded: "",
+        addedBy: "",
+        status: false
+    }
+}
+
+export const setselecteddetails = (state = selectedDetailsState, action) => {
+    switch(action.type){
+        case SET_SELECTED_DETAILS:
+            return action.selecteddetails;
         default:
             return state;
     }

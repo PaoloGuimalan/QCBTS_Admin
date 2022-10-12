@@ -5,8 +5,8 @@ import Axios from 'axios'
 import QCPath from '../../json/QCPath.json'
 import IconsDisplay from '../../json/IconsDisplay';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_ALERT, SET_CENTER_MAP, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_MARKER } from '../../redux/types';
-import { selectedAreaInputState, selectedAreaState } from '../../redux/actions';
+import { SET_ALERT, SET_CENTER_MAP, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER } from '../../redux/types';
+import { selectedAreaInputState, selectedAreaState, selectedDetailsState, setselecteddetails } from '../../redux/actions';
 import BusStopSelectionIcon from '../../resources/Pan_Blue_Circle.png'
 import { motion } from 'framer-motion'
 import OpennedIcon from '../../resources/OpenStop.png'
@@ -21,6 +21,7 @@ function Map(){
   const selectedareainput = useSelector(state => state.selectedareainput);
   const centerMap = useSelector(state => state.centermap);
   const selectedMarker = useSelector(state => state.selectedmarker);
+  const selecteddetails = useSelector(state => state.selecteddetails);
   const dispatch = useDispatch()
 
   const google = window.google;
@@ -124,12 +125,47 @@ function Map(){
     }).then((response) => {
       if(response.data.status){
         alertPrompt(true, response.data.result.message)
+        if(selecteddetails.status && (selecteddetails.busStopID == id)){
+          setSelectedDetailsWindow(id)
+        }
       }
       else{
         alertPrompt(false, response.data.result.message)
       }
     }).catch((err) => {
       alertPrompt(false, "Connection Error!")
+      console.log(err)
+    })
+  }
+
+  const setSelectedDetailsWindow = (passdataID) => {
+    //Fetch data in server and put this function in useEffect where conditioned if buslist changes and if status is true
+    Axios.get(`${URL}/admin/getSpecificBusStopData/${passdataID}`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        dispatch({ type: SET_SELECTED_DETAILS, selecteddetails: {
+          status: true,
+          busStopID: response.data.result.busStopID,
+          data: {
+              stationName: response.data.result.stationName,
+              stationAddress: response.data.result.stationAddress,
+              coordinates: {
+                  longitude: response.data.result.coordinates.longitude,
+                  latitude: response.data.result.coordinates.latitude
+              },
+              dateAdded: response.data.result.dateAdded,
+              addedBy: response.data.result.addedBy,
+              status: response.data.result.status
+          }
+        } })
+      }
+      else{
+        console.log(response.data.result.message)
+      }
+    }).catch((err) => {
       console.log(err)
     })
   }
@@ -144,7 +180,7 @@ function Map(){
         gestureHandling:'greedy',
         zoomControlOptions: { position: 3 },
         streetViewControl:false,
-        fullscreenControl:true,
+        fullscreenControl:false,
         maxZoom: 0,
         minZoom: 12,
         disableDefaultUI: true,
@@ -200,7 +236,7 @@ function Map(){
                       backgroundColor: data.status? "red" : "lime"
                     }}
                     className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
-                    <button className='btn_infoWindow_existing_bs' onClick={() => {  }}>View Details</button>
+                    <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
                   </div>
                 </div>
               </InfoWindow>
