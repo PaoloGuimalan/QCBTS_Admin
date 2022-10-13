@@ -1,0 +1,20 @@
+#div_default_display{
+    background-color: #5475BA;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+#p_default_label{
+    font-weight: bold;
+    color: #1D3462;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}

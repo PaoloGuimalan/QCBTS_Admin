@@ -13,6 +13,7 @@ import SubCAManagement from '../subcomponents/caManagement/Index'
 import AddCompany from '../subcomponents/caManagement/AddCompany';
 import CompDetails from '../subcomponents/caManagement/CompDetails';
 import CompAdDetails from '../subcomponents/caManagement/CompAdDetails';
+import Messages from '../subcomponents/messages/Messages';
 
 function Home() {
 
@@ -145,6 +146,7 @@ function Home() {
                 <Route path='/camanagement/addcompany' element={<AddCompany />} />
                 <Route path='/camanagement/companyDetails/:companyID' element={<CompDetails />} />
                 <Route path='/camanagement/companyAdminDetails/:companyAdID' element={<CompAdDetails />} />
+                <Route path='/messages/*' element={<Messages />} />
               </Routes>
             </li>
           </nav>
