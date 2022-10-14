@@ -79,3 +79,61 @@
     font-size: 13px;
     padding: 5px 10px 5px 10px;
 }
+
+#div_messages_list_array_container{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.div_indv_message_head{
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: calc(90% - 20px);
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 70px;
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+}
+
+.div_indv_message_head:hover{
+    box-shadow: 0px 0px 2px black;
+}
+
+.img_container_messages_list{
+    width: 100%;
+    height: 100%;
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.div_info_message_head{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px 10px 0px 10px ;
+}
+
+.p_info_container{
+    margin: 0px;
+    font-size: 13px;
+    color: white;
+}
+
+.p_info_container_label{
+    margin: 0px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+}
+

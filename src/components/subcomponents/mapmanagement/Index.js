@@ -358,7 +358,7 @@ function Index() {
                       </tr>
                       <tr className='tr_stationdetails'>
                         <th className='th_stationdetails'>Coordinates</th>
-                        <td className='td_stationdetails'>Lng: {selecteddetails.data.coordinates.latitude} <br /> Lat: {selecteddetails.data.coordinates.latitude}</td>
+                        <td className='td_stationdetails'>Lng: {selecteddetails.data.coordinates.longitude} <br /> Lat: {selecteddetails.data.coordinates.latitude}</td>
                       </tr>
                       <tr className='tr_stationdetails'>
                         <th className='th_stationdetails'>Date Added</th>
