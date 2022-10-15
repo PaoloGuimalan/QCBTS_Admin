@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER } from "../types";
+import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -203,6 +203,39 @@ export const setselecteddetails = (state = selectedDetailsState, action) => {
     switch(action.type){
         case SET_SELECTED_DETAILS:
             return action.selecteddetails;
+        default:
+            return state;
+    }
+}
+
+export const conversationListState = {
+    profiles: [],
+    conversations: []
+}
+
+export const setconversationlist = (state = conversationListState, action) => {
+    switch(action.type){
+        case SET_CONVERSATION_LIST:
+            return action.conversationlist;
+        default:
+            return state;
+    }
+}
+
+export const conversationDataState = {
+    userDetails: {
+        preview: "none",
+        userDisplayName: "",
+        userID: "",
+        userType: "",
+    },
+    conversation: []
+}
+
+export const setconversationdata = (state = conversationDataState, action) => {
+    switch(action.type){
+        case SET_CONVERSATION_DATA:
+            return action.conversationdata;
         default:
             return state;
     }

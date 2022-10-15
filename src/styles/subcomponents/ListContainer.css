@@ -102,9 +102,9 @@
     padding: 0px 10px 0px 10px;
 }
 
-.div_indv_message_head:hover{
+/* .div_indv_message_head:hover{
     box-shadow: 0px 0px 2px black;
-}
+} */
 
 .img_container_messages_list{
     width: 100%;
@@ -127,7 +127,7 @@
 .p_info_container{
     margin: 0px;
     font-size: 13px;
-    color: white;
+    color: 	#B2BEB5;
 }
 
 .p_info_container_label{
@@ -135,5 +135,9 @@
     font-size: 15px;
     font-weight: bold;
     color: white;
+}
+
+.link_message_header{
+    text-decoration: none;
 }
 

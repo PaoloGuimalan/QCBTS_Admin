@@ -68,7 +68,7 @@ function Index() {
         setSelectedDetailsWindow(selecteddetails.busStopID)
       }
     }).catch((err) => {
-      console.log(err);
+      // console.log(err);
       subscribeBusStopData();
       initBusStopsData();
       setSelectedDetailsWindow(selecteddetails.busStopID)

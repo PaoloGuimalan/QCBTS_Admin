@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { setalert, setbusstopslist, setcentermap, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setmapmode, setselectedarea, setselectedareainput, setselecteddetails, setselectedmarker, userAuth } from '../actions';
+import { setalert, setbusstopslist, setcentermap, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setconversationdata, setconversationlist, setmapmode, setselectedarea, setselectedareainput, setselecteddetails, setselectedmarker, userAuth } from '../actions';
 
 const combiner = combineReducers({
     authdetails: userAuth,
@@ -15,7 +15,9 @@ const combiner = combineReducers({
     busstopslist: setbusstopslist,
     centermap: setcentermap,
     selectedmarker: setselectedmarker,
-    selecteddetails: setselecteddetails
+    selecteddetails: setselecteddetails,
+    conversationlist: setconversationlist,
+    conversationdata: setconversationdata
 })
 
 const store = createStore(combiner);
