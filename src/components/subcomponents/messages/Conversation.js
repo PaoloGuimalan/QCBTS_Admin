@@ -90,7 +90,13 @@ function Conversation({filterType}) {
       }
     }).then((response) => {
       if(response.data.status){
-        subscribeMessages()
+        if(typeof cancelAxios != typeof undefined){
+          cancelAxios.cancel()
+          subscribeMessages()
+        }
+        else{
+          subscribeMessages()
+        }
         dispatch({ type: SET_CONVERSATION_DATA, conversationdata: response.data.result })
         scrollToBottom()
         // console.log(response.data.result)

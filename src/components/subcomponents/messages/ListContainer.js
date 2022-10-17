@@ -90,7 +90,13 @@ function ListContainer({filterType}) {
     }).then((response) => {
       if(response.data.status){
         // console.log("alert")
-        subscribeMessages()
+        if(typeof cancelAxios != typeof undefined){
+          cancelAxios.cancel()
+          subscribeMessages()
+        }
+        else{
+          subscribeMessages()
+        }
         dispatch({ type: SET_CONVERSATION_LIST, conversationlist: response.data.result })
       }
       else{
