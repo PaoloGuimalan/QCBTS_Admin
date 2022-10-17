@@ -67,7 +67,6 @@ function Conversation({filterType}) {
         if(response.data.status){
           //run init commands
           cancelAxios = undefined
-          initConversation()
           initMessagesList()
         }
         else{
@@ -110,6 +109,7 @@ function Conversation({filterType}) {
     }).then((response) => {
       if(response.data.status){
         // console.log("alert")
+        initConversation()
         dispatch({ type: SET_CONVERSATION_LIST, conversationlist: response.data.result })
       }
       else{
