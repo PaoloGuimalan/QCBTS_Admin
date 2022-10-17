@@ -149,6 +149,7 @@ function Conversation({filterType}) {
         if(response.data.status){
           //success
           setcontent("")
+          initMessagesList()
         }
         else{
           console.log(response.data.result.message)
