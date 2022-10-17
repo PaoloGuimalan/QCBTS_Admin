@@ -65,6 +65,7 @@ function Index() {
   const subscribeBusStopData = () => {
     if(typeof cancelAxios != typeof undefined){
       cancelAxios.cancel()
+      subscribeBusStopData()
     }
     else{
       cancelAxios = Axios.CancelToken.source()
