@@ -60,7 +60,8 @@ function Conversation({filterType}) {
       cancelAxios = Axios.CancelToken.source()
       Axios.get(`${URL}/messages/subscribeMessagesConvo`, {
         headers:{
-          "x-access-token": localStorage.getItem("token")
+          "x-access-token": localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*"
         },
         cancelToken: cancelAxios.token
       }).then((response) => {
