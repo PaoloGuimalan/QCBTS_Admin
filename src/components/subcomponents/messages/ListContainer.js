@@ -78,8 +78,9 @@ function ListContainer({filterType}) {
       }).catch((err) => {
         // cancelAxios()
         // subscribeMessages()
-        initMessagesList()
-        console.log(err);
+        if(err.message != 'canceled'){
+          initMessagesList()
+        }
       })
     }
   }
