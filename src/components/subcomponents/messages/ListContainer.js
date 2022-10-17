@@ -80,8 +80,9 @@ function ListContainer({filterType}) {
         // subscribeMessages()
         if(err.message != 'canceled'){
           initMessagesList()
+          console.log("error")
         }
-        console.log(err)
+        // console.log(err)
       })
     }
   }
