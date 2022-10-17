@@ -82,7 +82,7 @@ function Conversation({filterType}) {
         if(err.message != 'canceled'){
           initMessagesList()
         }
-        console.log(err)
+        // console.log(err)
       })
     }
   }
@@ -94,6 +94,7 @@ function Conversation({filterType}) {
       }
     }).then((response) => {
       if(response.data.status){
+        cancelAxios = undefined
         if(typeof cancelAxios != typeof undefined){
           cancelAxios.cancel()
           subscribeMessages()
