@@ -11,14 +11,22 @@ import CAIcon from '@material-ui/icons/Business'
 import AdminIcon from '@material-ui/icons/SupervisorAccount'
 import SelfIcon from '@material-ui/icons/Person'
 import ListContainer from './ListContainer';
+import { SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_SELECTED_TYPE } from '../../../redux/types';
 
 
 function Messages() {
 
   const navigate = useNavigate("")
   const params = useLocation();
+  const convID = params.pathname.split("/")[4]
+  const dispatch = useDispatch()
 
   const [selectedNav, setselectedNav] = useState("");
+  // const [selectedtype, setselectedtype] = useState("commuters");
+  // const [selectedConv, setselectedConv] = useState("");
+
+  const selectedconvID = useSelector(state => state.selectedconvID)
+  const selectedtype = useSelector(state => state.selectedtype)
 
   useEffect(() => {
     if(params.pathname.split("/")[3] == ""){
@@ -28,6 +36,7 @@ function Messages() {
 
   useEffect(() => {
     setselectedNav(params.pathname.split("/")[3])
+    // console.log(selectedNav)
   },[params])
 
   return (
@@ -38,28 +47,32 @@ function Messages() {
               backgroundColor: selectedNav == "co"? "#ffbf00" : "transparent"
             }}
             className='btn_navs_messages_main' onClick={() => {
-              navigate("/home/messages/co")
+              navigate("/home/messages/co");
+              dispatch({type: SET_SELECTED_TYPE, selectedtype: "commuters"})
             }}><QAIcon /></motion.button>
-            <motion.button
-            animate={{
-              backgroundColor: selectedNav == "ca"? "#ffbf00" : "transparent"
-            }}
-            className='btn_navs_messages_main' onClick={() => {
-              navigate("/home/messages/ca")
-            }}><DAIcon /></motion.button>
             <motion.button
             animate={{
               backgroundColor: selectedNav == "da"? "#ffbf00" : "transparent"
             }}
             className='btn_navs_messages_main' onClick={() => {
-              navigate("/home/messages/da")
+              navigate("/home/messages/da");
+              dispatch({type: SET_SELECTED_TYPE, selectedtype: "drivers"})
+            }}><DAIcon /></motion.button>
+            <motion.button
+            animate={{
+              backgroundColor: selectedNav == "ca"? "#ffbf00" : "transparent"
+            }}
+            className='btn_navs_messages_main' onClick={() => {
+              navigate("/home/messages/ca");
+              dispatch({type: SET_SELECTED_TYPE, selectedtype: "companyadmins"})
             }}><CAIcon /></motion.button>
             <motion.button
             animate={{
               backgroundColor: selectedNav == "sa"? "#ffbf00" : "transparent"
             }}
             className='btn_navs_messages_main' onClick={() => {
-              navigate("/home/messages/sa")
+              navigate("/home/messages/sa");
+              dispatch({type: SET_SELECTED_TYPE, selectedtype: "systemadmins"})
             }}><AdminIcon /></motion.button>
             <div id='flexed_div'></div>
             <button id='btn_message_account'><SelfIcon /></button>
