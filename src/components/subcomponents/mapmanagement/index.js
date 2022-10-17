@@ -87,7 +87,9 @@ function Index() {
         }
       }).catch((err) => {
         // console.log(err);
-        initBusStopsData();
+        if(err.message != 'canceled'){
+          initBusStopsData();
+        }
         setSelectedDetailsWindow(selecteddetails.busStopID)
       })
     }
