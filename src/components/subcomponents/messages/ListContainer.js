@@ -81,6 +81,7 @@ function ListContainer({filterType}) {
         if(err.message != 'canceled'){
           initMessagesList()
         }
+        console.log(err)
       })
     }
   }

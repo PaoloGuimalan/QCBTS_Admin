@@ -48,6 +48,7 @@ function Index() {
     }).then((response) => {
       if(response.data.status){
         // console.log(response.data.result);
+        cancelAxios.cancel()
         subscribeBusStopData()
         dispatch({ type: SET_BUS_STOPS_LIST, busstopslist: response.data.result })
       }

@@ -79,7 +79,10 @@ function Conversation({filterType}) {
       }).catch((err) => {
         // cancelAxios()
         // subscribeMessages()
-        initMessagesList()
+        if(err.message != 'canceled'){
+          initMessagesList()
+        }
+        console.log(err)
       })
     }
   }
