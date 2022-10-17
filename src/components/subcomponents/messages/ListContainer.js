@@ -139,37 +139,39 @@ function ListContainer({filterType}) {
             </div>
             <div id='div_messages_list_array_container'>
               {conversationlist.conversations.map((cnvs, i) => {
-                return(
-                  <Link key={i} to={`/home/messages/${selectedConvSection}/ex/${cnvs.conversationID}`} className='link_message_header'>
-                    <motion.div
-                    animate={{
-                      backgroundColor: selectedMessageHead == cnvs.conversationID? "#1D3462" : "transparent",
-                      boxShadow: selectedMessageHead == cnvs.conversationID? "0px 0px 2px black" : "0px 0px 0px black"
-                    }}
-                    whileHover={{
-                      boxShadow: "0px 0px 2px black",
-                      transition:{
-                        duration: 0
-                      }
-                    }}
-                    onClick={() => {
-                      dispatch({ type: SET_SELECTED_CONVID, selectedconvID: cnvs.conversationID })
-                    }}
-                    className='div_indv_message_head'>
-                      <img src={DefaultIconMessage} className='img_container_messages_list' />
-                      <div className='div_info_message_head'>
-                        {conversationlist.profiles.map((prfs, j) => {
-                          return(
-                            cnvs.to.userID == prfs.userID || cnvs.from.userID == prfs.userID? (
-                              <p key={j} className='p_info_container_label'>{prfs.userDisplayName}</p>
-                            ) : null
-                          )
-                        })}
-                        <p className='p_info_container'>{cnvs.from.userID == authdetails.userID? "you: " : ""}{cnvs.content}</p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                )
+                if(cnvs.to.userType == filterType || cnvs.from.userTyoe == filterType){
+                  return(
+                    <Link key={i} to={`/home/messages/${selectedConvSection}/ex/${cnvs.conversationID}`} className='link_message_header'>
+                      <motion.div
+                      animate={{
+                        backgroundColor: selectedMessageHead == cnvs.conversationID? "#1D3462" : "transparent",
+                        boxShadow: selectedMessageHead == cnvs.conversationID? "0px 0px 2px black" : "0px 0px 0px black"
+                      }}
+                      whileHover={{
+                        boxShadow: "0px 0px 2px black",
+                        transition:{
+                          duration: 0
+                        }
+                      }}
+                      onClick={() => {
+                        dispatch({ type: SET_SELECTED_CONVID, selectedconvID: cnvs.conversationID })
+                      }}
+                      className='div_indv_message_head'>
+                        <img src={DefaultIconMessage} className='img_container_messages_list' />
+                        <div className='div_info_message_head'>
+                          {conversationlist.profiles.map((prfs, j) => {
+                            return(
+                              cnvs.to.userID == prfs.userID || cnvs.from.userID == prfs.userID? (
+                                <p key={j} className='p_info_container_label'>{prfs.userDisplayName}</p>
+                              ) : null
+                            )
+                          })}
+                          <p className='p_info_container'>{cnvs.from.userID == authdetails.userID? "you: " : ""}{cnvs.content}</p>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  )
+                }
               })}
             </div>
           </div>
