@@ -71,11 +71,13 @@ function ListContainer({filterType}) {
         else{
           //also run init commands
           // cancelAxios()
-          subscribeMessages()
+          // subscribeMessages()
+          initMessagesList()
         }
       }).catch((err) => {
         // cancelAxios()
-        subscribeMessages()
+        // subscribeMessages()
+        initMessagesList()
       })
     }
   }

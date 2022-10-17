@@ -22,6 +22,8 @@ function Index() {
   const selectedMarker = useSelector(state => state.selectedmarker);
   const dispatch = useDispatch();
 
+  let cancelAxios;
+
   const [menutrigger, setmenutrigger] = useState(false);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ function Index() {
       dispatch({ type: SET_SELECTED_AREA_INPUT, selectedareainput: selectedAreaInputState })
       dispatch({ type: SET_CENTER_MAP, centermap: { lat: 14.647296, lng: 121.061376 }})
       dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+      cancelAxios.cancel()
     }
   },[])
 
@@ -53,26 +56,33 @@ function Index() {
   }
 
   const subscribeBusStopData = () => {
-    Axios.get(`${URL}/admin/busStopsDataSubscribe`, {
-      headers:{
-        "x-access-token": localStorage.getItem("token")
-      }
-    }).then((response) => {
-      if(response.data.status){
-        dispatch({ type: SET_BUS_STOPS_LIST, busstopslist: response.data.result })
-        subscribeBusStopData()
+    if(typeof cancelAxios != typeof undefined){
+      cancelAxios.cancel()
+    }
+    else{
+      cancelAxios = Axios.CancelToken.source()
+      Axios.get(`${URL}/admin/busStopsDataSubscribe`, {
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        },
+        cancelToken: cancelAxios.token
+      }).then((response) => {
+        if(response.data.status){
+          dispatch({ type: SET_BUS_STOPS_LIST, busstopslist: response.data.result })
+          subscribeBusStopData()
+          setSelectedDetailsWindow(selecteddetails.busStopID)
+        }
+        else{
+          subscribeBusStopData()
+          setSelectedDetailsWindow(selecteddetails.busStopID)
+        }
+      }).catch((err) => {
+        // console.log(err);
+        subscribeBusStopData();
+        initBusStopsData();
         setSelectedDetailsWindow(selecteddetails.busStopID)
-      }
-      else{
-        subscribeBusStopData()
-        setSelectedDetailsWindow(selecteddetails.busStopID)
-      }
-    }).catch((err) => {
-      // console.log(err);
-      subscribeBusStopData();
-      initBusStopsData();
-      setSelectedDetailsWindow(selecteddetails.busStopID)
-    })
+      })
+    }
   }
 
   const deleteBusStop = (id) => {
