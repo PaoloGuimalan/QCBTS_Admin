@@ -29,7 +29,7 @@ function Index() {
   useEffect(() => {
 
     initBusStopsData();
-    subscribeBusStopData();
+    // subscribeBusStopData();
 
     return () => {
       dispatch({ type: SET_MAP_MODE, mapmode: "none" })
