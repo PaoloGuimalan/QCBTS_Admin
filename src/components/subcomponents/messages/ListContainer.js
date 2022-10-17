@@ -114,6 +114,7 @@ function ListContainer({filterType}) {
     // alert("Helllo")
     return () => {
       // alert(conversationID)
+      dispatch({ type: SET_CONVERSATION_LIST, conversationlist: conversationListState })
       cancelAxios.cancel();
       // cancelAxios.map((ctoken) => {
       //   ctoken();
