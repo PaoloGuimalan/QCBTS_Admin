@@ -154,7 +154,7 @@ function Conversation({filterType}) {
         if(response.data.status){
           //success
           setcontent("")
-          initMessagesList()
+          // initMessagesList()
         }
         else{
           console.log(response.data.result.message)
