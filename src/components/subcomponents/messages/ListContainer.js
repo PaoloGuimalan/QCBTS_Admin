@@ -12,6 +12,8 @@ import DefaultIconMessage from '../../../resources/defaultimg.png';
 import { SET_CONVERSATION_LIST, SET_SELECTED_CONVID } from '../../../redux/types';
 import { conversationListState } from '../../../redux/actions';
 import NewMessage from './NewMessage';
+import SyncIcon from '@material-ui/icons/Sync';
+import EmptyIcon from '@material-ui/icons/ChatBubbleOutline'
 
 function ListContainer({filterType}) {
 
@@ -26,6 +28,8 @@ function ListContainer({filterType}) {
 
   const [selectedMessageHead, setselectedMessageHead] = useState("");
   const [selectedConvSection, setselectedConvSection] = useState("co");
+
+  const [loader, setloader] = useState(true);
 
   let cancelAxios;
 
@@ -104,6 +108,7 @@ function ListContainer({filterType}) {
           subscribeMessages()
         }
         dispatch({ type: SET_CONVERSATION_LIST, conversationlist: response.data.result })
+        setloader(false)
       }
       else{
         console.log(response.data.result)
@@ -120,6 +125,7 @@ function ListContainer({filterType}) {
     // alert("Helllo")
     return () => {
       // alert(conversationID)
+      setloader(true)
       dispatch({ type: SET_CONVERSATION_LIST, conversationlist: conversationListState })
       cancelAxios.cancel();
       // cancelAxios.map((ctoken) => {
@@ -143,41 +149,68 @@ function ListContainer({filterType}) {
               <input type='text' name='search_box' id='search_box' placeholder='Search' />
             </div>
             <div id='div_messages_list_array_container'>
-              {conversationlist.conversations.map((cnvs, i) => {
-                if(cnvs.to.userType == filterType || cnvs.from.userTyoe == filterType){
-                  return(
-                    <Link key={i} to={`/home/messages/${selectedConvSection}/ex/${cnvs.conversationID}`} className='link_message_header'>
-                      <motion.div
-                      animate={{
-                        backgroundColor: selectedMessageHead == cnvs.conversationID? "#1D3462" : "transparent",
-                        boxShadow: selectedMessageHead == cnvs.conversationID? "0px 0px 2px black" : "0px 0px 0px black"
-                      }}
-                      whileHover={{
-                        boxShadow: "0px 0px 2px black",
-                        transition:{
-                          duration: 0
-                        }
-                      }}
-                      onClick={() => {
-                        dispatch({ type: SET_SELECTED_CONVID, selectedconvID: cnvs.conversationID })
-                      }}
-                      className='div_indv_message_head'>
-                        <img src={DefaultIconMessage} className='img_container_messages_list' />
-                        <div className='div_info_message_head'>
-                          {conversationlist.profiles.map((prfs, j) => {
-                            return(
-                              cnvs.to.userID == prfs.userID || cnvs.from.userID == prfs.userID? (
-                                <p key={j} className='p_info_container_label'>{prfs.userDisplayName}</p>
-                              ) : null
-                            )
-                          })}
-                          <p className='p_info_container'>{cnvs.from.userID == authdetails.userID? "you: " : ""}{cnvs.content}</p>
-                        </div>
-                      </motion.div>
-                    </Link>
-                  )
-                }
-              })}
+              {loader? (
+                <div id='div_loader_container'>
+                  <motion.div
+                    id='div_loader'
+                    animate={{
+                      rotate: -360,
+                      transition:{
+                        repeat: Infinity,
+                        duration: 1,
+                        repeatDelay: 0
+                      }
+                    }}
+                  >
+                    <SyncIcon style={{fontSize: "35px", color: "white"}} />
+                  </motion.div>
+                </div>
+              ) : (
+                conversationlist.conversations.length == 0? (
+                  <div id='div_empty_container'>
+                    <div>
+                      <EmptyIcon style={{fontSize: "70px", color: "	#C0C0C0"}} />
+                      <p id='p_label_empty'>No Conversations yet</p>
+                    </div>
+                  </div>
+                ) : (
+                  conversationlist.conversations.map((cnvs, i) => {
+                    if(cnvs.to.userType == filterType || cnvs.from.userTyoe == filterType){
+                      return(
+                        <Link key={i} to={`/home/messages/${selectedConvSection}/ex/${cnvs.conversationID}`} className='link_message_header'>
+                          <motion.div
+                          animate={{
+                            backgroundColor: selectedMessageHead == cnvs.conversationID? "#1D3462" : "transparent",
+                            boxShadow: selectedMessageHead == cnvs.conversationID? "0px 0px 2px black" : "0px 0px 0px black"
+                          }}
+                          whileHover={{
+                            boxShadow: "0px 0px 2px black",
+                            transition:{
+                              duration: 0
+                            }
+                          }}
+                          onClick={() => {
+                            dispatch({ type: SET_SELECTED_CONVID, selectedconvID: cnvs.conversationID })
+                          }}
+                          className='div_indv_message_head'>
+                            <img src={DefaultIconMessage} className='img_container_messages_list' />
+                            <div className='div_info_message_head'>
+                              {conversationlist.profiles.map((prfs, j) => {
+                                return(
+                                  cnvs.to.userID == prfs.userID || cnvs.from.userID == prfs.userID? (
+                                    <p key={j} className='p_info_container_label'>{prfs.userDisplayName}</p>
+                                  ) : null
+                                )
+                              })}
+                              <p className='p_info_container'>{cnvs.from.userID == authdetails.userID? "you: " : ""}{cnvs.content}</p>
+                            </div>
+                          </motion.div>
+                        </Link>
+                      )
+                    }
+                  })
+                )
+              )}
             </div>
           </div>
         </div>
