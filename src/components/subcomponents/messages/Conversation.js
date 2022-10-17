@@ -58,7 +58,7 @@ function Conversation({filterType}) {
     }
     else{
       cancelAxios = Axios.CancelToken.source()
-      Axios.get(`${URL}/messages/subscribeMessages`, {
+      Axios.get(`${URL}/messages/subscribeMessagesConvo`, {
         headers:{
           "x-access-token": localStorage.getItem("token")
         },

@@ -40,21 +40,6 @@ function ListContainer({filterType}) {
   },[params])
 
   useEffect(() => {
-    dispatch({ type: SET_CONVERSATION_LIST, conversationlist: conversationListState })
-    initMessagesList()
-    setselectedConvSection(params.pathname.split("/")[3])
-    // alert("Helllo")
-    return () => {
-      // alert(conversationID)
-      cancelAxios.cancel();
-      // cancelAxios.map((ctoken) => {
-      //   ctoken();
-      // })
-    }
-
-  },[params.pathname.split("/")[3]])
-
-  useEffect(() => {
 
     return () => {
       dispatch({ type: SET_CONVERSATION_LIST, conversationlist: conversationListState })
@@ -113,6 +98,21 @@ function ListContainer({filterType}) {
       console.log(err);
     })
   }
+
+  useEffect(() => {
+    dispatch({ type: SET_CONVERSATION_LIST, conversationlist: conversationListState })
+    initMessagesList()
+    setselectedConvSection(params.pathname.split("/")[3])
+    // alert("Helllo")
+    return () => {
+      // alert(conversationID)
+      cancelAxios.cancel();
+      // cancelAxios.map((ctoken) => {
+      //   ctoken();
+      // })
+    }
+
+  },[params.pathname.split("/")[3]])
 
   return (
     <div id='div_listcontainer_main'>
