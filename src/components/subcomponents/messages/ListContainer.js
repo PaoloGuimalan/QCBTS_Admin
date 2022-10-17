@@ -95,6 +95,7 @@ function ListContainer({filterType}) {
     }).then((response) => {
       if(response.data.status){
         // console.log("alert")
+        cancelAxios = undefined
         if(typeof cancelAxios != typeof undefined){
           cancelAxios.cancel()
           subscribeMessages()
