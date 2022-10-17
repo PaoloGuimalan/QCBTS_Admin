@@ -65,7 +65,6 @@ function Index() {
   const subscribeBusStopData = () => {
     if(typeof cancelAxios != typeof undefined){
       cancelAxios.cancel()
-      subscribeBusStopData()
     }
     else{
       cancelAxios = Axios.CancelToken.source()
@@ -76,6 +75,7 @@ function Index() {
         cancelToken: cancelAxios.token
       }).then((response) => {
         if(response.data.status){
+          cancelAxios = undefined
           dispatch({ type: SET_BUS_STOPS_LIST, busstopslist: response.data.result })
           subscribeBusStopData()
           setSelectedDetailsWindow(selecteddetails.busStopID)

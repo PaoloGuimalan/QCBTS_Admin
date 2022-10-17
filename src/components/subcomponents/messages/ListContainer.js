@@ -79,6 +79,7 @@ function ListContainer({filterType}) {
         // cancelAxios()
         // subscribeMessages()
         initMessagesList()
+        console.log(err);
       })
     }
   }
