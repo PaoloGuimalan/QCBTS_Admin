@@ -109,7 +109,7 @@ function ListContainer({filterType}) {
   }
 
   useEffect(() => {
-    dispatch({ type: SET_CONVERSATION_LIST, conversationlist: conversationListState })
+    // dispatch({ type: SET_CONVERSATION_LIST, conversationlist: conversationListState })
     initMessagesList()
     setselectedConvSection(params.pathname.split("/")[3])
     // alert("Helllo")
