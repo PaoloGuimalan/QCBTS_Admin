@@ -48,6 +48,13 @@ function Index() {
     }).then((response) => {
       if(response.data.status){
         // console.log(response.data.result);
+        if(typeof cancelAxios != typeof undefined){
+          cancelAxios.cancel()
+          subscribeBusStopData()
+        }
+        else{
+          subscribeBusStopData()
+        }
         dispatch({ type: SET_BUS_STOPS_LIST, busstopslist: response.data.result })
       }
     }).catch((err) => {
