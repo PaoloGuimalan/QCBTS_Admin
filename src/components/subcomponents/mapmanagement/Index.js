@@ -48,8 +48,14 @@ function Index() {
     }).then((response) => {
       if(response.data.status){
         // console.log(response.data.result);
-        cancelAxios.cancel()
-        subscribeBusStopData()
+        cancelAxios = undefined
+        if(typeof cancelAxios != typeof undefined){
+          cancelAxios.cancel()
+          subscribeBusStopData()
+        }
+        else{
+          subscribeBusStopData()
+        }
         dispatch({ type: SET_BUS_STOPS_LIST, busstopslist: response.data.result })
       }
     }).catch((err) => {
@@ -71,17 +77,16 @@ function Index() {
       }).then((response) => {
         if(response.data.status){
           cancelAxios = undefined
+          initBusStopsData()
           dispatch({ type: SET_BUS_STOPS_LIST, busstopslist: response.data.result })
-          subscribeBusStopData()
           setSelectedDetailsWindow(selecteddetails.busStopID)
         }
         else{
-          subscribeBusStopData()
+          initBusStopsData()
           setSelectedDetailsWindow(selecteddetails.busStopID)
         }
       }).catch((err) => {
         // console.log(err);
-        subscribeBusStopData();
         initBusStopsData();
         setSelectedDetailsWindow(selecteddetails.busStopID)
       })
