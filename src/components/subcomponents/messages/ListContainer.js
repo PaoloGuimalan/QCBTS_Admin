@@ -46,7 +46,9 @@ function ListContainer({filterType}) {
     // alert("Helllo")
     return () => {
       // alert(conversationID)
-      cancelAxios.cancel();
+      if(typeof cancelAxios != typeof undefined){
+        cancelAxios.cancel();
+      }
       // cancelAxios.map((ctoken) => {
       //   ctoken();
       // })
