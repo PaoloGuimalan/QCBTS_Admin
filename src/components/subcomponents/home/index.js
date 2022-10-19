@@ -25,6 +25,9 @@ function Index() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setdate(`${dateGetter()}`)
+    settime(`${timeGetter()}`)
+
     const interval = setInterval(() => {
       setdate(`${dateGetter()}`)
       settime(`${timeGetter()}`)
@@ -145,6 +148,44 @@ function Index() {
             <div className='div_basic_analytics_indv'>
               <div id='div_basic_analytics_map_container'>
                 <MainIndex />
+              </div>
+            </div>
+          </div>
+          <div id='div_advanced_analytics_container'>
+            <div className='div_advanced_analytics_inside'>
+              <div className='div_advanced_analytics_data'>
+                <div id='div_label_analytics_data'>
+                  <p>Recent Added Accounts</p>
+                </div>
+                <div id='div_recently_added_accounts_container'>
+                  <table id='tbl_recently_added_accounts'>
+                    <tbody>
+                      <tr id='tr_tbl_header_holder'>
+                        <th className='th_labels'>Name</th>
+                        <th className='th_labels'>ID Number</th>
+                        <th className='th_labels'>Email</th>
+                        <th className='th_labels'>Number</th>
+                        <th className='th_labels'>Role</th>
+                        <th className='th_labels'>Status</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div className='div_advanced_analytics_inside'>
+              <div className='div_advanced_analytics_data'>
+                <div id='div_label_analytics_data'>
+                  <p>Monthly Active People</p>
+                </div>
+                <div id='div_recently_active_container'>
+                  <select id='select_date_range'>
+                    <option>Date Range</option>
+                  </select>
+                  <div id='div_recently_active_graph'>
+                    <p>Graph Area</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

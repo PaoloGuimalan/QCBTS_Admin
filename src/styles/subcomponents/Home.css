@@ -17,6 +17,7 @@
     justify-content: flex-start;
     align-items: center;
     box-shadow: 0px 0px 2px black;
+    z-index: 1;
 }
 
 #div_home_header_icon{
@@ -50,6 +51,7 @@
 .p_header_date_time_label{
     font-size: 13px;
     color: #252525;
+    font-weight: bold;
 }
 
 #div_home_main_section{
@@ -71,6 +73,7 @@
     flex-direction: column;
     gap: 10px;
     border-radius: 10px;
+    padding-bottom: 20px;
 }
 
 #div_header_admin_info{
@@ -252,6 +255,113 @@
     color: red;
 }
 
+#div_advanced_analytics_container{
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.div_advanced_analytics_inside{
+    background-color: transparent;
+    /* width: 40%; */
+}
+
+.div_advanced_analytics_inside:first-of-type{
+    width: 60%;
+    padding-right: 10px;
+}
+
+.div_advanced_analytics_inside:last-of-type{
+    width: 40%;
+}
+
+.div_advanced_analytics_data{
+    background-color: white;
+    box-shadow: 0px 0px 2px black;
+    width: 100%;
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column;
+    height: 200px;
+}
+
+.div_advanced_analytics_inside:first-of-type .div_advanced_analytics_data{
+    background-color: white;
+}
+
+.div_advanced_analytics_inside:last-of-type .div_advanced_analytics_data{
+    background-color: white;
+}
+
+#div_label_analytics_data{
+    background-color: transparent;
+    display: flex;
+    padding: 10px;
+}
+
+#div_label_analytics_data p{
+    margin: 0px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #252525;
+}
+
+#div_recently_added_accounts_container{
+    background-color: #EFEFEF;
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    margin-bottom: 5px;
+    overflow-y: scroll;
+    border-radius: 5px;
+}
+
+#div_recently_active_container{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    margin-bottom: 5px;
+    gap: 5px;
+}
+
+#tbl_recently_added_accounts{
+    font-size: 13px;
+    background-color: transparent;
+    color: #4B4B4B;
+}
+
+.th_labels{
+    width: 16.6%;
+    border-bottom: solid 1px #4B4B4B;
+}
+
+#div_recently_active_graph{
+    background-color: #EFEFEF;
+    display: flex;
+    flex: 1;
+    border-radius: 5px;
+    font-size: 13px;
+    justify-content: center;
+    align-items: center;
+    color: #4B4B4B;
+}
+
+#select_date_range{
+    height: 25px;
+    border: none;
+    background-color: #EFEFEF;
+    color: #4B4B4B;
+    border-radius: 5px;
+}
 
 @media screen and (max-width: 1300px) {
     .div_basic_analytics_boxes_ind{
@@ -260,6 +370,21 @@
 }
 
 @media screen and (max-width: 1000px) {
+
+    #div_advanced_analytics_container{
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .div_advanced_analytics_inside:first-of-type{
+        width: 100%;
+        padding-right: 0px;
+    }
+    
+    .div_advanced_analytics_inside:last-of-type{
+        width: 100%;
+    }
+
     #div_basic_analytics_container{
         background-color: transparent; 
         display: flex;
