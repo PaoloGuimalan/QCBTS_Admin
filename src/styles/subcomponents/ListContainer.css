@@ -128,6 +128,10 @@
     margin: 0px;
     font-size: 13px;
     color: 	#B2BEB5;
+    background-color: transparent;
+    text-align: left;
+    max-height: 35px;
+    overflow-y: hidden;
 }
 
 .p_info_container_label{
@@ -135,6 +139,11 @@
     font-size: 15px;
     font-weight: bold;
     color: white;
+    text-align: left;
+    background-color: transparent;
+    white-space: nowrap;
+    overflow-x: hidden;
+    max-width: 170px;
 }
 
 .link_message_header{
