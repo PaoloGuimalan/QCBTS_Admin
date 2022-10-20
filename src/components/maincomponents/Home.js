@@ -66,10 +66,12 @@ function Home() {
           //not play sound
         }
       }).catch((err) => {
-        console.log(err);
+        // console.log(err);
         if(err.message != 'canceled'){
+          // console.log(cancelAxios)
+          cancelAxios = undefined;
           subscribeAlertMessages()
-          console.log(err)
+          // console.log(err)
         }
       })
     }
