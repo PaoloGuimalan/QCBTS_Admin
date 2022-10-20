@@ -14,6 +14,9 @@ import AddCompany from '../subcomponents/caManagement/AddCompany';
 import CompDetails from '../subcomponents/caManagement/CompDetails';
 import CompAdDetails from '../subcomponents/caManagement/CompAdDetails';
 import Messages from '../subcomponents/messages/Messages';
+import { playSound } from '../../json/sounds';
+import Axios from 'axios'
+import { URL } from '../../json/urlconfig';
 
 function Home() {
 
@@ -23,6 +26,55 @@ function Home() {
 
   const [pathid, setpathid] = useState("");
 
+  let cancelAxios;
+
+  useEffect(() => {
+    subscribeAlertMessages()
+
+    return () => {
+      cancelAxios.cancel()
+    }
+  },[])
+
+  const subscribeAlertMessages = () => {
+    if(typeof cancelAxios != typeof undefined){
+      cancelAxios.cancel()
+    }
+    else{
+      cancelAxios = Axios.CancelToken.source()
+      Axios.get(`${URL}/messages/subscribeAlertMessage`,{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        },
+        cancelToken: cancelAxios.token
+      }).then((response) => {
+        if(response.data.status){
+          //play sound
+          playSound()
+          cancelAxios = undefined
+          if(typeof cancelAxios != typeof undefined){
+            // playSound()
+            cancelAxios.cancel()
+            subscribeAlertMessages()
+          }
+          else{
+            // playSound()
+            subscribeAlertMessages()
+          }
+        }
+        else{
+          //not play sound
+        }
+      }).catch((err) => {
+        // console.log(err);
+        if(err.message != 'canceled'){
+          subscribeAlertMessages()
+          // console.log(err)
+        }
+      })
+    }
+  }
+
   useEffect(() => {
     // console.log(UrlLocation.pathname.split("/")[2]);
     setpathid(UrlLocation.pathname.split("/")[2] == undefined? "" : UrlLocation.pathname.split("/")[2])
@@ -31,6 +83,7 @@ function Home() {
   const goToModule = (path) => {
     navigate(path);
     setpathid(path.split("/")[2]);
+    // playSound()
   }
 
   const logout = () => {
