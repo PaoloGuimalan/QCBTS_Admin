@@ -70,9 +70,9 @@ function App() {
         <p>{alert.message}</p>
       </motion.div>
       <Routes>
-        <Route path='/login' element={auth.status? <Navigate to='/home' /> : <Login />} />
-        <Route path='/home/*' element={auth.status? <Home /> : <Navigate to='/login' />} />
-        <Route path='/' element={auth.status? <Navigate to='/home' /> : <Navigate to='/login' />} />
+        <Route path='/login' element={auth.status == null? null : auth.status? <Navigate to='/home' /> : <Login />} />
+        <Route path='/home/*' element={auth.status == null? null : auth.status? <Home /> : <Navigate to='/login' />} />
+        <Route path='/' element={auth.status == null? null : auth.status? <Navigate to='/home' /> : <Navigate to='/login' />} />
       </Routes>
     </div>
   );

@@ -4,7 +4,7 @@ const userAuthState = {
     userID: "",
     fullname: "",
     email: "",
-    status: false
+    status: null
 }
 
 export const userAuth = (state = userAuthState, action) => {
