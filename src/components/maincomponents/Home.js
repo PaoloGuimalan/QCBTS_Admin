@@ -17,6 +17,8 @@ import Messages from '../subcomponents/messages/Messages';
 import { playSound } from '../../json/sounds';
 import Axios from 'axios'
 import { URL } from '../../json/urlconfig';
+import Main from '../subcomponents/daManagement/Main';
+import NotificationsMain from '../subcomponents/notifications/NotificationsMain';
 
 function Home() {
 
@@ -202,6 +204,8 @@ function Home() {
                 <Route path='/camanagement/companyDetails/:companyID' element={<CompDetails />} />
                 <Route path='/camanagement/companyAdminDetails/:companyAdID' element={<CompAdDetails />} />
                 <Route path='/messages/*' element={<Messages />} />
+                <Route path='/damanagement/*' element={<Main />} />
+                <Route path='/notifications/*' element={<NotificationsMain />} />
               </Routes>
             </li>
           </nav>
