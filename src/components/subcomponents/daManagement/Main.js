@@ -8,6 +8,8 @@ import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useSelector, useDispatch } from 'react-redux'
 import { SET_DA_COMPANY_LIST } from '../../../redux/types'
+import InfoIcon from '@material-ui/icons/Info'
+import RightIcon from '@material-ui/icons/KeyboardArrowRightTwoTone'
 
 function Main() {
 
@@ -83,7 +85,10 @@ function Main() {
                           <tr key={i} className='tr_indv'>
                             <td>{data.companyID}</td>
                             <td>{data.companyName}</td>
-                            <td>...</td>
+                            <td>
+                              <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button>
+                              <button className='btn_company_list_navs'><RightIcon style={{ fontSize: "15px" }} /></button>
+                            </td>
                           </tr>
                         )
                       })}

@@ -154,7 +154,19 @@
     background-color: #2b4273;
     height: 30px;
     color: white;
-    width: 33.3%;
+    /* width: 37.5%; */
+}
+
+.tbl_th:first-of-type{
+    width: 30%;
+}
+
+.tbl_th:nth-of-type(2){
+    width: 45%;
+}
+
+.tbl_th:last-of-type{
+    width: 25%;
 }
 
 .tbl_th2{
@@ -214,4 +226,12 @@
 .tr_indv:hover{
     background-color: #B2BEB5;
     color: black;
+}
+
+.btn_company_list_navs{
+    width: 30px;
+    height: 25px;
+    margin: 2px;
+    cursor: pointer;
+    border: none;
 }
