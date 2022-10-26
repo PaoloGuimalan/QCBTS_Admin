@@ -106,6 +106,7 @@
     flex: 1;
     justify-content: space-around;
     padding-top: 0px;
+    height: calc(100% - 70px);
 }
 
 .div_list_sections{
@@ -145,6 +146,7 @@
 
 .tbl_lists{
     width: 100%;
+    height: auto;
 }
 
 .tbl_th{
@@ -199,4 +201,17 @@
     padding-right: 10px;
     width: calc(100% - 50px);
     font-size: 13px;
+}
+
+.tr_indv{
+    background-color: #4B4B4B;
+    font-size: 12px;
+    height: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+.tr_indv:hover{
+    background-color: #B2BEB5;
+    color: black;
 }

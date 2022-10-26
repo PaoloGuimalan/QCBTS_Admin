@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_CONVID, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SELECTED_TYPE } from "../types";
+import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_DA_COMPANY_LIST, SET_DA_DRIVER_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_CONVID, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SELECTED_TYPE } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -254,6 +254,24 @@ export const setselectedtype = (state = "commuters", action) => {
     switch(action.type){
         case SET_SELECTED_TYPE:
             return action.selectedtype;
+        default:
+            return state;
+    }
+}
+
+export const setdacompanylist = (state = [], action) => {
+    switch(action.type){
+        case SET_DA_COMPANY_LIST:
+            return action.dacompanylist;
+        default:
+            return state;
+    }
+}
+
+export const setdadriverlist = (state = [], action) => {
+    switch(action.type){
+        case SET_DA_DRIVER_LIST:
+            return action.dadriverlist;
         default:
             return state;
     }

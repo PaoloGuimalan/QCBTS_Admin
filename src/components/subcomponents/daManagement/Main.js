@@ -1,15 +1,48 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../../../styles/subcomponents/DAManagementMain.css'
 import MessagesIcon from '@material-ui/icons/Message'
 import SearchIcon from '@material-ui/icons/Search'
 import BellIcon from '@material-ui/icons/Notifications'
+import Axios from 'axios'
+import { URL } from '../../../json/urlconfig'
+import { useSelector, useDispatch } from 'react-redux'
+import { SET_DA_COMPANY_LIST } from '../../../redux/types'
 
 function Main() {
 
+  const dacompanylist = useSelector(state => state.dacompanylist);
+  const dadriverlist = useSelector(state => state.dadriverlist);
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [selectedDriversList, setselectedDriversList] = useState("All");
+
+  useEffect(() => {
+    fetchCompanyList()
+
+    return () => {
+      dispatch({ type: SET_DA_COMPANY_LIST, dacompanylist: [] })
+    }
+  },[])
+
+  const fetchCompanyList = () => {
+    Axios.get(`${URL}/admin/getCompanyListDA`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        dispatch({ type: SET_DA_COMPANY_LIST, dacompanylist: response.data.result })
+        // console.log(response.data.result)
+      }
+      else{
+        console.log(response.data.result.message)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
   return (
     <div id='div_da_main'>
@@ -45,11 +78,15 @@ function Main() {
                         <th className='tbl_th'>Company Name</th>
                         <th className='tbl_th th_last'>Navigations</th>
                       </tr>
-                      <tr>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                      </tr>
+                      {dacompanylist.map((data, i) => {
+                        return(
+                          <tr key={i} className='tr_indv'>
+                            <td>{data.companyID}</td>
+                            <td>{data.companyName}</td>
+                            <td>...</td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
