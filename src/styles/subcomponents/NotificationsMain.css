@@ -8,7 +8,7 @@
 
 #div_navigations_panel{
     background-color: white;
-    width: 100%;
+    width: calc(100% - 20px);
     max-width: calc(300px - 20px);
     display: flex;
     padding: 10px;
@@ -37,7 +37,7 @@
     align-items: flex-start;
     gap: 5px;
     padding-left: 10px;
-    width: 100%;
+    width: calc(100% - 10px);
 }
 
 .link_icons_navigations{
@@ -47,7 +47,7 @@
     color: black;
     gap: 5px;
     text-decoration: none;
-    width: 100%;
+    width: calc(100% - 5px);
     max-width: 150px;
     height: 30px;
     border-radius: 5px;
