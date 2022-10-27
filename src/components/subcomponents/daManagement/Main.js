@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { SET_DA_COMPANY_LIST } from '../../../redux/types'
 import InfoIcon from '@material-ui/icons/Info'
 import RightIcon from '@material-ui/icons/KeyboardArrowRightTwoTone'
+import DAIcon from '@material-ui/icons/DirectionsBus'
 
 function Main() {
 
@@ -49,7 +50,7 @@ function Main() {
   return (
     <div id='div_da_main'>
         <div id='div_da_header'>
-            <p id='p_da_header_label'>Driver Account Management</p>
+            <p id='p_da_header_label'><DAIcon /> Driver Account Management</p>
             <div id='flexed_div'></div>
             <div id='div_search_input'>
               <input type='text' id='searchbox' name='searchbox' placeholder='Search a Driver' />

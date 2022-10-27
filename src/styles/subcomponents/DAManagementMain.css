@@ -29,6 +29,15 @@
 #p_da_header_label{
     font-weight: bold;
     font-size: 15px;
+    background-color: #2b4273;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    gap: 5px;
 }
 
 #notifbar_div_da{
