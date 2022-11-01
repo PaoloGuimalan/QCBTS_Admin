@@ -7,7 +7,7 @@ import MainIndex from './components/maincomponents/MainIndex';
 import Login from './components/authcomponents/Login';
 import Home from './components/maincomponents/Home';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_AUTH } from './redux/types';
+import { SET_ALERT, SET_AUTH } from './redux/types';
 import Axios from 'axios'
 import { URL } from './json/urlconfig'
 import { motion } from 'framer-motion';
@@ -51,9 +51,41 @@ function App() {
             status: true
         }})
       }
+      else{
+        dispatch({type: SET_AUTH, auth: {
+            userID: "",
+            fullname: "",
+            email: "",
+            status: false
+        }})
+        alertPrompt(false, response.data.result.message)
+      }
     }).catch((err) => {
+      alertPrompt(false, `Network Error!`)
       console.log(err);
     })
+  }
+
+  const alertPrompt = (statusPrompt, messagePrompt) => {
+    dispatch({ type: SET_ALERT, alert: {
+        trigger: true,
+        status: statusPrompt,
+        message: messagePrompt
+    } })
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: statusPrompt,
+            message: messagePrompt
+        } })
+    }, 3000)
+    setTimeout(() => {
+        dispatch({ type: SET_ALERT, alert: {
+            trigger: false,
+            status: false,
+            message: "..."
+        } })
+    }, 4000)
   }
 
   return (
