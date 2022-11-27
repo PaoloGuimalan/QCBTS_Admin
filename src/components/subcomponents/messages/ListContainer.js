@@ -176,7 +176,7 @@ function ListContainer({filterType}) {
                   </div>
                 ) : (
                   conversationlist.conversations.map((cnvs, i) => {
-                    if(cnvs.to.userType == filterType || cnvs.from.userTyoe == filterType){
+                    if(cnvs.to.userType == filterType || cnvs.from.userType == filterType){
                       return(
                         <Link key={i} to={`/home/messages/${selectedConvSection}/ex/${cnvs.conversationID}`} className='link_message_header'>
                           <motion.div
