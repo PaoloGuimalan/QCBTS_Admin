@@ -7,7 +7,7 @@
     position: fixed;
     z-index: 1;
     border-radius: 5px;
-    opacity: 0.8;
+    opacity: 1;
     border: solid 1px grey;
 }
 
