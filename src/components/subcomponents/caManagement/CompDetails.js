@@ -422,6 +422,51 @@ function CompDetails() {
             </li>
           </nav>
         </li>
+        <li>
+          <nav id='nav_details_page'>
+            <li>
+              <div id='div_adminslist'>
+                <p className='label_informations_company'>Routes List</p>
+              </div>
+            </li>
+            <li>
+            <div className='div_lists'>
+                <table className='tbl_lists'>
+                  <tbody>
+                    <tr>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>.....</th>
+                    </tr>
+                    {/* {companyrecord.adminlist.map((records, i) => {
+                      return(
+                        <tr key={i}>
+                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdminID}</td>
+                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdmin.firstname} {records.companyAdmin.lastname}</td>
+                          <td className='td_adminlist'><a className='link_conf_lists' href={`mailto:${records.email}`}>{records.email}</a></td>
+                          <motion.td
+                          animate={{
+                            color: records.status? "green" : "red"
+                          }} 
+                          className='td_adminlist'>{records.status? "Activated" : "Deactivated"}</motion.td>
+                          <td>
+                            <button onClick={() => {
+                              updateCompanyStatus(records.companyAdminID, records.status? false : true)
+                            }}
+                            className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
+                            <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button>
+                          </td>
+                        </tr>
+                      )
+                    })} */}
+                  </tbody>
+                </table>
+              </div>
+            </li>
+          </nav>
+        </li>
       </nav>
     </div>
   )
