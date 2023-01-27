@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_DA_COMPANY_LIST, SET_DA_DRIVER_LIST, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_CONVID, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SELECTED_TYPE } from "../types";
+import { SET_ALERT, SET_AUTH, SET_BUS_STOPS_LIST, SET_BUS_STOP_INFO, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_DA_COMPANY_LIST, SET_DA_DRIVER_LIST, SET_MAP_MODE, SET_PUBLIC_ROUTE_LIST, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_PATH, SET_ROUTE_STATUS_LOADER, SET_SAVED_ROUTE_PATH, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_CONVID, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SELECTED_TYPE } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -272,6 +272,83 @@ export const setdadriverlist = (state = [], action) => {
     switch(action.type){
         case SET_DA_DRIVER_LIST:
             return action.dadriverlist;
+        default:
+            return state;
+    }
+}
+
+export const routestatusloaderState = {
+    loading: false,
+    percent: 0,
+}
+
+export const setroutestatusloader = (state = routestatusloaderState, action) => {
+    switch(action.type){
+        case SET_ROUTE_STATUS_LOADER:
+            return action.routestatusloader;
+        default:
+            return state;
+    }
+}
+
+export const setroutelist = (state = [], action) => {
+    switch(action.type){
+        case SET_ROUTE_LIST:
+            return action.routelist;
+        default:
+            return state;
+    }
+}
+
+export const setpublicroutelist = (state = [], action) => {
+    switch(action.type){
+        case SET_PUBLIC_ROUTE_LIST:
+            return action.publicroutelist;
+        default:
+            return state;
+    }
+}
+
+export const savedroutepathState = {
+    routeID: null,
+    routeName: null,
+    stationList: [],
+    routePath: [],
+    companyID: null,
+    status: null
+}
+
+export const setsavedroutepath = (state = savedroutepathState, action) => {
+    switch(action.type){
+        case SET_SAVED_ROUTE_PATH:
+            return action.savedroutepath;
+        default:
+            return state;
+    }
+}
+
+export const setroutemakerlist = (state = [], action) => {
+    switch(action.type){
+        case SET_ROUTE_MAKER_LIST:
+            return action.routemakerlist;
+        default:
+            return state;
+    }
+}
+
+export const setbusstopinfo = (state = null, action) => {
+    switch(action.type){
+        case SET_BUS_STOP_INFO:
+            return action.busstopinfo;
+        default:
+            return state;
+    }
+}
+
+export const setroutepath = (state = [], action) => {
+    switch(action.type){
+        case SET_ROUTE_PATH:
+            return action.routepath;
         default:
             return state;
     }

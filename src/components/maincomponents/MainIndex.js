@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import '../../styles/maincompstyles/MainIndex.css'
-import { GoogleMap, withGoogleMap, withScriptjs, Polygon, InfoWindow, Marker } from 'react-google-maps';
+import { GoogleMap, withGoogleMap, withScriptjs, Polygon, InfoWindow, Marker, Polyline } from 'react-google-maps';
 import Axios from 'axios'
 import QCPath from '../../json/QCPath.json'
 import IconsDisplay from '../../json/IconsDisplay';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_ALERT, SET_CENTER_MAP, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER } from '../../redux/types';
+import { SET_ALERT, SET_CENTER_MAP, SET_ROUTE_MAKER_LIST, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER } from '../../redux/types';
 import { selectedAreaInputState, selectedAreaState, selectedDetailsState, setselecteddetails } from '../../redux/actions';
 import BusStopSelectionIcon from '../../resources/Pan_Blue_Circle.png'
 import { motion } from 'framer-motion'
@@ -22,6 +22,10 @@ function Map(){
   const centerMap = useSelector(state => state.centermap);
   const selectedMarker = useSelector(state => state.selectedmarker);
   const selecteddetails = useSelector(state => state.selecteddetails);
+  const routepath = useSelector(state => state.routepath);
+  const routestatusloader = useSelector(state => state.routestatusloader);
+  const savedroutepath = useSelector(state => state.savedroutepath);
+  const routemakerlist = useSelector(state => state.routemakerlist);
   const dispatch = useDispatch()
 
   const google = window.google;
@@ -231,6 +235,27 @@ function Map(){
                     </tbody>
                   </table>
                   <div id='div_btns_infowinfow'>
+                    {data.status? (
+                      <motion.button
+                      animate={{
+                        backgroundColor: "lime",
+                        display: mapmode == "routes"? "block" : "none"
+                      }}
+                      className='btn_infoWindow_existing_bs' onClick={() => { 
+                        dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                        ...routemakerlist,
+                        {
+                          pendingID: Math.floor(Math.random() * 100000),
+                          stationID: data.busStopID,
+                          stationName: data.stationName,
+                          coordinates: [
+                            data.coordinates.longitude,
+                            data.coordinates.latitude
+                          ]
+                        }] }) 
+                        dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                      }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                    ) : null}
                     <motion.button
                     animate={{
                       backgroundColor: data.status? "red" : "lime"
@@ -284,6 +309,30 @@ function Map(){
           strokeColor: "red"
         }}
       />
+      {routepath.length != 0? (
+        <Polyline
+          draggable={false}
+          editable={false}
+          path={routepath}
+          options={{
+            fillColor: "transparent",
+            strokeColor: "orange",
+            strokeWeight: 4
+          }}
+        />
+      ) : null}
+      {savedroutepath.routePath.length != 0? (
+        <Polyline
+          draggable={false}
+          editable={false}
+          path={savedroutepath.routePath}
+          options={{
+            fillColor: "transparent",
+            strokeColor: !savedroutepath.status? "lime" : "red",
+            strokeWeight: 4
+          }}
+        />
+      ) : null}
     </GoogleMap>
   )
 }
