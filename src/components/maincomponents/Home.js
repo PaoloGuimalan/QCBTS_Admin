@@ -19,6 +19,7 @@ import Axios from 'axios'
 import { URL } from '../../json/urlconfig';
 import Main from '../subcomponents/daManagement/Main';
 import NotificationsMain from '../subcomponents/notifications/NotificationsMain';
+import Feed from '../subcomponents/feed/Feed';
 
 function Home() {
 
@@ -142,6 +143,23 @@ function Home() {
                   }
                 }} onClick={() => { goToModule("/home/messages/") }} className='btn_navigations'>Messages</motion.button>
                 <motion.button animate={{
+                  borderWidth: pathid == "feed"? 0 : 0,
+                  backgroundColor: pathid == "feed"? "#ffbf00" : "transparent",
+                  color: pathid == "feed"? "#2b4273" : "white",
+                  textAlign: pathid == "feed"? "center" : "left",
+                  fontWeight: pathid == "feed"? "bold" : "normal",
+                  boxShadow: pathid == "feed"? "0px 0px 5px black" : "0px 0px 0px black"
+                }} transition={{
+                  delay: 0,
+                  duration: 0
+                }} whileHover={{
+                  boxShadow: "0px 0px 5px black",
+                  transition:{
+                    delay: 0,
+                    duration: 0
+                  }
+                }} onClick={() => { goToModule("/home/feed/") }} className='btn_navigations'>Updates & Feed</motion.button>
+                <motion.button animate={{
                   borderWidth: pathid == "map"? 0 : 0,
                   backgroundColor: pathid == "map"? "#ffbf00" : "transparent",
                   color: pathid == "map"? "#2b4273" : "white",
@@ -174,7 +192,7 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/camanagement") }} className='btn_navigations'>CA Management</motion.button>
+                }} onClick={() => { goToModule("/home/camanagement") }} className='btn_navigations'>Company Management</motion.button>
                 <motion.button animate={{
                   borderWidth: pathid == "damanagement"? 0 : 0,
                   backgroundColor: pathid == "damanagement"? "#ffbf00" : "transparent",
@@ -191,13 +209,14 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/damanagement") }} className='btn_navigations'>DA Management</motion.button>
+                }} onClick={() => { goToModule("/home/damanagement") }} className='btn_navigations'>Driver Management</motion.button>
                 <button onClick={() => { logout() }} className='btn_logout'>Logout</button>
               </div>
             </li>
             <li className='li_home'>
               <Routes>
                 <Route path='/' element={<SubHome />} />
+                <Route path='/feed' element={<Feed />} />
                 <Route path='/map' element={<SubMap />} />
                 <Route path='/camanagement' element={<SubCAManagement />} />
                 <Route path='/camanagement/addcompany' element={<AddCompany />} />
