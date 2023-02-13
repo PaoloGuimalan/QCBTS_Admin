@@ -37,3 +37,5 @@ export const SET_ROUTE_PATH = 'SET_ROUTE_PATH';
 export const SET_BUS_STOP_INFO = 'SET_BUS_STOP_INFO';
 
 export const SET_POSTS_LIST = 'SET_POSTS_LIST';
+
+export const SET_DRIVERS_LIST = 'SET_DRIVERS_LIST';

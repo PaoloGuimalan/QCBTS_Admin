@@ -5,7 +5,7 @@ import BackIcon from '@material-ui/icons/KeyboardArrowLeft'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ALERT, SET_COMPANY_RECORD } from '../../../redux/types'
+import { SET_ALERT, SET_COMPANY_RECORD, SET_DRIVERS_LIST } from '../../../redux/types'
 import { companyRecordState } from '../../../redux/actions'
 import DefaultIconComp from '../../../resources/defaultcompany.png'
 import MessageIcon from '@material-ui/icons/Message';
@@ -32,13 +32,17 @@ function CompDetails() {
   const [companyNumberEdit, setcompanyNumberEdit] = useState("");
   const [companyAddressEdit, setcompanyAddressEdit] = useState("");
 
+  const driverslist = useSelector(state => state.driverslist)
+
   useEffect(() => {
     // console.log(params["companyID"])
     fetchCompanyData();
     setDefaultEditValues();
+    initDriversList()
 
     return () => {
       dispatch({ type: SET_COMPANY_RECORD, companyrecord: companyRecordState })
+      dispatch({ type: SET_DRIVERS_LIST, driverslist: [] })
     }
   }, [companyID]);
 
@@ -51,6 +55,21 @@ function CompDetails() {
     setcompanyEmailEdit(companyrecord.companydata.email);
     setcompanyNumberEdit(companyrecord.companydata.companyNumber);
     setcompanyAddressEdit(companyrecord.companydata.companyAddress);
+  }
+
+  const initDriversList = () => {
+    Axios.get(`${URL}/admin/driverList/${companyID}`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      // console.log(response.data.result)
+      if(response.data.status){
+        dispatch({ type: SET_DRIVERS_LIST, driverslist: response.data.result })
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
   }
 
   const fetchCompanyData = () => {
@@ -152,6 +171,25 @@ function CompDetails() {
 
   const redirectToCompAdDet = (compadID) => {
     navigate(`/home/camanagement/companyAdminDetails/${compadID}`)
+  }
+
+  const updateDriverStatus = (id, status) => {
+    Axios.post(`${URL}/admin/updateDriverStatus`, {
+      driverID: id,
+      status: status
+    },
+    {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      // console.log(response.data.result)
+      if(response.data.status){
+        initDriversList()
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
   }
 
   return (
@@ -344,18 +382,18 @@ function CompDetails() {
                 <table className='tbl_lists'>
                   <tbody>
                     <tr>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>Driver ID</th>
+                      <th className='th_adminlist'>Full Name</th>
+                      <th className='th_adminlist'>License ID</th>
+                      <th className='th_adminlist'>Status</th>
+                      <th className='th_adminlist'>Navigations</th>
                     </tr>
-                    {/* {companyrecord.adminlist.map((records, i) => {
+                    {driverslist.map((records, i) => {
                       return(
                         <tr key={i}>
-                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdminID}</td>
-                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdmin.firstname} {records.companyAdmin.lastname}</td>
-                          <td className='td_adminlist'><a className='link_conf_lists' href={`mailto:${records.email}`}>{records.email}</a></td>
+                          <td className='td_adminlist' onClick={() => {  }}>{records.userID}</td>
+                          <td className='td_adminlist' onClick={() => {  }}>{records.firstName} {records.middleName == "N/A"? "" : records.middleName} {records.lastName}</td>
+                          <td className='td_adminlist'>{records.dlicense}</td>
                           <motion.td
                           animate={{
                             color: records.status? "green" : "red"
@@ -363,14 +401,14 @@ function CompDetails() {
                           className='td_adminlist'>{records.status? "Activated" : "Deactivated"}</motion.td>
                           <td>
                             <button onClick={() => {
-                              updateCompanyStatus(records.companyAdminID, records.status? false : true)
+                              updateDriverStatus(records.userID, !records.status)
                             }}
                             className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
-                            <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button>
+                            <button className='btns_list' onClick={() => {  }}><MessageIcon style={{fontSize: "15px"}} /></button>
                           </td>
                         </tr>
                       )
-                    })} */}
+                    })}
                   </tbody>
                 </table>
               </div>
