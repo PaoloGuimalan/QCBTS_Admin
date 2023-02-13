@@ -412,3 +412,9 @@
 .btn_edit_navs:last-of-type{
     background-color: red;
 }
+
+#select_routeAssign{
+    text-align: center;
+    height: 30px;
+    width: 100%;
+}

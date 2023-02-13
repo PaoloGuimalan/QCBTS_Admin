@@ -5,7 +5,7 @@ import BackIcon from '@material-ui/icons/KeyboardArrowLeft'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ALERT, SET_COMPANY_RECORD, SET_DRIVERS_LIST } from '../../../redux/types'
+import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_COMPANY_RECORD, SET_DRIVERS_LIST, SET_ROUTES_SELECTION_LIST } from '../../../redux/types'
 import { companyRecordState } from '../../../redux/actions'
 import DefaultIconComp from '../../../resources/defaultcompany.png'
 import MessageIcon from '@material-ui/icons/Message';
@@ -32,13 +32,24 @@ function CompDetails() {
   const [companyNumberEdit, setcompanyNumberEdit] = useState("");
   const [companyAddressEdit, setcompanyAddressEdit] = useState("");
 
+  const [selectedRouteSelection, setselectedRouteSelection] = useState({
+    routeID: "....",
+    routeName: "....",
+    stationTotal: "....",
+    dateAdded: "...."
+  })
+
   const driverslist = useSelector(state => state.driverslist)
+  const routesselectionlist = useSelector(state => state.routesselectionlist)
+  const assignedroutes = useSelector(state => state.assignedroutes)
 
   useEffect(() => {
     // console.log(params["companyID"])
     fetchCompanyData();
     setDefaultEditValues();
     initDriversList()
+    initRoutesSelectionList()
+    initAssignedRoutes()
 
     return () => {
       dispatch({ type: SET_COMPANY_RECORD, companyrecord: companyRecordState })
@@ -189,6 +200,59 @@ function CompDetails() {
       }
     }).catch((err) => {
       console.log(err);
+    })
+  }
+
+  const initRoutesSelectionList = () => {
+    Axios.get(`${URL}/admin/availableRoutes`, {
+      headers: {
+        "x-access-token": localStorage.getItem('token')
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // console.log(response.data.result)
+        dispatch({ type: SET_ROUTES_SELECTION_LIST, routesselectionlist: response.data.result })
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const initAssignedRoutes = () => {
+    Axios.get(`${URL}/admin/assignedRoutes/${companyID}`, {
+      headers: {
+        "x-access-token": localStorage.getItem('token')
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // console.log(response.data.result)
+        dispatch({ type: SET_ASSIGNED_ROUTES, assignedroutes: response.data.result })
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const asignRoutetoCompany = () => {
+    Axios.post(`${URL}/admin/assignRoute`, {
+      routeID: selectedRouteSelection.routeID,
+      companyID: companyID
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        initAssignedRoutes()
+        setselectedRouteSelection({
+          routeID: "....",
+          routeName: "....",
+          stationTotal: "....",
+          dateAdded: "...."
+        })
+      }
+    }).catch((err) => {
+      console.log(err)
     })
   }
 
@@ -472,33 +536,79 @@ function CompDetails() {
                 <table className='tbl_lists'>
                   <tbody>
                     <tr>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>Route ID</th>
+                      <th className='th_adminlist'>Route Name</th>
+                      <th className='th_adminlist'>Number of Stations</th>
+                      <th className='th_adminlist'>Date Added</th>
+                      <th className='th_adminlist'>Navigation</th>
                     </tr>
-                    {/* {companyrecord.adminlist.map((records, i) => {
-                      return(
-                        <tr key={i}>
-                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdminID}</td>
-                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdmin.firstname} {records.companyAdmin.lastname}</td>
-                          <td className='td_adminlist'><a className='link_conf_lists' href={`mailto:${records.email}`}>{records.email}</a></td>
-                          <motion.td
-                          animate={{
-                            color: records.status? "green" : "red"
-                          }} 
-                          className='td_adminlist'>{records.status? "Activated" : "Deactivated"}</motion.td>
-                          <td>
-                            <button onClick={() => {
-                              updateCompanyStatus(records.companyAdminID, records.status? false : true)
-                            }}
-                            className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
-                            <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button>
-                          </td>
-                        </tr>
-                      )
-                    })} */}
+                    <tr>
+                      <td className='td_adminlist' onClick={() => {  }}>
+                        <select id='select_routeAssign' value={selectedRouteSelection.routeID} onChange={(e) => {
+                          // alert(e.target.value)
+                          routesselectionlist.map((rt) => {
+                            if(e.target.value == "none"){
+                              setselectedRouteSelection({
+                                routeID: "none",
+                                routeName: "....",
+                                stationTotal: "....",
+                                dateAdded: "...."
+                              })
+                            }
+                            else{
+                              if(rt.routeID == e.target.value){
+                                setselectedRouteSelection({
+                                  routeID: e.target.value,
+                                  routeName: rt.routeName,
+                                  stationTotal: rt.stationList.length,
+                                  dateAdded: rt.dateAdded
+                                })
+                              }
+                            }
+                          })
+                        }}>
+                          <option value="none" defaultChecked>---Select a Route---</option>
+                          {routesselectionlist.map((rts, i) => {
+                            return(
+                              <option key={i} value={rts.routeID}>{rts.routeID} - {rts.routeName}</option>
+                            )
+                          })}
+                        </select>
+                      </td>
+                      <td className='td_adminlist' onClick={() => {  }}>{selectedRouteSelection.routeName}</td>
+                      <td className='td_adminlist'>{selectedRouteSelection.stationTotal}</td>
+                      <motion.td
+                      className='td_adminlist'>{selectedRouteSelection.dateAdded}</motion.td>
+                      <td>
+                        <button onClick={() => {
+                          asignRoutetoCompany()
+                        }}
+                        className='btns_list'><CheckIcon style={{fontSize: "15px"}} /></button>
+                        <button className='btns_list' onClick={() => {  }}><UncheckIcon style={{fontSize: "15px"}} /></button>
+                      </td>
+                    </tr>
+                    {routesselectionlist.map((rts, i) => 
+                        assignedroutes.map((records, i) => {
+                          if(records.routeID == rts.routeID){
+                            return(
+                              <tr key={i}>
+                                <td className='td_adminlist' onClick={() => {  }}>{rts.routeID}</td>
+                                <td className='td_adminlist' onClick={() => {  }}>{rts.routeName}</td>
+                                <td className='td_adminlist'>{rts.stationList.length}</td>
+                                <td className='td_adminlist'>{records.dateAssigned}</td>
+                                <td>
+                                  ....
+                                  {/* <button onClick={() => {
+                                    updateCompanyStatus(records.companyAdminID, records.status? false : true)
+                                  }}
+                                  className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
+                                  <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button> */}
+                                </td>
+                              </tr>
+                            )
+                          }
+                        })
+                    )}
                   </tbody>
                 </table>
               </div>
