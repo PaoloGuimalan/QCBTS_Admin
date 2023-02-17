@@ -11,6 +11,7 @@ import BusStopSelectionIcon from '../../resources/Pan_Blue_Circle.png'
 import { motion } from 'framer-motion'
 import OpennedIcon from '../../resources/OpenStop.png'
 import ClosedIcon from '../../resources/ClosedStop.png'
+import LiveBusIcon from '../../resources/livebus.png'
 import { URL } from '../../json/urlconfig'
 
 function Map(){
@@ -26,6 +27,7 @@ function Map(){
   const routestatusloader = useSelector(state => state.routestatusloader);
   const savedroutepath = useSelector(state => state.savedroutepath);
   const routemakerlist = useSelector(state => state.routemakerlist);
+  const livebuslist = useSelector(state => state.livebuslist)
   const dispatch = useDispatch()
 
   const google = window.google;
@@ -196,6 +198,22 @@ function Map(){
         clickMapArea(data)
       }}
     >
+      {livebuslist.map((lbs, i) => {
+        return(
+          <Marker
+            icon={{
+              url: LiveBusIcon,
+              anchor: new google.maps.Point(25, 25),
+              scaledSize: new google.maps.Size(25, 25),
+            }}
+            onClick={() => {  }}
+            key={i}
+            position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
+          >
+          </Marker>
+        )
+      })}
+
       {busstopslist.map((data, i) => {
         return(
           <Marker
