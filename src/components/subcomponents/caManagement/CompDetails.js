@@ -5,13 +5,14 @@ import BackIcon from '@material-ui/icons/KeyboardArrowLeft'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_COMPANY_RECORD, SET_DRIVERS_LIST, SET_ROUTES_SELECTION_LIST } from '../../../redux/types'
+import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_BUS_LIST, SET_COMPANY_RECORD, SET_DRIVERS_LIST, SET_ROUTES_SELECTION_LIST } from '../../../redux/types'
 import { companyRecordState } from '../../../redux/actions'
 import DefaultIconComp from '../../../resources/defaultcompany.png'
 import MessageIcon from '@material-ui/icons/Message';
 import MailIcon from '@material-ui/icons/Mail'
 import CheckIcon from '@material-ui/icons/Check'
 import UncheckIcon from '@material-ui/icons/Close'
+import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import InfoIcon from '@material-ui/icons/Info'
 import { motion } from 'framer-motion'
@@ -26,11 +27,17 @@ function CompDetails() {
 
   const companyrecord = useSelector(state => state.companyrecord);
   const [editForm, seteditForm] = useState(false);
+  const [addBus, setaddBus] = useState(false)
 
   const [companyNameEdit, setcompanyNameEdit] = useState("");
   const [companyEmailEdit, setcompanyEmailEdit] = useState("");
   const [companyNumberEdit, setcompanyNumberEdit] = useState("");
   const [companyAddressEdit, setcompanyAddressEdit] = useState("");
+
+  const [busModel, setbusModel] = useState("");
+  const [plateNumber, setplateNumber] = useState("")
+  const [busCapacity, setbusCapacity] = useState("")
+  const [busAssignedTo, setbusAssignedTo] = useState("none");
 
   const [selectedRouteSelection, setselectedRouteSelection] = useState({
     routeID: "....",
@@ -42,6 +49,7 @@ function CompDetails() {
   const driverslist = useSelector(state => state.driverslist)
   const routesselectionlist = useSelector(state => state.routesselectionlist)
   const assignedroutes = useSelector(state => state.assignedroutes)
+  const buslist = useSelector(state => state.buslist)
 
   useEffect(() => {
     // console.log(params["companyID"])
@@ -50,16 +58,25 @@ function CompDetails() {
     initDriversList()
     initRoutesSelectionList()
     initAssignedRoutes()
+    initBusList()
 
     return () => {
       dispatch({ type: SET_COMPANY_RECORD, companyrecord: companyRecordState })
       dispatch({ type: SET_DRIVERS_LIST, driverslist: [] })
+      dispatch({type: SET_BUS_LIST, buslist: []})
     }
   }, [companyID]);
 
   useEffect(() => {
     setDefaultEditValues()
   }, [companyrecord])
+
+  const setDefaultBusForm = () => {
+    setbusModel("")
+    setplateNumber("")
+    setbusCapacity("")
+    setbusAssignedTo("none")
+  }
 
   const setDefaultEditValues = () => {
     setcompanyNameEdit(companyrecord.companydata.companyName);
@@ -250,6 +267,46 @@ function CompDetails() {
           stationTotal: "....",
           dateAdded: "...."
         })
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const addBusProcess = () => {
+    Axios.post(`${URL}/admin/addBus`, {
+      companyID: companyID,
+      driverID: busAssignedTo,
+      busModel: busModel,
+      plateNumber: plateNumber,
+      capacity: busCapacity
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        setDefaultBusForm()
+        setaddBus(false)
+        alertPrompt(true, response.data.message)
+        initBusList()
+      }
+      else{
+        alertPrompt(false, response.data.message)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const initBusList = () => {
+    Axios.get(`${URL}/admin/getBusList/${companyID}`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        dispatch({type: SET_BUS_LIST, buslist: response.data.result})
       }
     }).catch((err) => {
       console.log(err)
@@ -481,9 +538,12 @@ function CompDetails() {
         </li>
         <li>
           <nav id='nav_details_page'>
-            <li>
+            <li id='li_buslist'>
               <div id='div_adminslist'>
                 <p className='label_informations_company'>Bus List</p>
+              </div>
+              <div id='div_livebus_add_button_container'>
+                <button id='btn_add_bus' onClick={() => { setaddBus(true) }}><AddIcon style={{fontSize: "15px"}} /></button>
               </div>
             </li>
             <li>
@@ -491,38 +551,79 @@ function CompDetails() {
                 <table className='tbl_lists'>
                   <tbody>
                     <tr>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
-                      <th className='th_adminlist'>.....</th>
+                      <th className='th_adminlist'>Bus ID / Assigned</th>
+                      <th className='th_adminlist'>Model</th>
+                      <th className='th_adminlist'>Plate No.</th>
+                      <th className='th_adminlist'>Capacity</th>
+                      <th className='th_adminlist'>Navigations</th>
                     </tr>
-                    {/* {companyrecord.adminlist.map((records, i) => {
+                    {buslist.map((records, i) => {
                       return(
                         <tr key={i}>
-                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdminID}</td>
-                          <td className='td_adminlist' onClick={() => { redirectToCompAdDet(records.companyAdminID) }}>{records.companyAdmin.firstname} {records.companyAdmin.lastname}</td>
-                          <td className='td_adminlist'><a className='link_conf_lists' href={`mailto:${records.email}`}>{records.email}</a></td>
-                          <motion.td
-                          animate={{
-                            color: records.status? "green" : "red"
-                          }} 
-                          className='td_adminlist'>{records.status? "Activated" : "Deactivated"}</motion.td>
+                          <td className='td_adminlist' onClick={() => {  }}>{records.busID} / {records.driverID}</td>
+                          <td className='td_adminlist' onClick={() => {  }}>{records.busModel}</td>
+                          <td className='td_adminlist'>{records.plateNumber}</td>
+                          <td className='td_adminlist'>{records.capacity}</td>
                           <td>
-                            <button onClick={() => {
-                              updateCompanyStatus(records.companyAdminID, records.status? false : true)
-                            }}
-                            className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
-                            <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button>
+                            ...
                           </td>
                         </tr>
                       )
-                    })} */}
+                    })}
                   </tbody>
                 </table>
               </div>
             </li>
           </nav>
+        </li>
+        <li>
+          <motion.nav
+            animate={{
+              padding: addBus? "10px" : "0px",
+              height: addBus? "auto" : "0px"
+            }}
+            id='nav_details_page_edit'>
+              <li>
+                <div id='div_adminslist'>
+                  <p className='label_informations_company'>Add Bus</p>
+                </div>
+              </li>
+              <li>
+                <div id='div_inputsedit'>
+                  <div id='div_editinputs'>
+                    <div id='div_inputholder'>
+                      <div className='div_inputcontainers'>
+                        <p className='p_label_inputsedit'>Model</p>
+                        <input type='text' onChange={(e) => { setbusModel(e.target.value) }} value={busModel} name='companyName' id='companyName' placeholder='Bus Model' className='inputsedit' />
+                      </div>
+                      <div className='div_inputcontainers'>
+                        <p className='p_label_inputsedit'>Plate No.</p>
+                        <input type='text' onChange={(e) => { setplateNumber(e.target.value) }} value={plateNumber} name='companyEmail' id='companyEmail' placeholder='Plate Number' className='inputsedit' />
+                      </div>
+                      <div className='div_inputcontainers'>
+                        <p className='p_label_inputsedit'>Capacity</p>
+                        <input type='text' onChange={(e) => { setbusCapacity(e.target.value) }} value={busCapacity} name='companyNumber' id='companyNumber' placeholder='Bus Capacity' className='inputsedit' />
+                      </div>
+                      <div className='div_inputcontainers'>
+                        <p className='p_label_inputsedit'>Assign To</p>
+                        <select id='select_routeAssign' className='inputsedit' value={busAssignedTo} onChange={(e) => { setbusAssignedTo(e.target.value) }}>
+                          <option value="none" defaultChecked>---Select a Driver---</option>
+                          {driverslist.map((drvs, i) => {
+                            return(
+                              <option key={drvs.userID} value={drvs.userID}>{drvs.firstName} {drvs.middleName == "N/A"? "" : drvs.middleName} {drvs.lastName}</option>
+                            )
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div id='div_btns'>
+                      <button className='btn_edit_navs' onClick={() => { addBusProcess() }}>Save</button>
+                      <button className='btn_edit_navs' onClick={() => { setaddBus(false); setDefaultBusForm() }}>Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </motion.nav>
         </li>
         <li>
           <nav id='nav_details_page'>
@@ -540,7 +641,7 @@ function CompDetails() {
                       <th className='th_adminlist'>Route Name</th>
                       <th className='th_adminlist'>Number of Stations</th>
                       <th className='th_adminlist'>Date Added</th>
-                      <th className='th_adminlist'>Navigation</th>
+                      <th className='th_adminlist'>Navigations</th>
                     </tr>
                     <tr>
                       <td className='td_adminlist' onClick={() => {  }}>

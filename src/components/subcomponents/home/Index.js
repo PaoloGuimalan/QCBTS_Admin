@@ -13,10 +13,14 @@ import PhoneIcon from '@material-ui/icons/PhoneAndroid'
 import RegIcon from '@material-ui/icons/SignalCellular4Bar'
 import UpIcon from '@material-ui/icons/TrendingUp'
 import DownIcon from '@material-ui/icons/TrendingDown'
+import { EXT_URL } from '../../../json/urlconfig'
+import { SET_LIVE_BUST_LIST } from '../../../redux/types'
+import Axios from 'axios'
 
 function Index() {
 
   const authdetails = useSelector(state => state.authdetails);
+  const livebuslist = useSelector(state => state.livebuslist)
 
   const [date, setdate] = useState("");
   const [time, settime] = useState("");
@@ -27,6 +31,7 @@ function Index() {
   useEffect(() => {
     setdate(`${dateGetter()}`)
     settime(`${timeGetter()}`)
+    // initBusLiveNumber()
 
     const interval = setInterval(() => {
       setdate(`${dateGetter()}`)
@@ -37,6 +42,40 @@ function Index() {
       clearInterval(interval);
     }
   },[])
+
+  useEffect(() => {
+    var interval = setInterval(() => {
+        Axios.get(`${EXT_URL}/liveData`).then((response) => {
+            var arrayData = Object.values(response.data)
+            // var arrayDataLength = arrayData.filter((dt, i) => dt.userID == selectedlivebus.userID).length
+            // console.log(arrayData)
+            dispatch({type: SET_LIVE_BUST_LIST, livebuslist: arrayData})
+            // console.log(arrayDataLength)
+            // if(arrayDataLength == 0){
+            //     if(status == 0){
+            //         status += 1
+            //         dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: { userID: "", companyID: "" } })
+            //         if(selectedlivebus.userID != ""){
+            //             if(Platform.OS == "android"){
+            //                 ToastAndroid.show("Bus went offline", ToastAndroid.SHORT)
+            //             }
+            //             else{
+            //                 alert("Bus went offline")
+            //             }
+            //         }
+            //         // console.log(status, arrayDataLength)
+            //     }
+            // }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },2000)
+
+    return () => {
+        clearInterval(interval)
+        // status = false;
+    }
+},[])
 
   function dateGetter(){
       var today = new Date();
@@ -94,7 +133,7 @@ function Index() {
             <div className='div_basic_analytics_indv'>
               <div className='div_basic_analytics_boxes_ind'>
                 <div className='div_division_boxes_indv'>
-                  <p className='p_data_indv_num'>0</p>
+                  <p className='p_data_indv_num'>{livebuslist.length}</p>
                   <p className='p_data_indv'>Active Bus</p>
                   <div className='div_data_status'>
                     <UpIcon style={{color: "green", fontSize: "40px"}}/>

@@ -418,3 +418,25 @@
     height: 30px;
     width: 100%;
 }
+
+#li_buslist{
+    display: flex;
+    align-items: center;
+}
+
+#div_livebus_add_button_container{
+    background-color: transparent;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 0px;
+    padding-bottom: 8px;
+}
+
+#btn_add_bus{
+    height: 30px;
+    width: 30px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px black;
+    cursor: pointer;
+}
