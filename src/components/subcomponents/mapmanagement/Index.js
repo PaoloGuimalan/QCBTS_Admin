@@ -7,10 +7,10 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO } from '../../../redux/types/index'
+import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST } from '../../../redux/types/index'
 import { savedroutepathState, selectedAreaInputState, selectedAreaState, selectedDetailsState } from '../../../redux/actions'
 import Axios from 'axios'
-import { URL } from '../../../json/urlconfig'
+import { EXT_URL, URL } from '../../../json/urlconfig'
 
 function Index() {
 
@@ -20,6 +20,7 @@ function Index() {
   const selecteddetails = useSelector(state => state.selecteddetails);
   const centerMap = useSelector(state => state.centermap);
   const selectedMarker = useSelector(state => state.selectedmarker);
+  const livebuslist = useSelector(state => state.livebuslist)
   const dispatch = useDispatch();
 
   const authdetails = useSelector(state => state.authdetails);
@@ -433,6 +434,40 @@ function Index() {
       }
     }
   }
+
+  useEffect(() => {
+    var interval = setInterval(() => {
+        Axios.get(`${EXT_URL}/liveData`).then((response) => {
+            var arrayData = Object.values(response.data)
+            // var arrayDataLength = arrayData.filter((dt, i) => dt.userID == selectedlivebus.userID).length
+            // console.log(arrayData)
+            dispatch({type: SET_LIVE_BUST_LIST, livebuslist: arrayData})
+            // console.log(arrayDataLength)
+            // if(arrayDataLength == 0){
+            //     if(status == 0){
+            //         status += 1
+            //         dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: { userID: "", companyID: "" } })
+            //         if(selectedlivebus.userID != ""){
+            //             if(Platform.OS == "android"){
+            //                 ToastAndroid.show("Bus went offline", ToastAndroid.SHORT)
+            //             }
+            //             else{
+            //                 alert("Bus went offline")
+            //             }
+            //         }
+            //         // console.log(status, arrayDataLength)
+            //     }
+            // }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },2000)
+
+    return () => {
+        clearInterval(interval)
+        // status = false;
+    }
+},[])
 
   return (
     <div id='div_submap'>

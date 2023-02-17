@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { setalert, setassignedroutes, setbusstopinfo, setbusstopslist, setcentermap, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setconversationdata, setconversationlist, setdacompanylist, setdadriverlist, setdriverslist, setmapmode, setpostslist, setpublicroutelist, setroutelist, setroutemakerlist, setroutepath, setroutesselectionlist, setroutestatusloader, setsavedroutepath, setselectedarea, setselectedareainput, setselectedconvID, setselecteddetails, setselectedmarker, setselectedtype, userAuth } from '../actions';
+import { setalert, setassignedroutes, setbusstopinfo, setbusstopslist, setcentermap, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setconversationdata, setconversationlist, setdacompanylist, setdadriverlist, setdriverslist, setlivebuslist, setmapmode, setpostslist, setpublicroutelist, setroutelist, setroutemakerlist, setroutepath, setroutesselectionlist, setroutestatusloader, setsavedroutepath, setselectedarea, setselectedareainput, setselectedconvID, setselecteddetails, setselectedmarker, setselectedtype, userAuth } from '../actions';
 
 const combiner = combineReducers({
     authdetails: userAuth,
@@ -32,7 +32,8 @@ const combiner = combineReducers({
     postslist: setpostslist,
     driverslist: setdriverslist,
     routesselectionlist: setroutesselectionlist,
-    assignedroutes: setassignedroutes
+    assignedroutes: setassignedroutes,
+    livebuslist: setlivebuslist
 })
 
 const store = createStore(combiner);
