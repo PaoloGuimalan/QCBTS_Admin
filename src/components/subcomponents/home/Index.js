@@ -13,7 +13,7 @@ import PhoneIcon from '@material-ui/icons/PhoneAndroid'
 import RegIcon from '@material-ui/icons/SignalCellular4Bar'
 import UpIcon from '@material-ui/icons/TrendingUp'
 import DownIcon from '@material-ui/icons/TrendingDown'
-import { EXT_URL } from '../../../json/urlconfig'
+import { EXT_URL, URL } from '../../../json/urlconfig'
 import { SET_LIVE_BUST_LIST } from '../../../redux/types'
 import Axios from 'axios'
 
@@ -25,6 +25,8 @@ function Index() {
   const [date, setdate] = useState("");
   const [time, settime] = useState("");
 
+  const [countAppUsersTotal, setcountAppUsersTotal] = useState(0)
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -32,6 +34,7 @@ function Index() {
     setdate(`${dateGetter()}`)
     settime(`${timeGetter()}`)
     // initBusLiveNumber()
+    initCountAppUsers()
 
     const interval = setInterval(() => {
       setdate(`${dateGetter()}`)
@@ -94,6 +97,21 @@ function Index() {
       var timeIndicator = hour >= 12? "am" : "pm"
 
       return today = `${hour}:${minutes} ${timeIndicator}`;
+  }
+
+  const initCountAppUsers = () => {
+    Axios.get(`${URL}/admin/countUsers`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // console.log(response.data.result)
+        setcountAppUsersTotal(response.data.result)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
   return (
@@ -159,7 +177,7 @@ function Index() {
               </div>
               <div className='div_basic_analytics_boxes_ind'>
                 <div className='div_division_boxes_indv'>
-                  <p className='p_data_indv_num'>0</p>
+                  <p className='p_data_indv_num'>{countAppUsersTotal}</p>
                   <p className='p_data_indv'>No. of App Users</p>
                   <div className='div_data_status'>
                     <DownIcon style={{color: "red", fontSize: "40px"}}/>
