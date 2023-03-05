@@ -47,38 +47,57 @@ function Index() {
   },[])
 
   useEffect(() => {
-    var interval = setInterval(() => {
-        Axios.get(`${EXT_URL}/liveData`).then((response) => {
-            var arrayData = Object.values(response.data)
-            // var arrayDataLength = arrayData.filter((dt, i) => dt.userID == selectedlivebus.userID).length
-            // console.log(arrayData)
-            dispatch({type: SET_LIVE_BUST_LIST, livebuslist: arrayData})
-            // console.log(arrayDataLength)
-            // if(arrayDataLength == 0){
-            //     if(status == 0){
-            //         status += 1
-            //         dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: { userID: "", companyID: "" } })
-            //         if(selectedlivebus.userID != ""){
-            //             if(Platform.OS == "android"){
-            //                 ToastAndroid.show("Bus went offline", ToastAndroid.SHORT)
-            //             }
-            //             else{
-            //                 alert("Bus went offline")
-            //             }
-            //         }
-            //         // console.log(status, arrayDataLength)
-            //     }
-            // }
-        }).catch((err) => {
-            console.log(err)
-        })
-    },2000)
+    // var interval = setInterval(() => {
+    //     Axios.get(`${EXT_URL}/liveData`).then((response) => {
+    //         var arrayData = Object.values(response.data)
+    //         // var arrayDataLength = arrayData.filter((dt, i) => dt.userID == selectedlivebus.userID).length
+    //         // console.log(arrayData)
+    //         dispatch({type: SET_LIVE_BUST_LIST, livebuslist: arrayData})
+    //         // console.log(arrayDataLength)
+    //         // if(arrayDataLength == 0){
+    //         //     if(status == 0){
+    //         //         status += 1
+    //         //         dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: { userID: "", companyID: "" } })
+    //         //         if(selectedlivebus.userID != ""){
+    //         //             if(Platform.OS == "android"){
+    //         //                 ToastAndroid.show("Bus went offline", ToastAndroid.SHORT)
+    //         //             }
+    //         //             else{
+    //         //                 alert("Bus went offline")
+    //         //             }
+    //         //         }
+    //         //         // console.log(status, arrayDataLength)
+    //         //     }
+    //         // }
+    //     }).catch((err) => {
+    //         console.log(err)
+    //     })
+    // },2000)
 
-    return () => {
-        clearInterval(interval)
-        // status = false;
-    }
+    // return () => {
+    //     clearInterval(interval)
+    //     // status = false;
+    // }
+
+    // initLiveData()
 },[])
+
+// const initLiveData = () => {
+//   Axios.get(`${EXT_URL}/liveData`).then((response) => {
+//     var arrayData = Object.values(response.data)
+//     // var arrayDataLength = arrayData.filter((dt, i) => dt.userID == selectedlivebus.userID).length
+//     // console.log(arrayData)
+//     dispatch({type: SET_LIVE_BUST_LIST, livebuslist: arrayData})
+//     setTimeout(() => {
+//       initLiveData()
+//     }, 2000)
+//   }).catch((err) => {
+//       console.log(err)
+//       setTimeout(() => {
+//         initLiveData()
+//       }, 2000)
+//   })
+// }
 
   function dateGetter(){
       var today = new Date();

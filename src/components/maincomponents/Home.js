@@ -5,7 +5,7 @@ import '../../styles/maincompstyles/Home.css'
 import IconImg from '../../resources/Track.png';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { SET_AUTH } from '../../redux/types';
+import { SET_AUTH, SET_LIVE_BUST_LIST } from '../../redux/types';
 import { motion } from 'framer-motion'
 import SubHome from '../subcomponents/home/Index';
 import SubMap from '../subcomponents/mapmanagement/Index'
@@ -16,7 +16,7 @@ import CompAdDetails from '../subcomponents/caManagement/CompAdDetails';
 import Messages from '../subcomponents/messages/Messages';
 import { playSound } from '../../json/sounds';
 import Axios from 'axios'
-import { URL } from '../../json/urlconfig';
+import { EXT_URL, URL } from '../../json/urlconfig';
 import Main from '../subcomponents/daManagement/Main';
 import NotificationsMain from '../subcomponents/notifications/NotificationsMain';
 import Feed from '../subcomponents/feed/Feed';
@@ -33,11 +33,29 @@ function Home() {
 
   useEffect(() => {
     subscribeAlertMessages()
+    initLiveData()
 
     return () => {
       cancelAxios.cancel()
     }
   },[])
+
+  const initLiveData = () => {
+    Axios.get(`${EXT_URL}/liveData`).then((response) => {
+      var arrayData = Object.values(response.data)
+      // var arrayDataLength = arrayData.filter((dt, i) => dt.userID == selectedlivebus.userID).length
+      // console.log(arrayData)
+      dispatch({type: SET_LIVE_BUST_LIST, livebuslist: arrayData})
+      setTimeout(() => {
+        initLiveData()
+      }, 2000)
+    }).catch((err) => {
+        console.log(err)
+        setTimeout(() => {
+          initLiveData()
+        }, 2000)
+    })
+  }
 
   const subscribeAlertMessages = () => {
     if(typeof cancelAxios != typeof undefined){
