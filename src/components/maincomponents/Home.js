@@ -143,7 +143,7 @@ function Home() {
                     duration: 0
                   }
                 }} onClick={() => { goToModule("/home/") }} className='btn_navigations'>Home</motion.button>
-                <motion.button animate={{
+                {/* <motion.button animate={{
                   borderWidth: pathid == "messages"? 0 : 0,
                   backgroundColor: pathid == "messages"? "#ffbf00" : "transparent",
                   color: pathid == "messages"? "#2b4273" : "white",
@@ -159,7 +159,7 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/messages/") }} className='btn_navigations'>Messages</motion.button>
+                }} onClick={() => { goToModule("/home/messages/") }} className='btn_navigations'>Messages</motion.button> */}
                 <motion.button animate={{
                   borderWidth: pathid == "feed"? 0 : 0,
                   backgroundColor: pathid == "feed"? "#ffbf00" : "transparent",

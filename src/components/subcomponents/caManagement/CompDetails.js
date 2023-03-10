@@ -9,6 +9,7 @@ import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_BUS_LIST, SET_COMPANY_RECORD, SET_D
 import { companyRecordState } from '../../../redux/actions'
 import DefaultIconComp from '../../../resources/defaultcompany.png'
 import MessageIcon from '@material-ui/icons/Message';
+import DeleteIcon from '@material-ui/icons/Delete'
 import MailIcon from '@material-ui/icons/Mail'
 import CheckIcon from '@material-ui/icons/Check'
 import UncheckIcon from '@material-ui/icons/Close'
@@ -40,7 +41,7 @@ function CompDetails() {
   const [busAssignedTo, setbusAssignedTo] = useState("none");
 
   const [selectedRouteSelection, setselectedRouteSelection] = useState({
-    routeID: "....",
+    routeID: "none",
     routeName: "....",
     stationTotal: "....",
     dateAdded: "...."
@@ -251,26 +252,36 @@ function CompDetails() {
   }
 
   const asignRoutetoCompany = () => {
-    Axios.post(`${URL}/admin/assignRoute`, {
-      routeID: selectedRouteSelection.routeID,
-      companyID: companyID
-    },{
-      headers:{
-        "x-access-token": localStorage.getItem("token")
+    if(selectedRouteSelection.routeID == "none"){
+      alert("Please select a route")
+    }
+    else{
+      if(assignedroutes.length > 0){
+        alert("Company already have Assigned Route");
       }
-    }).then((response) => {
-      if(response.data.status){
-        initAssignedRoutes()
-        setselectedRouteSelection({
-          routeID: "....",
-          routeName: "....",
-          stationTotal: "....",
-          dateAdded: "...."
+      else{
+        Axios.post(`${URL}/admin/assignRoute`, {
+          routeID: selectedRouteSelection.routeID,
+          companyID: companyID
+        },{
+          headers:{
+            "x-access-token": localStorage.getItem("token")
+          }
+        }).then((response) => {
+          if(response.data.status){
+            initAssignedRoutes()
+            setselectedRouteSelection({
+              routeID: "....",
+              routeName: "....",
+              stationTotal: "....",
+              dateAdded: "...."
+            })
+          }
+        }).catch((err) => {
+          console.log(err)
         })
       }
-    }).catch((err) => {
-      console.log(err)
-    })
+    }
   }
 
   const addBusProcess = () => {
@@ -308,6 +319,47 @@ function CompDetails() {
       if(response.data.status){
         dispatch({type: SET_BUS_LIST, buslist: response.data.result})
       }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const deleteAssignedRoute = (companyID, routeID) => {
+    Axios.post(`${URL}/admin/deleteAssignedRoute`, {
+      companyID: companyID,
+      routeID: routeID
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        alert(response.data.message)
+      }
+      else{
+        alert(response.data.message)
+      }
+      initAssignedRoutes()
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const deleteBus = (busID) => {
+    Axios.post(`${URL}/admin/deleteBus`, {
+      busID: busID
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        alert(response.data.message)
+      }
+      else{
+        alert(response.data.message)
+      }
+      initBusList()
     }).catch((err) => {
       console.log(err)
     })
@@ -445,7 +497,7 @@ function CompDetails() {
             </li>
           </motion.nav>
         </li>
-        <li>
+        {/* <li>
           <nav id='nav_details_page'>
             <li>
               <div id='div_adminslist'>
@@ -490,7 +542,7 @@ function CompDetails() {
               </div>
             </li>
           </nav>
-        </li>
+        </li> */}
         <li>
           <nav id='nav_details_page'>
             <li>
@@ -525,7 +577,7 @@ function CompDetails() {
                               updateDriverStatus(records.userID, !records.status)
                             }}
                             className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
-                            <button className='btns_list' onClick={() => {  }}><MessageIcon style={{fontSize: "15px"}} /></button>
+                            <button className='btns_list' onClick={() => {  }}><DeleteIcon style={{fontSize: "15px"}} /></button>
                           </td>
                         </tr>
                       )
@@ -565,7 +617,7 @@ function CompDetails() {
                           <td className='td_adminlist'>{records.plateNumber}</td>
                           <td className='td_adminlist'>{records.capacity}</td>
                           <td>
-                            ...
+                            <button className='btns_list' onClick={() => { deleteBus(records.busID) }}><DeleteIcon style={{fontSize: "15px"}} /></button>
                           </td>
                         </tr>
                       )
@@ -629,7 +681,7 @@ function CompDetails() {
           <nav id='nav_details_page'>
             <li>
               <div id='div_adminslist'>
-                <p className='label_informations_company'>Routes List</p>
+                <p className='label_informations_company'>Route</p>
               </div>
             </li>
             <li>
@@ -698,12 +750,7 @@ function CompDetails() {
                                 <td className='td_adminlist'>{rts.stationList.length}</td>
                                 <td className='td_adminlist'>{records.dateAssigned}</td>
                                 <td>
-                                  ....
-                                  {/* <button onClick={() => {
-                                    updateCompanyStatus(records.companyAdminID, records.status? false : true)
-                                  }}
-                                  className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
-                                  <button className='btns_list' onClick={() => { redirectToMessages(records.companyAdminID) }}><MessageIcon style={{fontSize: "15px"}} /></button> */}
+                                  <button className='btns_list' onClick={() => { deleteAssignedRoute(records.companyID, rts.routeID) }}><DeleteIcon style={{fontSize: "15px"}} /></button>
                                 </td>
                               </tr>
                             )
