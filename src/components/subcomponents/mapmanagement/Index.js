@@ -469,6 +469,29 @@ function Index() {
     // }
 },[])
 
+const deleteRoute = (routeID) => {
+  // alert(routeID)
+  Axios.post(`${URL}/admin/deleteRoute`, {
+    routeID: routeID
+  },{
+    headers:{
+      "x-access-token": localStorage.getItem("token")
+    }
+  }).then((response) => {
+    if(response.data.status){
+      dispatch({ type: SET_SAVED_ROUTE_PATH, savedroutepath: savedroutepathState })
+      initRoutesList()
+      initPublicRoutesList()
+      alert(response.data.message)
+    }
+    else{
+      alert(response.data.message)
+    }
+  }).catch((err) => {
+    console.log(err)
+  })
+}
+
   return (
     <div id='div_submap'>
         <div id='div_map_header' className='absolute_divs_map'>
@@ -526,6 +549,12 @@ function Index() {
                 <div id='div_details_data_dynamic_container'>
                   <p className='p_details_data_holder'>{savedroutepath.privacy? "Route is in Public" : "Route is Private"}</p>
                   <p className='p_details_data_holder'>{savedroutepath.status? "Activated" : "Not Active"}</p>
+                </div>
+              </div>
+              <div id='div_route_info_details'>
+                <p id='p_details_label'>Navigations</p>
+                <div id='div_details_navigations_dynamic_container'>
+                  <button id='btn_delete_route' onClick={() => { deleteRoute(savedroutepath.routeID) }}>Delete Route</button>
                 </div>
               </div>
             </div>
