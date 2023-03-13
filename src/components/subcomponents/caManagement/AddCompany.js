@@ -242,7 +242,7 @@ function AddCompany() {
                   </li>
                   <li>
                     <div id='div_savebtn_holder'>
-                      <button id='btn_fmswitch_company' onClick={() => { setformswitch(false) }}>Add a Company Admin</button>
+                      {/* <button id='btn_fmswitch_company' onClick={() => { setformswitch(false) }}>Add a Company Admin</button> */}
                       <button id='btn_save_company' onClick={() => { saveCompanyDetails() }}>Save Company</button>
                     </div>
                   </li>

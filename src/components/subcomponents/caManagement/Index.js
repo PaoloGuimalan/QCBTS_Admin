@@ -125,12 +125,12 @@ function Index() {
                 <nav id='nav_table_intro'>
                     <li className='li_table_intro'>
                         <div id='div_table_intro'>
-                            <p className='label_table_intro'>Operator/Company Admin Account</p>
+                            <p className='label_table_intro'>Operator/Company Account</p>
                             <p className='label_table_intro'>Manage Account here</p>
                         </div>
                     </li>
                     <li className='li_table_intro'>
-                        <button onClick={() => { goToModule("/home/camanagement/addcompany") }} id='add_account_btn'>ADD ACCOUNT</button>
+                        <button onClick={() => { goToModule("/home/camanagement/addcompany") }} id='add_account_btn'>ADD COMPANY</button>
                     </li>
                 </nav>
             </li>
