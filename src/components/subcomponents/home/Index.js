@@ -158,9 +158,9 @@ function Index() {
             </div>
             <div id='div_flexed_admin_info'></div>
             <div id='div_admin_info_navs'>
-              <button className='btn_admin_info' onClick={() => {
+              {/* <button className='btn_admin_info' onClick={() => {
                 navigate("/home/messages/co")
-              }}><MessagesIcon /></button>
+              }}><MessagesIcon /></button> */}
               <button className='btn_admin_info' onClick={() => {
                 navigate("/home/notifications")
               }}><BellIcon /></button>

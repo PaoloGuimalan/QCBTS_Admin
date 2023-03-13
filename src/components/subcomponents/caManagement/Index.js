@@ -115,7 +115,7 @@ function Index() {
                     </li>
                     <li className='li_header_nav'>
                         <div id='notifbar_div'>
-                            <button onClick={() => { goToModule("/home/messages/ca") }} className='btn_notifbar'><MessagesIcon style={{fontSize: "30px", color: "white"}} /></button>
+                            {/* <button onClick={() => { goToModule("/home/messages/ca") }} className='btn_notifbar'><MessagesIcon style={{fontSize: "30px", color: "white"}} /></button> */}
                             <button onClick={() => { goToModule("/home/notifications") }} className='btn_notifbar'><BellIcon style={{fontSize: "30px", color: "white"}} /></button>
                         </div>
                     </li>

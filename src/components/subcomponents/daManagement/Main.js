@@ -58,7 +58,7 @@ function Main() {
             </div>
             <div id='flexed_div'></div>
             <div id='notifbar_div_da'>
-             <button onClick={() => { navigate("/home/messages/da") }} className='btn_notifbar_da'><MessagesIcon style={{fontSize: "20px", color: "#4B4B4B"}} /></button>
+             {/* <button onClick={() => { navigate("/home/messages/da") }} className='btn_notifbar_da'><MessagesIcon style={{fontSize: "20px", color: "#4B4B4B"}} /></button> */}
              <button onClick={() => { navigate("/home/notifications") }} className='btn_notifbar_da'><BellIcon style={{fontSize: "20px", color: "#4B4B4B"}} /></button>
             </div>
         </div>
