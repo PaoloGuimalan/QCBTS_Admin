@@ -203,22 +203,52 @@ function CompDetails() {
   }
 
   const updateDriverStatus = (id, status) => {
-    Axios.post(`${URL}/admin/updateDriverStatus`, {
-      driverID: id,
-      status: status
-    },
-    {
-      headers:{
-        "x-access-token": localStorage.getItem("token")
+    if(status === true){
+      if(assignedroutes.length == 0){
+        alert("Assign a route for the company first")
       }
-    }).then((response) => {
-      // console.log(response.data.result)
-      if(response.data.status){
-        initDriversList()
+      else{
+        if(buslist.filter((bsl, i) => bsl.driverID == id).length == 1){
+          Axios.post(`${URL}/admin/updateDriverStatus`, {
+            driverID: id,
+            status: status
+          },
+          {
+            headers:{
+              "x-access-token": localStorage.getItem("token")
+            }
+          }).then((response) => {
+            // console.log(response.data.result)
+            if(response.data.status){
+              initDriversList()
+            }
+          }).catch((err) => {
+            console.log(err);
+          })
+        }
+        else{
+          alert("Please assign a bus first for the driver")
+        }
       }
-    }).catch((err) => {
-      console.log(err);
-    })
+    }
+    else{
+      Axios.post(`${URL}/admin/updateDriverStatus`, {
+        driverID: id,
+        status: status
+      },
+      {
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        // console.log(response.data.result)
+        if(response.data.status){
+          initDriversList()
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
   }
 
   const initRoutesSelectionList = () => {
@@ -285,29 +315,34 @@ function CompDetails() {
   }
 
   const addBusProcess = () => {
-    Axios.post(`${URL}/admin/addBus`, {
-      companyID: companyID,
-      driverID: busAssignedTo,
-      busModel: busModel,
-      plateNumber: plateNumber,
-      capacity: busCapacity
-    },{
-      headers:{
-        "x-access-token": localStorage.getItem("token")
-      }
-    }).then((response) => {
-      if(response.data.status){
-        setDefaultBusForm()
-        setaddBus(false)
-        alertPrompt(true, response.data.message)
-        initBusList()
-      }
-      else{
-        alertPrompt(false, response.data.message)
-      }
-    }).catch((err) => {
-      console.log(err);
-    })
+    if(buslist.filter((bsl, i) => bsl.driverID == busAssignedTo).length == 1){
+      alert(`A bus were already assigned to ${busAssignedTo}`)
+    }
+    else{
+      Axios.post(`${URL}/admin/addBus`, {
+        companyID: companyID,
+        driverID: busAssignedTo,
+        busModel: busModel,
+        plateNumber: plateNumber,
+        capacity: busCapacity
+      },{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          setDefaultBusForm()
+          setaddBus(false)
+          alertPrompt(true, response.data.message)
+          initBusList()
+        }
+        else{
+          alertPrompt(false, response.data.message)
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
   }
 
   const initBusList = () => {
@@ -340,14 +375,16 @@ function CompDetails() {
         alert(response.data.message)
       }
       initAssignedRoutes()
+      initDriversList()
     }).catch((err) => {
       console.log(err)
     })
   }
 
-  const deleteBus = (busID) => {
+  const deleteBus = (busID, driverID) => {
     Axios.post(`${URL}/admin/deleteBus`, {
-      busID: busID
+      busID: busID,
+      driverID: driverID
     },{
       headers:{
         "x-access-token": localStorage.getItem("token")
@@ -360,6 +397,7 @@ function CompDetails() {
         alert(response.data.message)
       }
       initBusList()
+      initDriversList()
     }).catch((err) => {
       console.log(err)
     })
@@ -617,7 +655,7 @@ function CompDetails() {
                           <td className='td_adminlist'>{records.plateNumber}</td>
                           <td className='td_adminlist'>{records.capacity}</td>
                           <td>
-                            <button className='btns_list' onClick={() => { deleteBus(records.busID) }}><DeleteIcon style={{fontSize: "15px"}} /></button>
+                            <button className='btns_list' onClick={() => { deleteBus(records.busID, records.driverID) }}><DeleteIcon style={{fontSize: "15px"}} /></button>
                           </td>
                         </tr>
                       )
@@ -695,6 +733,7 @@ function CompDetails() {
                       <th className='th_adminlist'>Date Added</th>
                       <th className='th_adminlist'>Navigations</th>
                     </tr>
+                    {assignedroutes.length == 1? null : (
                     <tr>
                       <td className='td_adminlist' onClick={() => {  }}>
                         <select id='select_routeAssign' value={selectedRouteSelection.routeID} onChange={(e) => {
@@ -740,6 +779,7 @@ function CompDetails() {
                         <button className='btns_list' onClick={() => {  }}><UncheckIcon style={{fontSize: "15px"}} /></button>
                       </td>
                     </tr>
+                    )}
                     {routesselectionlist.map((rts, i) => 
                         assignedroutes.map((records, i) => {
                           if(records.routeID == rts.routeID){
