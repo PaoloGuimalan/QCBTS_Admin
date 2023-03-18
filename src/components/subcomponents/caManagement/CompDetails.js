@@ -360,47 +360,79 @@ function CompDetails() {
   }
 
   const deleteAssignedRoute = (companyID, routeID) => {
-    Axios.post(`${URL}/admin/deleteAssignedRoute`, {
-      companyID: companyID,
-      routeID: routeID
-    },{
-      headers:{
-        "x-access-token": localStorage.getItem("token")
-      }
-    }).then((response) => {
-      if(response.data.status){
-        alert(response.data.message)
-      }
-      else{
-        alert(response.data.message)
-      }
-      initAssignedRoutes()
-      initDriversList()
-    }).catch((err) => {
-      console.log(err)
-    })
+    if(window.confirm("Do you want to unassign this route from the company?")){
+      Axios.post(`${URL}/admin/deleteAssignedRoute`, {
+        companyID: companyID,
+        routeID: routeID
+      },{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          alert(response.data.message)
+        }
+        else{
+          alert(response.data.message)
+        }
+        initAssignedRoutes()
+        initDriversList()
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
   }
 
   const deleteBus = (busID, driverID) => {
-    Axios.post(`${URL}/admin/deleteBus`, {
-      busID: busID,
-      driverID: driverID
-    },{
-      headers:{
-        "x-access-token": localStorage.getItem("token")
-      }
-    }).then((response) => {
-      if(response.data.status){
-        alert(response.data.message)
+    if(window.confirm("Do you want to delete this bus?")){
+      Axios.post(`${URL}/admin/deleteBus`, {
+        busID: busID,
+        driverID: driverID
+      },{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          alert(response.data.message)
+        }
+        else{
+          alert(response.data.message)
+        }
+        initBusList()
+        initDriversList()
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+  }
+
+  const deleteDriver = (driverIDprop) => {
+    // alert(driverIDprop)
+    if(window.confirm("Do you want to delete this driver's account?")){
+      if(buslist.filter((bsl, i) => bsl.driverID == driverIDprop).length > 0){
+        alert(`Please delete a bus assigned to this driver before deleting the driver's account`)
       }
       else{
-        alert(response.data.message)
+        Axios.post(`${URL}/admin/deleteDriver`,{
+          driverID: driverIDprop
+        },{
+          headers:{
+            "x-access-token": localStorage.getItem("token")
+          }
+        }).then((response) => {
+          if(response.data.status){
+            alert(response.data.message)
+            initDriversList()
+          }
+          else{
+            alert(response.data.message)
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
       }
-      initBusList()
-      initDriversList()
-    }).catch((err) => {
-      console.log(err)
-    })
+    }
   }
 
   return (
@@ -615,7 +647,7 @@ function CompDetails() {
                               updateDriverStatus(records.userID, !records.status)
                             }}
                             className='btns_list'>{records.status? <UncheckIcon style={{fontSize: "15px"}} /> : <CheckIcon style={{fontSize: "15px"}} />}</button>
-                            <button className='btns_list' onClick={() => {  }}><DeleteIcon style={{fontSize: "15px"}} /></button>
+                            <button className='btns_list' onClick={() => { deleteDriver(records.userID) }}><DeleteIcon style={{fontSize: "15px"}} /></button>
                           </td>
                         </tr>
                       )
