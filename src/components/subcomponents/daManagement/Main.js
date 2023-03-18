@@ -7,10 +7,11 @@ import BellIcon from '@material-ui/icons/Notifications'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useSelector, useDispatch } from 'react-redux'
-import { SET_DA_COMPANY_LIST } from '../../../redux/types'
+import { SET_DA_COMPANY_LIST, SET_DA_DRIVER_LIST } from '../../../redux/types'
 import InfoIcon from '@material-ui/icons/Info'
 import RightIcon from '@material-ui/icons/KeyboardArrowRightTwoTone'
 import DAIcon from '@material-ui/icons/DirectionsBus'
+import ReloadListIcon from '@material-ui/icons/Refresh'
 
 function Main() {
 
@@ -23,9 +24,11 @@ function Main() {
 
   useEffect(() => {
     fetchCompanyList()
+    fetchAllDrivers()
 
     return () => {
       dispatch({ type: SET_DA_COMPANY_LIST, dacompanylist: [] })
+      dispatch({type: SET_DA_DRIVER_LIST, dadriverlist: []})
     }
   },[])
 
@@ -41,6 +44,40 @@ function Main() {
       }
       else{
         console.log(response.data.result.message)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const fetchAllDrivers = () => {
+    setselectedDriversList("All")
+    Axios.get(`${URL}/admin/getAllDrivers`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        dispatch({type: SET_DA_DRIVER_LIST, dadriverlist: response.data.result})
+      }
+      else{
+        console.log(response.data.message)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const getCompanyDriversList = (companyIDprop, companyName) => {
+    setselectedDriversList(companyName)
+    Axios.get(`${URL}/admin/driverList/${companyIDprop}`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      // console.log(response.data.result)
+      if(response.data.status){
+        dispatch({type: SET_DA_DRIVER_LIST, dadriverlist: response.data.result})
       }
     }).catch((err) => {
       console.log(err);
@@ -88,7 +125,7 @@ function Main() {
                             <td>{data.companyName}</td>
                             <td>
                               <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button>
-                              <button className='btn_company_list_navs'><RightIcon style={{ fontSize: "15px" }} /></button>
+                              <button className='btn_company_list_navs' onClick={() => { getCompanyDriversList(data.companyID, data.companyName) }}><RightIcon style={{ fontSize: "15px" }} /></button>
                             </td>
                           </tr>
                         )
@@ -98,7 +135,7 @@ function Main() {
                 </div>
               </div>
               <div className='div_list_sections_container'>
-                <p className='p_each_list_label'>Drivers From ({selectedDriversList})</p>
+                <p onClick={() => { fetchAllDrivers() }} className='p_each_list_label'>Drivers From ({selectedDriversList})</p>
                 <div className='div_list_sections'>
                   <table className='tbl_lists'>
                     <tbody>
@@ -108,12 +145,22 @@ function Main() {
                         <th className='tbl_th2'>Driver Name</th>
                         <th className='tbl_th2 th_last'>Navigations</th>
                       </tr>
-                      <tr>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                      </tr>
+                      {dadriverlist.map((dadrv, i) => {
+                        return(
+                          <tr key={i} className='tr_indv'>
+                            <td>{dadrv.userID}</td>
+                            {dacompanylist.map((cmp, i) => {
+                              if(cmp.companyID == dadrv.companyID){
+                                return(
+                                  <td key={i}>{cmp.companyName}</td>
+                                )
+                              }
+                            })}
+                            <td>{dadrv.firstName} {dadrv.middleName != "N/A"? dadrv.middleName : ""} {dadrv.lastName}</td>
+                            <td>...</td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
