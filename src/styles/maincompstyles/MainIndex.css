@@ -75,6 +75,14 @@
     align-items: flex-start;
 }
 
+.div_infowindow_live_bs{
+    background-color: transparent;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 #p_stationName{
     font-weight: bold;
     margin-top: 5px;
@@ -102,10 +110,33 @@
     color: white;
 }
 
+.btn_infoWindow_live_bs{
+    width: 120px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: solid 0px black;
+    color: white;
+}
+
+.btn_infoWindow_live_bs:first-of-type{
+    background-color: lime;
+}
+
+.btn_infoWindow_live_bs:last-of-type{
+    background-color: #ffbf00;
+}
+
 .btn_infoWindow_existing_bs:first-of-type{
     background-color: #ffbf00;
 }
 
 .btn_infoWindow_existing_bs:last-of-type{
     background-color: #ffbf00;
+}
+
+.th_live_bs{
+    width: 90px;
+    display: flex;
+    justify-content: flex-start;
 }

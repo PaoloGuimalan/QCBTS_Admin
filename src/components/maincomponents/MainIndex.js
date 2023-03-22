@@ -5,7 +5,7 @@ import Axios from 'axios'
 import QCPath from '../../json/QCPath.json'
 import IconsDisplay from '../../json/IconsDisplay';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_ALERT, SET_CENTER_MAP, SET_ROUTE_MAKER_LIST, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER } from '../../redux/types';
+import { SET_ALERT, SET_CENTER_MAP, SET_ROUTE_MAKER_LIST, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_LIVE_BUS, SET_SELECTED_MARKER } from '../../redux/types';
 import { selectedAreaInputState, selectedAreaState, selectedDetailsState, setselecteddetails } from '../../redux/actions';
 import BusStopSelectionIcon from '../../resources/Pan_Blue_Circle.png'
 import { motion } from 'framer-motion'
@@ -28,6 +28,8 @@ function Map(){
   const savedroutepath = useSelector(state => state.savedroutepath);
   const routemakerlist = useSelector(state => state.routemakerlist);
   const livebuslist = useSelector(state => state.livebuslist)
+  const selectedlivebus = useSelector(state => state.selectedlivebus);
+  const publicroutelist = useSelector(state => state.publicroutelist)
   const dispatch = useDispatch()
 
   const google = window.google;
@@ -45,6 +47,7 @@ function Map(){
       dispatch({ type: SET_SELECTED_AREA_INPUT, selectedareainput: selectedAreaInputState })
       dispatch({ type: SET_CENTER_MAP, centermap: { lat: 14.647296, lng: 121.061376 }})
       dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+      dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: ""})
     }
   },[])
 
@@ -206,12 +209,69 @@ function Map(){
               anchor: new google.maps.Point(25, 25),
               scaledSize: new google.maps.Size(25, 25),
             }}
-            onClick={() => {  }}
+            onClick={() => { dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: lbs.userID }) }}
             key={i}
             position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
           >
+            {selectedlivebus == lbs.userID? (
+              <InfoWindow onCloseClick={() => {
+                dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
+              }}>
+                <div className='div_infowindow_live_bs'>
+                  <p id='p_stationName'>LIVE BUS - {lbs.busID}</p>
+                  <table id='table_existing_bs'>
+                    <tbody>
+                      <tr>
+                        <th className='th_live_bs'>Bus Route</th>
+                        <td>{lbs.routeName}</td>
+                      </tr>
+                      <tr>
+                        <th className='th_live_bs'>Driver</th>
+                        <td>{lbs.firstName} {lbs.middleName == "N/A"? "" : lbs.middleName} {lbs.lastName}</td>
+                      </tr>
+                      <tr>
+                        <th className='th_live_bs'>Company</th>
+                        <td>{lbs.companyID}</td>
+                      </tr>
+                      <tr>
+                        <th className='th_live_bs'>Plate Number</th>
+                        <td>{lbs.plateNumber}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div id='div_btns_infowinfow'>
+                    <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Bus Info</button>
+                    <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Driver Info</button>
+                  </div>
+                </div>
+              </InfoWindow>
+            ) : null}
           </Marker>
         )
+      })}
+
+      {livebuslist.map((lbs, i) => {
+        if(selectedlivebus == lbs.userID){
+          return(
+            publicroutelist.map((pblrl, j) => {
+              if(pblrl.routeID == lbs.routeID){
+                // console.log(pblrl.routePath)
+                return(
+                  <Polyline
+                    draggable={false}
+                    editable={false}
+                    path={pblrl.routePath}
+                    options={{
+                      fillColor: "transparent",
+                      strokeColor: "yellow",
+                      strokeWeight: 4
+                    }}
+                  />
+                )
+              }
+            })
+          )
+        }
       })}
 
       {busstopslist.map((data, i) => {
