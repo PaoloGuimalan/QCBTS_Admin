@@ -140,3 +140,8 @@
     display: flex;
     justify-content: flex-start;
 }
+
+.div_livebuscomponent{
+    height: 25px;
+    overflow-y: hidden;
+}

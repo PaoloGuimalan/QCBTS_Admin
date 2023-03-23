@@ -471,25 +471,27 @@ function Index() {
 
 const deleteRoute = (routeID) => {
   // alert(routeID)
-  Axios.post(`${URL}/admin/deleteRoute`, {
-    routeID: routeID
-  },{
-    headers:{
-      "x-access-token": localStorage.getItem("token")
-    }
-  }).then((response) => {
-    if(response.data.status){
-      dispatch({ type: SET_SAVED_ROUTE_PATH, savedroutepath: savedroutepathState })
-      initRoutesList()
-      initPublicRoutesList()
-      alert(response.data.message)
-    }
-    else{
-      alert(response.data.message)
-    }
-  }).catch((err) => {
-    console.log(err)
-  })
+  if(window.confirm(`Are you sure that you want to delete Route - ${routeID}`)){
+    Axios.post(`${URL}/admin/deleteRoute`, {
+      routeID: routeID
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        dispatch({ type: SET_SAVED_ROUTE_PATH, savedroutepath: savedroutepathState })
+        initRoutesList()
+        initPublicRoutesList()
+        alert(response.data.message)
+      }
+      else{
+        alert(response.data.message)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
 }
 
   return (

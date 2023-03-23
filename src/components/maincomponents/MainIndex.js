@@ -218,31 +218,7 @@ function Map(){
                 dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
               }}>
                 <div className='div_infowindow_live_bs'>
-                  <p id='p_stationName'>LIVE BUS - {lbs.busID}</p>
-                  <table id='table_existing_bs'>
-                    <tbody>
-                      <tr>
-                        <th className='th_live_bs'>Bus Route</th>
-                        <td>{lbs.routeName}</td>
-                      </tr>
-                      <tr>
-                        <th className='th_live_bs'>Driver</th>
-                        <td>{lbs.firstName} {lbs.middleName == "N/A"? "" : lbs.middleName} {lbs.lastName}</td>
-                      </tr>
-                      <tr>
-                        <th className='th_live_bs'>Company</th>
-                        <td>{lbs.companyID}</td>
-                      </tr>
-                      <tr>
-                        <th className='th_live_bs'>Plate Number</th>
-                        <td>{lbs.plateNumber}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div id='div_btns_infowinfow'>
-                    <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Bus Info</button>
-                    <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Driver Info</button>
-                  </div>
+                  <LiveBusComponent lbs={lbs} />
                 </div>
               </InfoWindow>
             ) : null}
@@ -412,6 +388,54 @@ function Map(){
         />
       ) : null}
     </GoogleMap>
+  )
+}
+
+function LiveBusComponent({lbs}){
+
+  const [expandLiveBusInfo, setexpandLiveBusInfo] = useState(false)
+
+  return(
+    <motion.div
+      className='div_livebuscomponent'
+      initial={{
+        width: "100%",
+        overflowY: "hidden",
+        cursor: "pointer"
+      }}
+      animate={{
+        height: expandLiveBusInfo? "auto" : "25px",
+        overflowY: expandLiveBusInfo? "hidden" : "hidden"
+      }}
+    >
+      <p id='p_stationName'
+        onClick={() => { setexpandLiveBusInfo(!expandLiveBusInfo) }}
+      >LIVE BUS - {lbs.busID}</p>
+      <table id='table_existing_bs'>
+        <tbody>
+          <tr>
+            <th className='th_live_bs'>Bus Route</th>
+            <td>{lbs.routeName}</td>
+          </tr>
+          <tr>
+            <th className='th_live_bs'>Driver</th>
+            <td>{lbs.firstName} {lbs.middleName == "N/A"? "" : lbs.middleName} {lbs.lastName}</td>
+          </tr>
+          <tr>
+            <th className='th_live_bs'>Company</th>
+            <td>{lbs.companyID}</td>
+          </tr>
+          <tr>
+            <th className='th_live_bs'>Plate Number</th>
+            <td>{lbs.plateNumber}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div id='div_btns_infowinfow'>
+        <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Bus Info</button>
+        <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Driver Info</button>
+      </div>
+    </motion.div>
   )
 }
 
