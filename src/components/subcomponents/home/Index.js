@@ -25,7 +25,11 @@ function Index() {
   const [date, setdate] = useState("");
   const [time, settime] = useState("");
 
-  const [countAppUsersTotal, setcountAppUsersTotal] = useState(0)
+  const [countAppUsersTotal, setcountAppUsersTotal] = useState({
+    commuter: 0,
+    company: 0,
+    buses: 0
+  })
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -183,7 +187,7 @@ function Index() {
               </div>
               <div className='div_basic_analytics_boxes_ind'>
                 <div className='div_division_boxes_indv'>
-                  <p className='p_data_indv_num'>0</p>
+                  <p className='p_data_indv_num'>{countAppUsersTotal.company}</p>
                   <p className='p_data_indv'>No. of Bus Company</p>
                   <div className='div_data_status'>
                     <UpIcon style={{color: "green", fontSize: "40px"}}/>
@@ -196,7 +200,7 @@ function Index() {
               </div>
               <div className='div_basic_analytics_boxes_ind'>
                 <div className='div_division_boxes_indv'>
-                  <p className='p_data_indv_num'>{countAppUsersTotal}</p>
+                  <p className='p_data_indv_num'>{countAppUsersTotal.commuter}</p>
                   <p className='p_data_indv'>No. of App Users</p>
                   <div className='div_data_status'>
                     <DownIcon style={{color: "red", fontSize: "40px"}}/>
@@ -209,7 +213,7 @@ function Index() {
               </div>
               <div className='div_basic_analytics_boxes_ind'>
                 <div className='div_division_boxes_indv'>
-                  <p className='p_data_indv_num'>0</p>
+                  <p className='p_data_indv_num'>{countAppUsersTotal.buses}</p>
                   <p className='p_data_indv_bus'>No. of Bus Registered</p>
                   <div className='div_data_status'>
                     <UpIcon style={{color: "green", fontSize: "40px"}}/>
