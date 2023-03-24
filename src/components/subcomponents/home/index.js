@@ -16,6 +16,10 @@ import DownIcon from '@material-ui/icons/TrendingDown'
 import { EXT_URL, URL } from '../../../json/urlconfig'
 import { SET_LIVE_BUST_LIST } from '../../../redux/types'
 import Axios from 'axios'
+import CanvasJSReact from '../../../libs/canvasjs-3.7.5/canvasjs.react';
+
+var CanvasJS = CanvasJSReact.CanvasJS;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 function Index() {
 
@@ -31,6 +35,41 @@ function Index() {
     buses: 0,
     recentlyAdded: []
   })
+
+  const [dataPoints, setdataPoints] = useState(
+    [
+      { label: "Jan",  y: 10  },
+      { label: "Feb", y: 15  },
+      { label: "Mar", y: 25  },
+      { label: "Apr",  y: 30  },
+      { label: "May",  y: 28  },
+      { label: "Jun",  y: 28  },
+      { label: "Jul",  y: 28  },
+      { label: "Aug",  y: 28  },
+      { label: "Sep",  y: 28  },
+      { label: "Oct",  y: 28  },
+      { label: "Nov",  y: 28  },
+      { label: "Dec",  y: 100  }
+    ]
+  )
+
+  const options = {
+    theme: "light2",
+    title: {
+      // text: "Nifty 50 Index"
+    },
+    data: [
+    // {
+    //   type: "line",
+    //   xValueFormatString: "MMM YYYY",
+    //   yValueFormatString: "#,##0.00",
+    //   dataPoints: dataPoints
+    // },
+    {
+			type: "column",
+			dataPoints: dataPoints
+		}]
+  }
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -273,10 +312,11 @@ function Index() {
                 </div>
                 <div id='div_recently_active_container'>
                   <select id='select_date_range'>
-                    <option>Date Range</option>
+                    <option>Select Year</option>
                   </select>
                   <div id='div_recently_active_graph'>
-                    <p>Graph Area</p>
+                    <CanvasJSChart options={options} />
+                    {/* <p>Graph Area</p> */}
                   </div>
                 </div>
               </div>
