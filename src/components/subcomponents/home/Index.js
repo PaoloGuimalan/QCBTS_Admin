@@ -28,7 +28,8 @@ function Index() {
   const [countAppUsersTotal, setcountAppUsersTotal] = useState({
     commuter: 0,
     company: 0,
-    buses: 0
+    buses: 0,
+    recentlyAdded: []
   })
 
   const navigate = useNavigate();
@@ -243,11 +244,23 @@ function Index() {
                       <tr id='tr_tbl_header_holder'>
                         <th className='th_labels'>Name</th>
                         <th className='th_labels'>ID Number</th>
-                        <th className='th_labels'>Email</th>
-                        <th className='th_labels'>Number</th>
-                        <th className='th_labels'>Role</th>
+                        {/* <th className='th_labels'>Email</th>
+                        <th className='th_labels'>Number</th> */}
+                        <th className='th_labels'>Company</th>
                         <th className='th_labels'>Status</th>
                       </tr>
+                      {countAppUsersTotal.recentlyAdded.filter((rac, i) => rac.dateRegistered.split("/")[0] == date.split("/")[0]).map((res, j) => {
+                        return(
+                          <tr key={res.userID} className='tr_tbl_data_holder'>
+                            <td className='td_labels'>{res.firstName} {res.middleName == "N/A"? "" : res.middleName} {res.lastName}</td>
+                            <td className='td_labels'>{res.userID}</td>
+                            {/* <td className='td_labels'>{res.email}</td>
+                            <td className='td_labels'>{res.mobileNumber}</td> */}
+                            <td className='td_labels'>{res.companyID}</td>
+                            <td className='td_labels'>{res.status? "Activated" : "Deactivated"}</td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
