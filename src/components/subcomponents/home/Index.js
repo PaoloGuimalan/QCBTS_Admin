@@ -16,10 +16,30 @@ import DownIcon from '@material-ui/icons/TrendingDown'
 import { EXT_URL, URL } from '../../../json/urlconfig'
 import { SET_LIVE_BUST_LIST } from '../../../redux/types'
 import Axios from 'axios'
-import CanvasJSReact from '../../../libs/canvasjs-3.7.5/canvasjs.react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+// import CanvasJSReact from '../../../libs/canvasjs-3.7.5/canvasjs.react';
 
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+// var CanvasJS = CanvasJSReact.CanvasJS;
+// var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function Index() {
 
@@ -53,23 +73,50 @@ function Index() {
     ]
   )
 
+  // const options = {
+  //   theme: "light2",
+  //   title: {
+  //     // text: "Nifty 50 Index"
+  //   },
+  //   data: [
+  //   // {
+  //   //   type: "line",
+  //   //   xValueFormatString: "MMM YYYY",
+  //   //   yValueFormatString: "#,##0.00",
+  //   //   dataPoints: dataPoints
+  //   // },
+  //   {
+	// 		type: "column",
+	// 		dataPoints: dataPoints
+	// 	}]
+  // }
+
   const options = {
-    theme: "light2",
-    title: {
-      // text: "Nifty 50 Index"
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      }
     },
-    data: [
-    // {
-    //   type: "line",
-    //   xValueFormatString: "MMM YYYY",
-    //   yValueFormatString: "#,##0.00",
-    //   dataPoints: dataPoints
-    // },
-    {
-			type: "column",
-			dataPoints: dataPoints
-		}]
-  }
+  };
+  
+  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+  
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Commuters',
+        data: dataPoints.map((dt, i) => dt.y),
+        backgroundColor: 'blue',
+      },
+      // {
+      //   label: 'Drivers',
+      //   data: dataPoints.map((dt, i) => dt.y),
+      //   backgroundColor: 'orange',
+      // }
+    ],
+  };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -315,7 +362,8 @@ function Index() {
                     <option>Select Year</option>
                   </select>
                   <div id='div_recently_active_graph'>
-                    <CanvasJSChart options={options} />
+                    <Bar options={options} data={data} style={{height: "100%"}} />
+                    {/* <CanvasJSChart options={options} /> */}
                     {/* <p>Graph Area</p> */}
                   </div>
                 </div>

@@ -14,6 +14,7 @@
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: row;
     width: 100%;
     height: 100%;
 }
@@ -83,4 +84,19 @@
     cursor: pointer;
     color: white;
     margin-top: 30px;
+}
+
+@media screen and (max-width: 720px) {
+    #home_nav{
+        flex-direction: column;
+    }
+
+    .li_home:first-of-type{
+        width: 100%;
+        height: 300px;
+    }
+    
+    .li_home:last-of-type{
+        width: 100%;
+    }
 }
