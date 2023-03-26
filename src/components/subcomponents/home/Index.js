@@ -233,7 +233,23 @@ function Index() {
     }).then((response) => {
       if(response.data.status){
         // console.log(response.data.result)
-        setdataPoints(response.data.result)
+        // setdataPoints(response.data.result)
+        var arrayFinal = []
+        labels.map((lb, i) => {
+          if(response.data.result.some(item => item.label === lb)){
+            // console.log(response.data.result.find(item => item.label === lb))
+            arrayFinal.push(response.data.result.find(item => item.label === lb))
+          }
+          else{
+            // console.log(lb, i + 1)
+            arrayFinal.push({
+              _id: i + 1,
+              label: lb,
+              count: 0
+            })
+          }
+        })
+        setdataPoints(arrayFinal)
       }
     }).catch((err) => {
       console.log(err)
