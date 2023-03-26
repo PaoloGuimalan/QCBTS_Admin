@@ -58,18 +58,18 @@ function Index() {
 
   const [dataPoints, setdataPoints] = useState(
     [
-      { label: "Jan",  y: 10  },
-      { label: "Feb", y: 15  },
-      { label: "Mar", y: 25  },
-      { label: "Apr",  y: 30  },
-      { label: "May",  y: 28  },
-      { label: "Jun",  y: 28  },
-      { label: "Jul",  y: 28  },
-      { label: "Aug",  y: 28  },
-      { label: "Sep",  y: 28  },
-      { label: "Oct",  y: 28  },
-      { label: "Nov",  y: 28  },
-      { label: "Dec",  y: 100  }
+      { _id: 1, label: "Jan",  count: 0  },
+      { _id: 2, label: "Feb", count: 0  },
+      { _id: 3, label: "Mar", count: 0  },
+      { _id: 4, label: "Apr",  count: 0  },
+      { _id: 5, label: "May",  count: 0  },
+      { _id: 6, label: "Jun",  count: 0  },
+      { _id: 7, label: "Jul",  count: 0  },
+      { _id: 8, label: "Aug",  count: 0  },
+      { _id: 9, label: "Sep",  count: 0  },
+      { _id: 10, label: "Oct",  count: 0  },
+      { _id: 11, label: "Nov",  count: 0  },
+      { _id: 12, label: "Dec",  count: 0  }
     ]
   )
 
@@ -107,7 +107,7 @@ function Index() {
     datasets: [
       {
         label: 'Commuters',
-        data: dataPoints.map((dt, i) => dt.y),
+        data: dataPoints.map((dt, i) => dt.count),
         backgroundColor: 'blue',
       },
       // {
@@ -126,6 +126,7 @@ function Index() {
     settime(`${timeGetter()}`)
     // initBusLiveNumber()
     initCountAppUsers()
+    initMonthlyActiveStatistics()
 
     const interval = setInterval(() => {
       setdate(`${dateGetter()}`)
@@ -218,6 +219,21 @@ function Index() {
       if(response.data.status){
         // console.log(response.data.result)
         setcountAppUsersTotal(response.data.result)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const initMonthlyActiveStatistics = () => {
+    Axios.get(`${URL}/admin/getMonthlyActiveStatistics`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // console.log(response.data.result)
+        setdataPoints(response.data.result)
       }
     }).catch((err) => {
       console.log(err)
