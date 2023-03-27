@@ -170,9 +170,10 @@ function Index() {
                                         <th className='th_header_company_list'></th>
                                         <th className='th_header_company_list'>Company Name</th>
                                         <th className='th_header_company_list'>Company ID</th>
-                                        <th className='th_header_company_list'>Address</th>
+                                        {/* <th className='th_header_company_list'>Address</th> */}
                                         <th className='th_header_company_list'>Email</th>
                                         <th className='th_header_company_list'>Date Registered</th>
+                                        <th className='th_header_company_list'>Navigations</th>
                                     </tr>
                                     {companylist.map((data, i) => {
                                         // return(
@@ -227,14 +228,17 @@ function Index() {
                                                 {/* <td className='td_data_company_list'>
                                                     <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdmin.firstname} {data.companyAdmin.lastname}</p>
                                                 </td> */}
-                                                <td className='td_data_company_list'>
+                                                {/* <td className='td_data_company_list'>
                                                     <p className='p_linker' >{data.companyAddress}</p>
-                                                </td>
+                                                </td> */}
                                                 <td className='td_data_company_list'>
                                                     <a className='link_conf' href={`mailto:${data.email}`}>{data.email}</a>
                                                 </td>
                                                 <td className='td_data_company_list'>
                                                     <p className='p_linker' >{data.dateRegistered}</p>
+                                                </td>
+                                                <td className='td_data_company_list'>
+                                                    <p className='p_linker' >...</p>
                                                 </td>
                                                 {/* <td className='td_data_company_list'>
                                                     <motion.p animate={{
