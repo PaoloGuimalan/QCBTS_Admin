@@ -25,7 +25,8 @@ function Index() {
   }
 
   useEffect(() => {
-    fetchCompanyList()
+    // fetchCompanyList()
+    fetchCompanyRegList()
   }, [])
 
   const alertPrompt = (statusPrompt, messagePrompt) => {
@@ -48,6 +49,25 @@ function Index() {
             message: "..."
         } })
     }, 4000)
+  }
+
+  const fetchCompanyRegList = () => {
+    Axios.get(`${URL}/admin/getCompanyListDA`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // dispatch({ type: SET_DA_COMPANY_LIST, dacompanylist: response.data.result })
+        dispatch({type: SET_COMPANY_LIST, companylist: response.data.result});
+        // console.log(response.data.result)
+      }
+      else{
+        console.log(response.data.result.message)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
   }
 
   const fetchCompanyList = () => {
@@ -150,17 +170,51 @@ function Index() {
                                         <th className='th_header_company_list'></th>
                                         <th className='th_header_company_list'>Company Name</th>
                                         <th className='th_header_company_list'>Company ID</th>
-                                        <th className='th_header_company_list'>Admin Fullname</th>
+                                        <th className='th_header_company_list'>Address</th>
                                         <th className='th_header_company_list'>Email</th>
-                                        <th className='th_header_company_list'>Status</th>
+                                        <th className='th_header_company_list'>Date Registered</th>
                                     </tr>
                                     {companylist.map((data, i) => {
+                                        // return(
+                                        //     <tr key={i} id='tr_body_company_list'>
+                                        //         <td className='td_data_company_list'>
+                                        //             <motion.div
+                                        //             animate={{
+                                        //                 backgroundColor: data.status? "lime" : "red"
+                                        //             }}
+                                        //             className='div_status_icon'>&nbsp;</motion.div>
+                                        //             {/* <img src={data.preview == "" || "none"? DefaultIconComp : data.preview} id='selected_company_img' /> */}
+                                        //         </td>
+                                        //         <td className='td_data_company_list'><p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyName}</p></td>
+                                        //         <td className='td_data_company_list'>
+                                        //             <p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyID}</p>
+                                        //             <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdminID}</p>
+                                        //         </td>
+                                        //         <td className='td_data_company_list'>
+                                        //             <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdmin.firstname} {data.companyAdmin.lastname}</p>
+                                        //         </td>
+                                        //         <td className='td_data_company_list'>
+                                        //             <a className='link_conf' href={`mailto:${data.email}`}>{data.email}</a>
+                                        //         </td>
+                                        //         <td className='td_data_company_list'>
+                                        //             <motion.p animate={{
+                                        //                 color: data.status? "lime" : "red"
+                                        //             }} className='p_status_label'>{data.status? "Activated" : "Deactivated"}</motion.p>
+                                        //             <motion.button onClick={() => {
+                                        //                 updateCompanyStatus(data.companyAdminID, data.status? false : true);
+                                        //             }} animate={{
+                                        //                 backgroundColor: data.status? "red" : "lime"
+                                        //             }} id='btn_activation'>{data.status? "Deactivate?" : "Activate?"}</motion.button>
+                                        //         </td>
+                                        //     </tr>
+                                        // )
                                         return(
                                             <tr key={i} id='tr_body_company_list'>
                                                 <td className='td_data_company_list'>
                                                     <motion.div
                                                     animate={{
-                                                        backgroundColor: data.status? "lime" : "red"
+                                                        // backgroundColor: data.status? "lime" : "red"
+                                                        backgroundColor: "lime"
                                                     }}
                                                     className='div_status_icon'>&nbsp;</motion.div>
                                                     {/* <img src={data.preview == "" || "none"? DefaultIconComp : data.preview} id='selected_company_img' /> */}
@@ -168,15 +222,21 @@ function Index() {
                                                 <td className='td_data_company_list'><p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyName}</p></td>
                                                 <td className='td_data_company_list'>
                                                     <p className='p_linker' onClick={() => { redirectToCompDet(data.companyID) }} >{data.companyID}</p>
-                                                    <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdminID}</p>
+                                                    {/* <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdminID}</p> */}
                                                 </td>
-                                                <td className='td_data_company_list'>
+                                                {/* <td className='td_data_company_list'>
                                                     <p className='p_linker' onClick={() => { redirectToCompAdDet(data.companyAdminID) }}>{data.companyAdmin.firstname} {data.companyAdmin.lastname}</p>
+                                                </td> */}
+                                                <td className='td_data_company_list'>
+                                                    <p className='p_linker' >{data.companyAddress}</p>
                                                 </td>
                                                 <td className='td_data_company_list'>
                                                     <a className='link_conf' href={`mailto:${data.email}`}>{data.email}</a>
                                                 </td>
                                                 <td className='td_data_company_list'>
+                                                    <p className='p_linker' >{data.dateRegistered}</p>
+                                                </td>
+                                                {/* <td className='td_data_company_list'>
                                                     <motion.p animate={{
                                                         color: data.status? "lime" : "red"
                                                     }} className='p_status_label'>{data.status? "Activated" : "Deactivated"}</motion.p>
@@ -185,7 +245,7 @@ function Index() {
                                                     }} animate={{
                                                         backgroundColor: data.status? "red" : "lime"
                                                     }} id='btn_activation'>{data.status? "Deactivate?" : "Activate?"}</motion.button>
-                                                </td>
+                                                </td> */}
                                             </tr>
                                         )
                                     })}
