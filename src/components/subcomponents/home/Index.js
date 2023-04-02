@@ -306,15 +306,15 @@ function Index() {
               </div>
               <div className='div_basic_analytics_boxes_ind'>
                 <div className='div_division_boxes_indv'>
-                  <p className='p_data_indv_num'>{countAppUsersTotal.company}</p>
-                  <p className='p_data_indv'>No. of Bus Company</p>
+                  <p className='p_data_indv_num'>{countAppUsersTotal.buses}</p>
+                  <p className='p_data_indv_bus'>No. of Bus Registered</p>
                   <div className='div_data_status'>
                     <UpIcon style={{color: "green", fontSize: "40px"}}/>
-                    <p className='p_data_inc'>0</p>
+                    <p className='p_data_inc'>+10</p>
                   </div>
                 </div>
                 <div className='div_division_boxes_indv'>
-                  <BuildingIcon style={{fontSize: "35px", color: "#4B4B4B"}} />
+                  <RegIcon style={{fontSize: "35px", color: "#4B4B4B"}} />
                 </div>
               </div>
               <div className='div_basic_analytics_boxes_ind'>
@@ -332,15 +332,15 @@ function Index() {
               </div>
               <div className='div_basic_analytics_boxes_ind'>
                 <div className='div_division_boxes_indv'>
-                  <p className='p_data_indv_num'>{countAppUsersTotal.buses}</p>
-                  <p className='p_data_indv_bus'>No. of Bus Registered</p>
+                  <p className='p_data_indv_num'>{countAppUsersTotal.company}</p>
+                  <p className='p_data_indv'>No. of Bus Company</p>
                   <div className='div_data_status'>
                     <UpIcon style={{color: "green", fontSize: "40px"}}/>
-                    <p className='p_data_inc'>+10</p>
+                    <p className='p_data_inc'>0</p>
                   </div>
                 </div>
                 <div className='div_division_boxes_indv'>
-                  <RegIcon style={{fontSize: "35px", color: "#4B4B4B"}} />
+                  <BuildingIcon style={{fontSize: "35px", color: "#4B4B4B"}} />
                 </div>
               </div>
             </div>

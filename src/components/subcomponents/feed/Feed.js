@@ -127,7 +127,7 @@ function Feed() {
                     <select value={contentViewers} onChange={(e) => { setcontentViewers(e.target.value) }} id='select_whocansee' className='input_forms_post'>
                         <option value="all">All</option>
                         <option value="systemadmins">System Admins</option>
-                        <option value="operators">Operators</option>
+                        {/* <option value="operators">Operators</option> */}
                         <option value="drivers">Drivers</option>
                         <option value="commuters">Commuters</option>
                     </select>

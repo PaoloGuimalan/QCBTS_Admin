@@ -576,7 +576,7 @@ const deleteRoute = (routeID) => {
                 <button className='btn_menu_navigations'>Live Map</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "bus_stops" }) }}>Bus Stops</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "routes" }) }}>Routes</button>
-                <button className='btn_menu_navigations'>Traffic</button>
+                {/* <button className='btn_menu_navigations'>Traffic</button> */}
               </div>
             </li>
           </nav>

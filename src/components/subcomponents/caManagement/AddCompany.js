@@ -21,6 +21,7 @@ function AddCompany() {
   const [companyNumberAC, setcompanyNumberAC] = useState("");
   const [companyEmailAC, setcompanyEmailAC] = useState("");
   const [companyAddressAC, setcompanyAddressAC] = useState("");
+  const [LTOregistrationNumber, setLTOregistrationNumber] = useState("")
   const [previewAC, setpreviewAC] = useState("none");
 
   const [companyIDACA, setcompanyIDACA] = useState(null);
@@ -99,7 +100,7 @@ function AddCompany() {
     if(companyNameAC == " " || companyNumberAC == " " || 
       companyEmailAC == " " || companyAddressAC == " " || 
       companyNameAC == "" || companyNumberAC == "" || 
-      companyEmailAC == "" || companyAddressAC == ""){
+      companyEmailAC == "" || companyAddressAC == "" || LTOregistrationNumber == ""){
       alertPrompt(false, `Please complete all fields`)
     }
     else{
@@ -108,6 +109,7 @@ function AddCompany() {
           companyAddress: companyAddressAC,
           companyNumber: companyNumberAC,
           companyEmail: companyEmailAC,
+          ltoregno: LTOregistrationNumber,
           preview: previewAC
       },{
         headers:{
@@ -119,6 +121,7 @@ function AddCompany() {
           setcompanyNumberAC("")
           setcompanyEmailAC("")
           setcompanyAddressAC("")
+          setLTOregistrationNumber("")
           setpreviewAC("none")
           fetchCompanyRegList()
           alertPrompt(true, `New Company/Operator has been Added`)
@@ -220,6 +223,8 @@ function AddCompany() {
                     <div id='company_name_holder'>
                       <p id='company_name_input_label'>Company Name</p>
                       <input type='text' onChange={(e) => { setcompanyNameAC(e.target.value) }} value={companyNameAC} id='companyNameInput' name='companyNameInput' placeholder="Company Name" />
+                      <p className='subdetails_label'>LTO Registration No.</p>
+                      <input type='text' id='companyEmailInput' onChange={(e) => { setLTOregistrationNumber(e.target.value) }} value={LTOregistrationNumber} name='companyEmailInput' placeholder="LTO Registration Number" />
                     </div>
                   </li>
                   <li>
