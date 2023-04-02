@@ -485,6 +485,10 @@ function CompDetails() {
                               <td className='td_table_information'>{companyrecord.companydata.companyID}</td>
                             </tr>
                             <tr className='tr_data'>
+                              <th className='th_table_information'>LTO Reg No.: </th>
+                              <td className='td_table_information'>{companyrecord.companydata.companyID == ""? "" : companyrecord.companydata.ltoregno? companyrecord.companydata.ltoregno : "Pre-registered Company"}</td>
+                            </tr>
+                            <tr className='tr_data'>
                               <th className='th_table_information'>Address: </th>
                               <td className='td_table_information'>{companyrecord.companydata.companyAddress}</td>
                             </tr>

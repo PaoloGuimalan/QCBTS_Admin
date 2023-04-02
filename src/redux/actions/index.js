@@ -76,6 +76,7 @@ export const companyRecordState = {
         companyName: "",
         companyNumber: "",
         dateRegistered: "",
+        ltoregno: "",
         email: "",
         preview: "none"
     }
