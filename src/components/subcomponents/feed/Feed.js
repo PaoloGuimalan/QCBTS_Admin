@@ -5,8 +5,9 @@ import { URL } from '../../../json/urlconfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { SET_POSTS_LIST } from '../../../redux/types';
 import { motion } from 'framer-motion'
+import DeleteIcon from '@material-ui/icons/Delete'
 
-function IndvPost({psts}){
+function IndvPost({psts, deletePost}){
 
     const [expandPost, setexpandPost] = useState(false)
 
@@ -25,7 +26,10 @@ function IndvPost({psts}){
                 paddingBottom: expandPost? "20px" : "0px"
             }}
             className='div_content_expand'>
-                <p id='p_label_post_time'>Posted on {psts.time}</p>
+                <div className='div_postcontentheader'>
+                    <p id='p_label_post_time'>Posted on {psts.time}</p>
+                    <button title='Delete Post' id='btn_deletepost' onClick={() => { deletePost(psts.postID) }}><DeleteIcon style={{fontSize: "15px", color: "white"}} /></button>
+                </div>
                 {psts.content.split("***").map((ps, i) => {
                     return(
                         <p key={i} className='p_content_post'>{ps}</p>
@@ -94,6 +98,22 @@ function Feed() {
     })
   }
 
+  const deletePost = (postID) => {
+    if(window.confirm("Are you sure you want to delete this post?")){
+        Axios.get(`${URL}/admin/deletePost/${postID}`, {
+            headers:{
+                "x-access-token": localStorage.getItem("token")
+            }
+        }).then((response) => {
+            if(response.data.status){
+                initPosts()
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+  }
+
   return (
     <div id='div_feedmain'>
         <div id='div_newpost'>
@@ -143,7 +163,7 @@ function Feed() {
             <div id='div_postslist_container'>
                 {postslist.map((psts, i) => {
                     return(
-                        <IndvPost key={psts.postID} psts={psts} />
+                        <IndvPost key={psts.postID} psts={psts} deletePost={deletePost} />
                     )
                 })}
             </div>

@@ -303,3 +303,20 @@
     margin-top: 15px;
     margin-bottom: 5px;
   }
+
+  .div_postcontentheader{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #btn_deletepost{
+    min-width: 30px;
+    min-height: 30px;
+    background-color: red;
+    border: solid 0px black;
+    border-radius: 5px;
+    cursor: pointer;
+  }
