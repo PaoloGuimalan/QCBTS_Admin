@@ -16,6 +16,7 @@ import UncheckIcon from '@material-ui/icons/Close'
 import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import InfoIcon from '@material-ui/icons/Info'
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep'
 import { motion } from 'framer-motion'
 
 function CompDetails() {
@@ -435,6 +436,47 @@ function CompDetails() {
     }
   }
 
+  const deleteCompany = () => {
+    if(window.confirm("Do you want to delete the company? Please note that this is irreversible.")){
+      Axios.get(`${URL}/admin/deleteCompany/${companyID}`,{
+        headers:{
+          "x-access-token": localStorage.getItem('token')
+        }
+      }).then((response) => {
+        if(response.data.status){
+          alert(response.data.message)
+          navigate("/home/camanagement")
+        }
+        else{
+          alert(response.data.message)
+        }
+      })
+    }
+  }
+
+  const formatCompanyData = () => {
+    if(window.confirm("Do you want to clear company data? Please note that this will delete all company records only.")){
+      Axios.get(`${URL}/admin/deleteCompanyRecords/${companyID}`,{
+        headers:{
+          "x-access-token": localStorage.getItem('token')
+        }
+      }).then((response) => {
+        if(response.data.status){
+          alert(response.data.message)
+          fetchCompanyData();
+          setDefaultEditValues();
+          initDriversList()
+          initRoutesSelectionList()
+          initAssignedRoutes()
+          initBusList()
+        }
+        else{
+          alert(response.data.message)
+        }
+      })
+    }
+  }
+
   return (
     <div id='div_addcompany'>
       <nav id='nav_addcompany'>
@@ -463,6 +505,8 @@ function CompDetails() {
                 </li>
                 <li>
                   <div id='div_header_contacts'>
+                    <button title='Delete Company' onClick={() => { deleteCompany() }} className='btn_header_companydata'><DeleteIcon /></button>
+                    <button title='Clear Company Data' onClick={() => { formatCompanyData() }} className='btn_header_companydata'><DeleteSweepIcon /></button>
                     <button title='Edit Details' onClick={() => { seteditForm(!editForm); setDefaultEditValues(); }} className='btn_header_companydata'><EditIcon /></button>
                     <button title='Email' className='btn_header_companydata' onClick={() => { window.location.href = `mailto:${companyrecord.companydata.email}` }} ><MailIcon /></button>
                   </div>
