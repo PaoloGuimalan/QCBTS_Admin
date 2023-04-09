@@ -368,19 +368,24 @@ function Index() {
                         <th className='th_labels'>Status</th>
                       </tr>
                       {countAppUsersTotal.recentlyAdded.filter((rac, i) => rac.dateRegistered.split("/")[0] == date.split("/")[0]).map((res, j) => {
-                        return(
-                          <tr key={res.userID} className='tr_tbl_data_holder'>
-                            <td className='td_labels'>{res.firstName} {res.middleName == "N/A"? "" : res.middleName} {res.lastName}</td>
-                            <td className='td_labels'>{res.userID}</td>
-                            {/* <td className='td_labels'>{res.email}</td>
-                            <td className='td_labels'>{res.mobileNumber}</td> */}
-                            <td className='td_labels'>{res.companyID}</td>
-                            <td className='td_labels'>{res.status? "Activated" : "Deactivated"}</td>
-                          </tr>
-                        )
+                          return(
+                            <tr key={res.userID} className='tr_tbl_data_holder'>
+                              <td className='td_labels'>{res.firstName} {res.middleName == "N/A"? "" : res.middleName} {res.lastName}</td>
+                              <td className='td_labels'>{res.userID}</td>
+                              {/* <td className='td_labels'>{res.email}</td>
+                              <td className='td_labels'>{res.mobileNumber}</td> */}
+                              <td className='td_labels'>{res.companyID}</td>
+                              <td className='td_labels'>{res.status? "Activated" : "Deactivated"}</td>
+                            </tr>
+                          )
                       })}
                     </tbody>
                   </table>
+                  {countAppUsersTotal.recentlyAdded.filter((rac, i) => rac.dateRegistered.split("/")[0] == date.split("/")[0]).length == 0? (
+                      <div id='div_nnaam_label'>
+                        <p>No Newly Added Accounts this month</p>
+                      </div>
+                  ) : null}
                 </div>
               </div>
             </div>
