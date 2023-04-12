@@ -312,6 +312,22 @@
     align-items: center;
   }
 
+  #div_indvPostBtns{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  #btn_editpost{
+    min-width: 30px;
+    min-height: 30px;
+    background-color: orange;
+    border: solid 0px black;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
   #btn_deletepost{
     min-width: 30px;
     min-height: 30px;

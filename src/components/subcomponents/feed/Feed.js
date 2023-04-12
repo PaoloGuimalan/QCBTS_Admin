@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SET_POSTS_LIST } from '../../../redux/types';
 import { motion } from 'framer-motion'
 import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 
-function IndvPost({psts, deletePost}){
+function IndvPost({psts, deletePost, editPost}){
 
     const [expandPost, setexpandPost] = useState(false)
 
@@ -28,7 +29,10 @@ function IndvPost({psts, deletePost}){
             className='div_content_expand'>
                 <div className='div_postcontentheader'>
                     <p id='p_label_post_time'>Posted on {psts.time}</p>
-                    <button title='Delete Post' id='btn_deletepost' onClick={() => { deletePost(psts.postID) }}><DeleteIcon style={{fontSize: "15px", color: "white"}} /></button>
+                    <div id='div_indvPostBtns'>
+                        <button title='Edit Post' id='btn_editpost' onClick={() => { editPost(psts.postID) }}><EditIcon style={{fontSize: "15px", color: "white"}} /></button>
+                        <button title='Delete Post' id='btn_deletepost' onClick={() => { deletePost(psts.postID) }}><DeleteIcon style={{fontSize: "15px", color: "white"}} /></button>
+                    </div>
                 </div>
                 {psts.content.split("***").map((ps, i) => {
                     return(
@@ -114,6 +118,10 @@ function Feed() {
     }
   }
 
+  const editPost = (postID) => {
+    alert(postID)
+  }
+
   return (
     <div id='div_feedmain'>
         <div id='div_newpost'>
@@ -163,7 +171,7 @@ function Feed() {
             <div id='div_postslist_container'>
                 {postslist.map((psts, i) => {
                     return(
-                        <IndvPost key={psts.postID} psts={psts} deletePost={deletePost} />
+                        <IndvPost key={psts.postID} psts={psts} deletePost={deletePost} editPost={editPost} />
                     )
                 })}
             </div>
