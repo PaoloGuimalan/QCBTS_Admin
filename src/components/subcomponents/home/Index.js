@@ -345,7 +345,7 @@ function Index() {
               </div>
             </div>
             <div className='div_basic_analytics_indv'>
-              <div id='div_basic_analytics_map_container'>
+              <div id='div_basic_analytics_map_container' onClick={() => { navigate("/home/map") }}>
                 <MainIndex />
               </div>
             </div>
