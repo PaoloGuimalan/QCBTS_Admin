@@ -7,6 +7,7 @@ import { SET_POSTS_LIST } from '../../../redux/types';
 import { motion } from 'framer-motion'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
+import CloseIcon from '@material-ui/icons/Close'
 
 function IndvPost({psts, deletePost, editPost}){
 
@@ -30,7 +31,7 @@ function IndvPost({psts, deletePost, editPost}){
                 <div className='div_postcontentheader'>
                     <p id='p_label_post_time'>Posted on {psts.time}</p>
                     <div id='div_indvPostBtns'>
-                        <button title='Edit Post' id='btn_editpost' onClick={() => { editPost(psts.postID) }}><EditIcon style={{fontSize: "15px", color: "white"}} /></button>
+                        <button title='Edit Post' id='btn_editpost' onClick={() => { editPost(psts) }}><EditIcon style={{fontSize: "15px", color: "white"}} /></button>
                         <button title='Delete Post' id='btn_deletepost' onClick={() => { deletePost(psts.postID) }}><DeleteIcon style={{fontSize: "15px", color: "white"}} /></button>
                     </div>
                 </div>
@@ -56,6 +57,17 @@ function Feed() {
   const [contentPreview, setcontentPreview] = useState("");
   const [contentParagraph, setcontentParagraph] = useState("");
   const [contentViewers, setcontentViewers] = useState("all");
+
+  const defaultSelectedPostToEditData = {
+    postID: "",
+    title: "",
+    preview: "",
+    content: "",
+    viewers: "",
+    date: "",
+    time: "",
+  }
+  const [selectedPostToEdit, setselectedPostToEdit] = useState(defaultSelectedPostToEditData);
 
   const clearFields = () => {
     setcontentTitle("")
@@ -118,12 +130,51 @@ function Feed() {
     }
   }
 
-  const editPost = (postID) => {
-    alert(postID)
+  const editPost = (postData) => {
+    setselectedPostToEdit(postData)
+    // alert(postData.postID)
   }
 
   return (
     <div id='div_feedmain'>
+        {selectedPostToEdit.postID != ""? (
+            <div id='div_absolute_floating_edit_post_container'>
+                <div id='div_main_edit_post_form_container'>
+                    <div id='div_edit_post_header'>
+                        <p id='p_edit_post_label'>Edit Post</p>
+                        <button title='Delete Post' id='btn_deletepost' onClick={() => { 
+                            setselectedPostToEdit(defaultSelectedPostToEditData)
+                        }}><CloseIcon style={{fontSize: "15px", color: "white"}} /></button>
+                    </div>
+                    <div id='div_post_preview_container'>
+                        <img id='img_post_preview_holder' src={selectedPostToEdit.preview} />
+                    </div>
+                    <div id='div_edit_post_postID_container'>
+                        <span id='span_postID_holder'>{selectedPostToEdit.postID}</span>
+                    </div>
+                    <div id='div_edit_post_content_container'>
+                        <div id='div_edit_post_title_container'>
+                            <p id='p_title_label_holder'>Title</p>
+                            <input value={selectedPostToEdit.title} onChange={(e) => { 
+                                setselectedPostToEdit({
+                                    ...selectedPostToEdit,
+                                    title: e.target.value
+                                })
+                            }} type='text' id='input_post_title' className='input_forms_post' placeholder="Edit Title here..." />
+                        </div>
+                        <div id='div_edit_post_title_container'>
+                            <p id='p_title_label_holder'>Content</p>
+                            <textarea value={selectedPostToEdit.content} onChange={(e) => { 
+                                setselectedPostToEdit({
+                                    ...selectedPostToEdit,
+                                    content: e.target.value
+                                }) 
+                            }} id='textarea_content_edit' className='input_forms_post' placeholder="Type a content here..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ) : null}
         <div id='div_newpost'>
             <p id='p_postupdatedlabel'>Post an Update</p>
             <div id='div_postupdate_form'>
@@ -148,7 +199,7 @@ function Feed() {
                 </div>
                 <div id='div_indv_fields'>
                     <p id='p_label_field'>Content</p>
-                    <textarea value={contentParagraph} onChange={(e) => { setcontentParagraph(e.target.value) }} id='textarea_content' className='input_forms_post' placeholder="Create a Title here..." />
+                    <textarea value={contentParagraph} onChange={(e) => { setcontentParagraph(e.target.value) }} id='textarea_content' className='input_forms_post' placeholder="Type a content here..." />
                 </div>
                 <div id='div_indv_fields'>
                     <p id='p_label_field'>Who can see?</p>
