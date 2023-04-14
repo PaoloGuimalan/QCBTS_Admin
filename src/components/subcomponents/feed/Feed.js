@@ -140,36 +140,42 @@ function Feed() {
         {selectedPostToEdit.postID != ""? (
             <div id='div_absolute_floating_edit_post_container'>
                 <div id='div_main_edit_post_form_container'>
-                    <div id='div_edit_post_header'>
-                        <p id='p_edit_post_label'>Edit Post</p>
-                        <button title='Delete Post' id='btn_deletepost' onClick={() => { 
-                            setselectedPostToEdit(defaultSelectedPostToEditData)
-                        }}><CloseIcon style={{fontSize: "15px", color: "white"}} /></button>
-                    </div>
-                    <div id='div_post_preview_container'>
-                        <img id='img_post_preview_holder' src={selectedPostToEdit.preview} />
-                    </div>
-                    <div id='div_edit_post_postID_container'>
-                        <span id='span_postID_holder'>{selectedPostToEdit.postID}</span>
-                    </div>
-                    <div id='div_edit_post_content_container'>
-                        <div id='div_edit_post_title_container'>
-                            <p id='p_title_label_holder'>Title</p>
-                            <input value={selectedPostToEdit.title} onChange={(e) => { 
-                                setselectedPostToEdit({
-                                    ...selectedPostToEdit,
-                                    title: e.target.value
-                                })
-                            }} type='text' id='input_post_title' className='input_forms_post' placeholder="Edit Title here..." />
+                    <div id='div_holder_edit_post_form_container'>
+                        <div id='div_edit_post_header'>
+                            <p id='p_edit_post_label'>Edit Post</p>
+                            <button title='Delete Post' id='btn_deletepost' onClick={() => { 
+                                setselectedPostToEdit(defaultSelectedPostToEditData)
+                            }}><CloseIcon style={{fontSize: "15px", color: "white"}} /></button>
                         </div>
-                        <div id='div_edit_post_title_container'>
-                            <p id='p_title_label_holder'>Content</p>
-                            <textarea value={selectedPostToEdit.content} onChange={(e) => { 
-                                setselectedPostToEdit({
-                                    ...selectedPostToEdit,
-                                    content: e.target.value
-                                }) 
-                            }} id='textarea_content_edit' className='input_forms_post' placeholder="Type a content here..." />
+                        <div id='div_post_preview_container'>
+                            <img id='img_post_preview_holder' src={selectedPostToEdit.preview} />
+                        </div>
+                        <div id='div_edit_post_postID_container'>
+                            <span id='span_postID_holder'>{selectedPostToEdit.postID}</span>
+                        </div>
+                        <div id='div_edit_post_content_container'>
+                            <div id='div_edit_post_title_container'>
+                                <p id='p_title_label_holder'>Title</p>
+                                <input value={selectedPostToEdit.title} onChange={(e) => { 
+                                    setselectedPostToEdit({
+                                        ...selectedPostToEdit,
+                                        title: e.target.value
+                                    })
+                                }} type='text' id='input_post_title' className='input_forms_post_edit' placeholder="Edit Title here..." />
+                            </div>
+                            <div id='div_edit_post_title_container'>
+                                <p id='p_title_label_holder'>Content</p>
+                                <textarea value={selectedPostToEdit.content} onChange={(e) => { 
+                                    setselectedPostToEdit({
+                                        ...selectedPostToEdit,
+                                        content: e.target.value
+                                    }) 
+                                }} id='textarea_content_edit' className='input_forms_post_edit' placeholder="Edit content here..." />
+                            </div>
+                            <div id='div_edit_form_btns_container'>
+                                <button className='btns_edit_form_actions'>Save</button>
+                                <button className='btns_edit_form_actions'>Undo</button>
+                            </div>
                         </div>
                     </div>
                 </div>

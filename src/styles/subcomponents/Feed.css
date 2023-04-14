@@ -350,15 +350,27 @@
 
   #div_main_edit_post_form_container{
     background-color: white;
-    width: calc(100% - 20px);
+    width: calc(100% - 10px);
     height: calc(90% - 20px);
     max-height: 800px;
     max-width: 600px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     padding: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  #div_holder_edit_post_form_container{
+    width: calc(100% - 10px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 
   #div_edit_post_header{
@@ -438,6 +450,50 @@
     /* height: max-content; */
     border-radius: 5px;
   }
+
+  .input_forms_post_edit{
+    width: calc(100% - 20px);
+    font-size: 13px;
+    border: solid 1px #e4e4e4;
+    background-color: #e4e4e4;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #5a5a5a;
+}
+
+.input_forms_post_edit:focus{
+  color: black;
+  background-color: white;
+}
+
+#div_edit_form_btns_container{
+  width: calc(100% - 5px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+
+.btns_edit_form_actions{
+  width: 70px;
+  height: 25px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: solid 0px black;
+  color: white;
+  cursor: pointer;
+}
+
+.btns_edit_form_actions:first-of-type{
+  background-color: lime;
+}
+
+.btns_edit_form_actions:nth-of-type(2){
+  background-color: orange;
+}
 
   @media screen and (max-width: 720px) {
     #div_absolute_floating_edit_post_container{
