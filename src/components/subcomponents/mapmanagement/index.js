@@ -833,7 +833,22 @@ const deleteRoute = (routeID) => {
                     id='div_selecteddetails_status'>&nbsp;</motion.div>
                     {selecteddetails.data.stationName}
                   </p>
-                  <table id='tbl_stationdetails'>
+                  <div className='div_station_information_container'>
+                    <p className='p_bus_stop_information_data'>{selecteddetails.busStopID} - {selecteddetails.data.status? "Open" : "Closed"}</p>
+                    <p className='p_bus_stop_information_labels'>Address</p>
+                    <p className='p_bus_stop_information_data'>{selecteddetails.data.stationAddress}</p>
+                  </div>
+                  <div className='div_station_information_container'>
+                    <p className='p_bus_stop_information_labels'>Coordinates</p>
+                    <p className='p_bus_stop_information_data'>Lng: {selecteddetails.data.coordinates.longitude} <br /> Lat: {selecteddetails.data.coordinates.latitude}</p>
+                  </div>
+                  <div className='div_station_information_container'>
+                    <p className='p_bus_stop_information_labels'>Date Added</p>
+                    <p className='p_bus_stop_information_data'>{selecteddetails.data.dateAdded}</p>
+                    <p className='p_bus_stop_information_labels'>Added By</p>
+                    <p className='p_bus_stop_information_data'>{selecteddetails.data.addedBy}</p>
+                  </div>
+                  {/* <table id='tbl_stationdetails'>
                     <tbody>
                       <tr className='tr_stationdetails'>
                         <th className='th_stationdetails'>Station ID</th>
@@ -856,7 +871,7 @@ const deleteRoute = (routeID) => {
                         <td className='td_stationdetails'>{selecteddetails.data.addedBy}</td>
                       </tr>
                     </tbody>
-                  </table>
+                  </table> */}
                   <div id='div_selecteddetails_btn'>
                     <motion.button
                     animate={{
