@@ -43,6 +43,15 @@ function Index() {
 
   const [menutrigger, setmenutrigger] = useState(false);
 
+  const defaultBusStopData = {
+    busStopID: "",
+    stationName: "",
+    stationAddress: "",
+    dateAdded: "",
+    addedBy: ""
+  }
+  const [selectedBusStopToEdit, setselectedBusStopToEdit] = useState(defaultBusStopData)
+
   useEffect(() => {
 
     initBusStopsData();
@@ -227,6 +236,37 @@ function Index() {
         console.log(err)
       })
     }
+  }
+
+  const setSelectedDetailsWindowFromDetailsUpdate = (passdataID) => {
+    Axios.get(`${URL}/admin/getSpecificBusStopData/${passdataID}`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        dispatch({ type: SET_SELECTED_DETAILS, selecteddetails: {
+          status: true,
+          busStopID: response.data.result.busStopID,
+          data: {
+              stationName: response.data.result.stationName,
+              stationAddress: response.data.result.stationAddress,
+              coordinates: {
+                  longitude: response.data.result.coordinates.longitude,
+                  latitude: response.data.result.coordinates.latitude
+              },
+              dateAdded: response.data.result.dateAdded,
+              addedBy: response.data.result.addedBy,
+              status: response.data.result.status
+          }
+        } })
+      }
+      else{
+        console.log(response.data.result.message)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
   const alertPrompt = (statusPrompt, messagePrompt) => {
@@ -492,6 +532,43 @@ const deleteRoute = (routeID) => {
       console.log(err)
     })
   }
+}
+
+const isBusStopModified = (stationNameProp, stationAddressProp) => {
+  if(selectedBusStopToEdit.stationName.replace(/\s/g, '') != "" && selectedBusStopToEdit.stationAddress.replace(/\s/g, '') != ""){
+    if(selectedBusStopToEdit.stationName != stationNameProp || selectedBusStopToEdit.stationAddress != stationAddressProp){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  else{
+    return false;
+  }
+}
+
+const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddressProp) => {
+  Axios.post(`${URL}/admin/updateBusStopData`,{
+    busStopID: busStopIDProp,
+    stationName: stationNameProp,
+    stationAddress: stationAddressProp
+  },{
+    headers:{
+      "x-access-token": localStorage.getItem("token")
+    }
+  }).then((response) => {
+    if(response.data.status){
+      //if update success
+      setSelectedDetailsWindowFromDetailsUpdate(busStopIDProp)
+      alertPrompt(true, response.data.message)
+    }
+    else{
+      alertPrompt(false, response.data.message)
+    }
+  }).catch((err) => {
+    console.log(err)
+  })
 }
 
   return (
@@ -848,30 +925,6 @@ const deleteRoute = (routeID) => {
                     <p className='p_bus_stop_information_labels'>Added By</p>
                     <p className='p_bus_stop_information_data'>{selecteddetails.data.addedBy}</p>
                   </div>
-                  {/* <table id='tbl_stationdetails'>
-                    <tbody>
-                      <tr className='tr_stationdetails'>
-                        <th className='th_stationdetails'>Station ID</th>
-                        <td className='td_stationdetails'>{selecteddetails.busStopID} - {selecteddetails.data.status? "Open" : "Closed"}</td>
-                      </tr>
-                      <tr className='tr_stationdetails'>
-                        <th className='th_stationdetails'>Address</th>
-                        <td className='td_stationdetails'>{selecteddetails.data.stationAddress}</td>
-                      </tr>
-                      <tr className='tr_stationdetails'>
-                        <th className='th_stationdetails'>Coordinates</th>
-                        <td className='td_stationdetails'>Lng: {selecteddetails.data.coordinates.longitude} <br /> Lat: {selecteddetails.data.coordinates.latitude}</td>
-                      </tr>
-                      <tr className='tr_stationdetails'>
-                        <th className='th_stationdetails'>Date Added</th>
-                        <td className='td_stationdetails'>{selecteddetails.data.dateAdded}</td>
-                      </tr>
-                      <tr className='tr_stationdetails'>
-                        <th className='th_stationdetails'>Added By</th>
-                        <td className='td_stationdetails'>{selecteddetails.data.addedBy}</td>
-                      </tr>
-                    </tbody>
-                  </table> */}
                   <div id='div_selecteddetails_btn'>
                     <motion.button
                     animate={{
@@ -879,11 +932,72 @@ const deleteRoute = (routeID) => {
                     }}
                     onClick={() => { updateBSStatus(selecteddetails.busStopID, selecteddetails.data.status? false : true) }}
                     className='btn_selecteddetails'>{selecteddetails.data.status? "Close Station" : "Open Station"}</motion.button>
-                    <button className='btn_selecteddetails'>Edit</button>
+                    {selectedBusStopToEdit.busStopID != ""? (
+                      selectedBusStopToEdit.busStopID == selecteddetails.busStopID? (
+                        <button className='btn_selecteddetails' onClick={() => {
+                          setselectedBusStopToEdit(defaultBusStopData)
+                        }}>Cancel</button>
+                      ) : (
+                        <button className='btn_selecteddetails' onClick={() => {
+                          setselectedBusStopToEdit({
+                            busStopID: selecteddetails.busStopID,
+                            stationName: selecteddetails.data.stationName,
+                            stationAddress: selecteddetails.data.stationAddress,
+                            dateAdded: selecteddetails.data.dateAdded,
+                            addedBy: selecteddetails.data.addedBy
+                          })
+                        }}>Edit</button>
+                      )
+                    ) : (
+                      <button className='btn_selecteddetails' onClick={() => {
+                        setselectedBusStopToEdit({
+                          busStopID: selecteddetails.busStopID,
+                          stationName: selecteddetails.data.stationName,
+                          stationAddress: selecteddetails.data.stationAddress,
+                          dateAdded: selecteddetails.data.dateAdded,
+                          addedBy: selecteddetails.data.addedBy
+                        })
+                      }}>Edit</button>
+                    )}
                     <button className='btn_selecteddetails' onClick={() => { deleteBusStop(selecteddetails.busStopID) }} >Delete</button>
                   </div>
                 </div>
-                <p>...</p>
+                {selectedBusStopToEdit.busStopID != ""? (
+                  selectedBusStopToEdit.busStopID == selecteddetails.busStopID? (
+                    <div id='div_busstop_edit_form'>
+                      <p className='p_bus_stop_information_labels_edit'>Edit Bus Stop Information</p>
+                      <p className='p_bus_stop_information_labels_edit'>Station Name</p>
+                      <input type='text' className='input_station_edit' placeholder='Enter Station Name'
+                      onChange={(e) => {
+                        setselectedBusStopToEdit({
+                          ...selectedBusStopToEdit,
+                          stationName: e.target.value,
+                        })
+                      }}
+                      value={selectedBusStopToEdit.stationName} />
+                      <p className='p_bus_stop_information_labels_edit'>Address</p>
+                      <input type='text' className='input_station_edit' placeholder='Enter Station Address'
+                      onChange={(e) => {
+                        setselectedBusStopToEdit({
+                          ...selectedBusStopToEdit,
+                          stationAddress: e.target.value,
+                        })
+                      }}
+                      value={selectedBusStopToEdit.stationAddress} />
+                      <div id='div_edit_busstop_btns_holder'>
+                        <motion.button
+                        animate={{
+                          backgroundColor: isBusStopModified(selecteddetails.data.stationName, selecteddetails.data.stationAddress)? "lime" : "#92CA91",
+                          cursor: isBusStopModified(selecteddetails.data.stationName, selecteddetails.data.stationAddress)? "pointer" : "default"
+                        }}
+                        disabled={!isBusStopModified(selecteddetails.data.stationName, selecteddetails.data.stationAddress)}
+                        className='btn_edit_busstop_actions' onClick={() => {
+                          updateBusStopInformation(selecteddetails.busStopID, selectedBusStopToEdit.stationName, selectedBusStopToEdit.stationAddress)
+                        }}>Save</motion.button>
+                      </div>
+                    </div>
+                  ) : null
+                ) : null}
               </div>
             </li>
           </nav>
