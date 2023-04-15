@@ -142,8 +142,13 @@ function Feed() {
   }
 
   const isPostModified = () => {
-    if(selectedPostToEdit.title != currentPostVersion.title || selectedPostToEdit.content != currentPostVersion.content || selectedPostToEdit.viewers != currentPostVersion.viewers){
-        return true
+    if(selectedPostToEdit.title.replace(/\s/g, '') != "" && selectedPostToEdit.content.replace(/\s/g, '') != ""){
+        if(selectedPostToEdit.title != currentPostVersion.title || selectedPostToEdit.content != currentPostVersion.content || selectedPostToEdit.viewers != currentPostVersion.viewers){
+            return true
+        }
+        else{
+            return false;
+        }
     }
     else{
         return false;
@@ -151,7 +156,27 @@ function Feed() {
   }
 
   const updatePostData = (newPostData) => {
-    alert(newPostData.postID)
+    // alert(newPostData.postID)
+    Axios.post(`${URL}/admin/updatePost`,{
+        ...newPostData
+    },{
+        headers:{
+            "x-access-token": localStorage.getItem("token")
+        }
+    }).then((response) => {
+        if(response.data.status){
+            //post update success
+            alert(response.data.message)
+            initPosts()
+            setselectedPostToEdit(defaultSelectedPostToEditData)
+            setcurrentPostVersion(defaultSelectedPostToEditData)
+        }
+        else{
+            //post update failed
+        }
+    }).catch((err) => {
+        console.log(err)
+    })
   }
 
   return (
@@ -199,7 +224,7 @@ function Feed() {
                                         ...selectedPostToEdit,
                                         viewers: e.target.value
                                     }) 
-                                }} id='select_whocansee' className='input_forms_post'>
+                                }} id='select_whocansee' className='input_forms_post_edit'>
                                     <option value="all">All</option>
                                     <option value="systemadmins">System Admins</option>
                                     {/* <option value="operators">Operators</option> */}
