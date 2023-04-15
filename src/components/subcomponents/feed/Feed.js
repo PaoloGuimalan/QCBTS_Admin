@@ -68,6 +68,7 @@ function Feed() {
     time: "",
   }
   const [selectedPostToEdit, setselectedPostToEdit] = useState(defaultSelectedPostToEditData);
+  const [currentPostVersion, setcurrentPostVersion] = useState(defaultSelectedPostToEditData)
 
   const clearFields = () => {
     setcontentTitle("")
@@ -132,7 +133,25 @@ function Feed() {
 
   const editPost = (postData) => {
     setselectedPostToEdit(postData)
+    setcurrentPostVersion(postData)
     // alert(postData.postID)
+  }
+
+  const undoPostEdit = () => {
+    setselectedPostToEdit(currentPostVersion)
+  }
+
+  const isPostModified = () => {
+    if(selectedPostToEdit.title != currentPostVersion.title || selectedPostToEdit.content != currentPostVersion.content || selectedPostToEdit.viewers != currentPostVersion.viewers){
+        return true
+    }
+    else{
+        return false;
+    }
+  }
+
+  const updatePostData = (newPostData) => {
+    alert(newPostData.postID)
   }
 
   return (
@@ -145,6 +164,7 @@ function Feed() {
                             <p id='p_edit_post_label'>Edit Post</p>
                             <button title='Delete Post' id='btn_deletepost' onClick={() => { 
                                 setselectedPostToEdit(defaultSelectedPostToEditData)
+                                setcurrentPostVersion(defaultSelectedPostToEditData)
                             }}><CloseIcon style={{fontSize: "15px", color: "white"}} /></button>
                         </div>
                         <div id='div_post_preview_container'>
@@ -172,9 +192,36 @@ function Feed() {
                                     }) 
                                 }} id='textarea_content_edit' className='input_forms_post_edit' placeholder="Edit content here..." />
                             </div>
+                            <div id='div_edit_post_title_container'>
+                                <p id='p_title_label_holder'>Audience</p>
+                                <select value={selectedPostToEdit.viewers} onChange={(e) => { 
+                                    setselectedPostToEdit({
+                                        ...selectedPostToEdit,
+                                        viewers: e.target.value
+                                    }) 
+                                }} id='select_whocansee' className='input_forms_post'>
+                                    <option value="all">All</option>
+                                    <option value="systemadmins">System Admins</option>
+                                    {/* <option value="operators">Operators</option> */}
+                                    <option value="drivers">Drivers</option>
+                                    <option value="commuters">Commuters</option>
+                                </select>
+                            </div>
                             <div id='div_edit_form_btns_container'>
-                                <button className='btns_edit_form_actions'>Save</button>
-                                <button className='btns_edit_form_actions'>Undo</button>
+                                <motion.button
+                                animate={{
+                                    backgroundColor: isPostModified()? "lime" : "#92CA91",
+                                    cursor: isPostModified()? "pointer" : "default"
+                                }}
+                                disabled={!isPostModified()}
+                                className='btns_edit_form_actions' onClick={() => { updatePostData(selectedPostToEdit) }}>Save</motion.button>
+                                <motion.button
+                                animate={{
+                                    backgroundColor: isPostModified()? "orange" : "#FEBF6E",
+                                    cursor: isPostModified()? "pointer" : "default"
+                                }}
+                                disabled={!isPostModified()}
+                                className='btns_edit_form_actions' onClick={() => { undoPostEdit() }}>Undo</motion.button>
                             </div>
                         </div>
                     </div>
