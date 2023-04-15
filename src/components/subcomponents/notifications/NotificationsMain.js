@@ -91,7 +91,23 @@ function NotificationsMain() {
           {systemactivitieslist.filter((usrt, j) => usrt.userType == selectedParam).map((sal, i) => {
             return(
               <div key={i} className='div_systemactivities_result_indv'>
-                <p>{sal.userType}</p>
+                <div className='div_result_indv_containers'>
+                  <p id='p_systemactivity_id'>{sal.activityID}</p>
+                  <p id='p_sa_commuterid'>{sal.userID}</p>
+                  <p id='p_sa_activity'>{sal.action}</p>
+                  <p id='p_sa_userType'>{sal.userType}</p>
+                </div>
+                <div className='div_result_indv_containers'>
+                  <p id='p_sa_platform'>{sal.platform}</p>
+                  <p id='p_sa_date'>
+                    <span className='span_datetime_labels'>Date Recorded: </span>
+                    <span>{sal.dateCommited.dateRecorded}</span>
+                  </p>
+                  <p id='p_sa_time'>
+                    <span className='span_datetime_labels'>Time Recorded: </span>
+                    <span>{sal.dateCommited.timeRecorded}</span>
+                  </p>
+                </div>
               </div>
             )
           })}

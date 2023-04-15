@@ -104,7 +104,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     flex: 1;
-    gap: 5px;
+    gap: 7px;
     align-items: center;
     padding-bottom: 20px;
     /* overflow-y: scroll; */
@@ -113,7 +113,102 @@
 .div_systemactivities_result_indv{
     background-color: rgb(194, 194, 194);
     min-height: 100px;
+    height: auto;
     width: 95%;
     max-width: 600px;
     border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.div_result_indv_containers:first-of-type{
+    background-color: transparent;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.div_result_indv_containers:nth-of-type(2){
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 200px;
+    align-items: flex-end;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#p_systemactivity_id{
+    margin: 0px;
+    text-align: left;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+}
+
+#p_sa_commuterid{
+    margin: 0px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#p_sa_activity{
+    margin: 0px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    text-align: left;
+}
+
+#p_sa_userType{
+    margin: 0px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#p_sa_platform{
+    margin: 0px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    flex: 1;
+    font-weight: bold;
+}
+
+#p_sa_date{
+    margin: 0px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+}
+
+#p_sa_time{
+    margin: 0px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+}
+
+.span_datetime_labels{
+    font-weight: bold;
 }
