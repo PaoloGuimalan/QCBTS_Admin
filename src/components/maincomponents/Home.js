@@ -37,10 +37,12 @@ function Home() {
 
     return () => {
       cancelAxios.cancel()
+      initLiveData = () => {}
+      console.log("Hello")
     }
   },[])
 
-  const initLiveData = () => {
+  var initLiveData = () => {
     Axios.get(`${EXT_URL}/liveData`).then((response) => {
       var arrayData = Object.values(response.data)
       // var arrayDataLength = arrayData.filter((dt, i) => dt.userID == selectedlivebus.userID).length
