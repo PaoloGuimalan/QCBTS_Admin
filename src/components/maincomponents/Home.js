@@ -38,7 +38,7 @@ function Home() {
     return () => {
       cancelAxios.cancel()
       initLiveData = () => {}
-      console.log("Hello")
+      // console.log("Hello")
     }
   },[])
 
