@@ -212,3 +212,20 @@
 .span_datetime_labels{
     font-weight: bold;
 }
+
+#div_no_systemactivities_display{
+    width: 100%;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: grey;
+    font-weight: bold;
+    /* background-color: green; */
+}
+
+#div_loader_icon{
+    /* background-color: green; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
