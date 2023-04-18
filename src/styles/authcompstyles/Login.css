@@ -46,8 +46,13 @@
     justify-content: center;
     align-items: center;
     width: calc(100% - 350px);
-    background: linear-gradient(to bottom, rgb(43, 66, 115, 0.8), rgba(255, 191, 0, 0.8)), url('../../resources/staticmap.png');
-    background-color: #ffbf00;
+    /* background-image: url("./../../resources/splashbg.png"); */
+    background: linear-gradient(to bottom, rgb(43, 66, 115, 0), rgba(255, 191, 0, 1)), url('./../../resources/splashbg.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* background: linear-gradient(to bottom, rgb(43, 66, 115, 0.8), rgba(255, 191, 0, 0.8)), url('../../resources/staticmap.png'); */
+    /* background-color: #ffbf00; */
 }
 
 #label_title{
@@ -55,13 +60,17 @@
     font-weight: bold;
     margin: 0;
     font-family: 'Roboto', sans-serif;
+    color: white;
+    text-shadow: 1px 0px black;
 }
 
 #label_desctitle{
     font-size: 20px;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
-    margin: 5px;
+    margin: 0px;
+    color: white;
+    text-shadow: 1px 0px black;
     /* margin-bottom: 10px; */
 }
 

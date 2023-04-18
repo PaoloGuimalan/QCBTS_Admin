@@ -11,6 +11,7 @@ import { SET_ALERT, SET_AUTH } from './redux/types';
 import Axios from 'axios'
 import { URL } from './json/urlconfig'
 import { motion } from 'framer-motion';
+import Splash from './components/authcomponents/Splash';
 
 function App() {
   
@@ -102,9 +103,9 @@ function App() {
         <p>{alert.message}</p>
       </motion.div>
       <Routes>
-        <Route path='/login' element={auth.status == null? null : auth.status? <Navigate to='/home' /> : <Login />} />
-        <Route path='/home/*' element={auth.status == null? null : auth.status? <Home /> : <Navigate to='/login' />} />
-        <Route path='/' element={auth.status == null? null : auth.status? <Navigate to='/home' /> : <Navigate to='/login' />} />
+        <Route path='/login' element={auth.status == null? <Splash /> : auth.status? <Navigate to='/home' /> : <Login />} />
+        <Route path='/home/*' element={auth.status == null? <Splash /> : auth.status? <Home /> : <Navigate to='/login' />} />
+        <Route path='/' element={auth.status == null? <Splash /> : auth.status? <Navigate to='/home' /> : <Navigate to='/login' />} />
       </Routes>
     </div>
   );
