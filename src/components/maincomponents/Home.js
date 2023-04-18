@@ -20,6 +20,11 @@ import { EXT_URL, URL } from '../../json/urlconfig';
 import Main from '../subcomponents/daManagement/Main';
 import NotificationsMain from '../subcomponents/notifications/NotificationsMain';
 import Feed from '../subcomponents/feed/Feed';
+import HomeIcon from '@material-ui/icons/HomeRounded'
+import UFIcon from '@material-ui/icons/UpdateRounded'
+import MapMIcon from '@material-ui/icons/MapRounded'
+import CAIcon from '@material-ui/icons/BusinessCenterRounded'
+import DAIcon from '@material-ui/icons/DirectionsBus'
 
 function Home() {
 
@@ -132,7 +137,7 @@ function Home() {
                   borderWidth: pathid == ""? 0 : 0,
                   backgroundColor: pathid == ""? "#ffbf00" : "transparent",
                   color: pathid == ""? "#2b4273" : "white",
-                  textAlign: pathid == ""? "center" : "left",
+                  // textAlign: pathid == ""? "center" : "left",
                   fontWeight: pathid == ""? "bold" : "normal",
                   boxShadow: pathid == ""? "0px 0px 5px black" : "0px 0px 0px black"
                 }} transition={{
@@ -144,7 +149,7 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/") }} className='btn_navigations'>Home</motion.button>
+                }} onClick={() => { goToModule("/home/") }} className='btn_navigations'><HomeIcon style={{fontSize: "20px", marginTop: "-3px"}} /> Home</motion.button>
                 {/* <motion.button animate={{
                   borderWidth: pathid == "messages"? 0 : 0,
                   backgroundColor: pathid == "messages"? "#ffbf00" : "transparent",
@@ -166,7 +171,7 @@ function Home() {
                   borderWidth: pathid == "feed"? 0 : 0,
                   backgroundColor: pathid == "feed"? "#ffbf00" : "transparent",
                   color: pathid == "feed"? "#2b4273" : "white",
-                  textAlign: pathid == "feed"? "center" : "left",
+                  // textAlign: pathid == "feed"? "center" : "left",
                   fontWeight: pathid == "feed"? "bold" : "normal",
                   boxShadow: pathid == "feed"? "0px 0px 5px black" : "0px 0px 0px black"
                 }} transition={{
@@ -178,12 +183,12 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/feed/") }} className='btn_navigations'>Updates & Feed</motion.button>
+                }} onClick={() => { goToModule("/home/feed/") }} className='btn_navigations'><UFIcon style={{fontSize: "20px", marginTop: "-3px"}} /> Updates & Feed</motion.button>
                 <motion.button animate={{
                   borderWidth: pathid == "map"? 0 : 0,
                   backgroundColor: pathid == "map"? "#ffbf00" : "transparent",
                   color: pathid == "map"? "#2b4273" : "white",
-                  textAlign: pathid == "map"? "center" : "left",
+                  // textAlign: pathid == "map"? "center" : "left",
                   fontWeight: pathid == "map"? "bold" : "normal",
                   boxShadow: pathid == "map"? "0px 0px 5px black" : "0px 0px 0px black"
                 }} transition={{
@@ -195,12 +200,12 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/map") }} className='btn_navigations'>Map Management</motion.button>
+                }} onClick={() => { goToModule("/home/map") }} className='btn_navigations'><MapMIcon style={{fontSize: "20px", marginTop: "-3px"}} /> Map Management</motion.button>
                 <motion.button animate={{
                   borderWidth: pathid == "camanagement"? 0 : 0,
                   backgroundColor: pathid == "camanagement"? "#ffbf00" : "transparent",
                   color: pathid == "camanagement"? "#2b4273" : "white",
-                  textAlign: pathid == "camanagement"? "center" : "left",
+                  // textAlign: pathid == "camanagement"? "center" : "left",
                   fontWeight: pathid == "camanagement"? "bold" : "normal",
                   boxShadow: pathid == "camanagement"? "0px 0px 5px black" : "0px 0px 0px black"
                 }} transition={{
@@ -212,12 +217,12 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/camanagement") }} className='btn_navigations'>Company Management</motion.button>
+                }} onClick={() => { goToModule("/home/camanagement") }} className='btn_navigations'><CAIcon style={{fontSize: "20px", marginTop: "-3px"}} /> Company Management</motion.button>
                 <motion.button animate={{
                   borderWidth: pathid == "damanagement"? 0 : 0,
                   backgroundColor: pathid == "damanagement"? "#ffbf00" : "transparent",
                   color: pathid == "damanagement"? "#2b4273" : "white",
-                  textAlign: pathid == "damanagement"? "center" : "left",
+                  // textAlign: pathid == "damanagement"? "center" : "left",
                   fontWeight: pathid == "damanagement"? "bold" : "normal",
                   boxShadow: pathid == "damanagement"? "0px 0px 5px black" : "0px 0px 0px black"
                 }} transition={{
@@ -229,7 +234,7 @@ function Home() {
                     delay: 0,
                     duration: 0
                   }
-                }} onClick={() => { goToModule("/home/damanagement") }} className='btn_navigations'>Driver Management</motion.button>
+                }} onClick={() => { goToModule("/home/damanagement") }} className='btn_navigations'><DAIcon style={{fontSize: "20px", marginTop: "-3px"}} /> Driver Management</motion.button>
                 <button onClick={() => { logout() }} className='btn_logout'>Logout</button>
               </div>
             </li>

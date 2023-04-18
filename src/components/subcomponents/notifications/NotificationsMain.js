@@ -9,6 +9,9 @@ import { motion } from 'framer-motion'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { SET_SYSTEM_ACTIVITIES_LIST } from '../../../redux/types'
+import AdminIcon from '@material-ui/icons/Person'
+import DriverIcon from '@material-ui/icons/DirectionsBus'
+import CommuterIcon from '@material-ui/icons/PersonPin'
 
 function NotificationsMain() {
   
@@ -85,7 +88,7 @@ function NotificationsMain() {
           onClick={() => {
             setselectedParam("System Admin")
           }}
-          className='link_icons_navigations'><BellIcon style={{ fontSize: "17px" }} />System Admin {
+          className='link_icons_navigations'><AdminIcon style={{ fontSize: "17px" }} />System Admin {
             loadingsystemactivities? null : (`(${systemactivitieslist.filter((usrt, j) => usrt.userType == "System Admin").length})`)
           }</motion.button>
           <motion.button
@@ -96,7 +99,7 @@ function NotificationsMain() {
           onClick={() => {
             setselectedParam("Driver")
           }}
-          className='link_icons_navigations'><BellIcon style={{ fontSize: "17px" }} />Drivers {
+          className='link_icons_navigations'><DriverIcon style={{ fontSize: "17px" }} />Drivers {
             loadingsystemactivities? null : (`(${systemactivitieslist.filter((usrt, j) => usrt.userType == "Driver").length})`)
           }</motion.button>
           <motion.button
@@ -107,7 +110,7 @@ function NotificationsMain() {
           onClick={() => {
             setselectedParam("Commuter")
           }}
-          className='link_icons_navigations'><BellIcon style={{ fontSize: "17px" }} />Commuters {
+          className='link_icons_navigations'><CommuterIcon style={{ fontSize: "17px" }} />Commuters {
             loadingsystemactivities? null : (`(${systemactivitieslist.filter((usrt, j) => usrt.userType == "Commuter").length})`)
           }</motion.button>
           {/* <Link to='/home/notifications' className='link_icons_navigations' style={{
