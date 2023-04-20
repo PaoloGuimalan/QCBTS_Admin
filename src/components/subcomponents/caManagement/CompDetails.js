@@ -72,6 +72,7 @@ function CompDetails() {
       dispatch({ type: SET_COMPANY_RECORD, companyrecord: companyRecordState })
       dispatch({ type: SET_DRIVERS_LIST, driverslist: [] })
       dispatch({type: SET_BUS_LIST, buslist: []})
+      dispatch({ type: SET_TRIP_SCHEDULES_LIST, tripscheduleslist: [] })
     }
   }, [companyID]);
 
