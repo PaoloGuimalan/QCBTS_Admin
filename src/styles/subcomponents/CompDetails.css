@@ -179,6 +179,27 @@
     margin-top: 0px;
 }
 
+.label_informations_tripschedules{
+    color: black;
+    /* font-size: 17px; */
+    /* font-weight: bold; */
+    /* margin-top: 10px; */
+    margin-bottom: 20px;
+    margin-top: 0px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.label_informations_tripschedules_sub:first-of-type{
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.label_informations_tripschedules_sub:last-of-type{
+    font-size: 13px;
+}
+
 .p_data_labels{
     font-size: 15px;
     font-weight: normal;
@@ -285,15 +306,15 @@
     border-top-right-radius: 10px;
 }
 
-.td_adminlist{
-    font-size: 13px;
-    color: #36454F;
-}
-
 .link_conf_lists{
     font-size: 13px;
     color: #36454F;
     text-decoration: underline;
+}
+
+.td_adminlist{
+    font-size: 13px;
+    color: #36454F;
 }
 
 .td_adminlist:nth-of-type(4){
@@ -325,6 +346,43 @@
 }
 
 .td_adminlist:nth-of-type(2):hover{
+    text-decoration: underline;
+}
+
+.td_tripschedulelist{
+    font-size: 13px;
+    color: #36454F;
+}
+
+.td_tripschedulelist:nth-of-type(4){
+    font-weight: normal;
+}
+
+.td_tripschedulelist:nth-of-type(1){
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.td_tripschedulelist:nth-of-type(2){
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.td_tripschedulelist:nth-of-type(1):hover{
+    text-decoration: underline;
+}
+
+.td_tripschedulelist:nth-of-type(2):hover{
     text-decoration: underline;
 }
 
@@ -439,4 +497,17 @@
     border-radius: 5px;
     box-shadow: 0px 0px 2px black;
     cursor: pointer;
+}
+
+#select_dayTripAssign{
+    text-align: center;
+    height: 30px;
+    width: 100%;
+}
+
+.input_tripAssign{
+    align-self: center;
+    height: 24px;
+    width: calc(100% - 10px);
+    font-size: 13px;
 }

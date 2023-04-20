@@ -5,7 +5,7 @@ import BackIcon from '@material-ui/icons/KeyboardArrowLeft'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_BUS_LIST, SET_COMPANY_RECORD, SET_DRIVERS_LIST, SET_ROUTES_SELECTION_LIST } from '../../../redux/types'
+import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_BUS_LIST, SET_COMPANY_RECORD, SET_DRIVERS_LIST, SET_ROUTES_SELECTION_LIST, SET_TRIP_SCHEDULES_LIST } from '../../../redux/types'
 import { companyRecordState } from '../../../redux/actions'
 import DefaultIconComp from '../../../resources/defaultcompany.png'
 import MessageIcon from '@material-ui/icons/Message';
@@ -41,6 +41,11 @@ function CompDetails() {
   const [busCapacity, setbusCapacity] = useState("")
   const [busAssignedTo, setbusAssignedTo] = useState("none");
 
+  const [tripDestination, settripDestination] = useState("");
+  const [tripDay, settripDay] = useState("");
+  const [tripTime, settripTime] = useState("")
+  const [tripInterval, settripInterval] = useState("")
+
   const [selectedRouteSelection, setselectedRouteSelection] = useState({
     routeID: "none",
     routeName: "....",
@@ -52,6 +57,7 @@ function CompDetails() {
   const routesselectionlist = useSelector(state => state.routesselectionlist)
   const assignedroutes = useSelector(state => state.assignedroutes)
   const buslist = useSelector(state => state.buslist)
+  const tripscheduleslist = useSelector(state => state.tripscheduleslist)
 
   useEffect(() => {
     // console.log(params["companyID"])
@@ -85,6 +91,35 @@ function CompDetails() {
     setcompanyEmailEdit(companyrecord.companydata.email);
     setcompanyNumberEdit(companyrecord.companydata.companyNumber);
     setcompanyAddressEdit(companyrecord.companydata.companyAddress);
+  }
+
+  useEffect(() => {
+    initTripSchedules()
+
+    return () => {
+      dispatch({ type: SET_TRIP_SCHEDULES_LIST, tripscheduleslist: [] })
+    }
+  },[assignedroutes, companyID])
+
+  const initTripSchedules = () => {
+    var assignedRouteIDfromListing = assignedroutes[0]?.routeID
+    if(assignedroutes.length > 0){
+      Axios.get(`${URL}/admin/getTripSchedules/${companyID}/${assignedRouteIDfromListing}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          // alert("OK")
+          dispatch({ type: SET_TRIP_SCHEDULES_LIST, tripscheduleslist: response.data.result })
+        }
+        else{
+          //response false
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
   }
 
   const initDriversList = () => {
@@ -477,6 +512,64 @@ function CompDetails() {
     }
   }
 
+  function isInt(n) {
+    // console.log(n % 1 === 0)
+    return n % 1 === 0;
+  }
+
+  const clearTripForm = () => {
+    settripDestination("")
+    settripDay("")
+    settripTime("")
+    settripInterval("")
+  }
+
+  const saveTripSchedule = () => {
+    var assignedRouteIDfromListing = assignedroutes[0]?.routeID
+    if(assignedroutes.length > 0 && companyID != null && tripDestination != "" && tripDay != "" && tripTime != "" && tripInterval != ""){
+      Axios.post(`${URL}/admin/saveTripSchedule`,{
+        routeID: assignedRouteIDfromListing,
+        companyID: companyID,
+        tripDestination: tripDestination,
+        tripDay: tripDay,
+        tripTime: tripTime,
+        tripInterval: tripInterval
+      },{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          clearTripForm()
+          initTripSchedules()
+        }
+        else{
+          //failed saving trip schedule
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+    else{
+      alert("Trip Schedule data is incomplete!")
+    }
+  }
+
+  const deleteTripSchedule = (tripIDprop) => {
+    Axios.get(`${URL}/admin/deleteTripSchedule/${tripIDprop}`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        //alert(response.data.message)
+        initTripSchedules()
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
   return (
     <div id='div_addcompany'>
       <nav id='nav_addcompany'>
@@ -794,6 +887,90 @@ function CompDetails() {
                 </div>
               </li>
             </motion.nav>
+        </li>
+        <li>
+          <nav id='nav_details_page'>
+            <li>
+              <div id='div_adminslist'>
+                <p className='label_informations_tripschedules'>
+                  <span className='label_informations_tripschedules_sub'>Trip Schedules</span>
+                  <span className='label_informations_tripschedules_sub'>(This will reflect with other companies assigned in same route)</span>
+                </p>
+              </div>
+            </li>
+            <li>
+            <div className='div_lists'>
+                <table className='tbl_lists'>
+                  <tbody>
+                    <tr>
+                      <th className='th_adminlist'>Trip</th>
+                      <th className='th_adminlist'>Day</th>
+                      <th className='th_adminlist'>Time</th>
+                      <th className='th_adminlist'>Interval</th>
+                      <th className='th_adminlist'>Navigations</th>
+                    </tr>
+                    {/* Time Interval Input */}
+                    <tr>
+                      <td>
+                        <select id='select_dayTripAssign' value={tripDestination} onChange={(e) => { settripDestination(e.target.value) }}>
+                          <option defaultChecked value={""}>---Select a Trip---</option>
+                          {assignedroutes.length != 0? (
+                            <>
+                              <option value={`${routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[0]?.stationName} - ${routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[isInt(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2)? (routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 - 1) : Math.round(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 + 2)]?.stationName}`}>{routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[0]?.stationName} - {routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[isInt(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2)? (routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 - 1) : Math.round(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 + 2)]?.stationName}</option>
+                              <option value={`${routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[isInt(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2)? (routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 - 1) : Math.round(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 + 2)]?.stationName} - ${routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[0]?.stationName}`}>{routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[isInt(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2)? (routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 - 1) : Math.round(routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList.length/2 + 2)]?.stationName} - {routesselectionlist.filter((rt, i) => rt.routeID == assignedroutes[0].routeID)[0]?.stationList[0]?.stationName}</option>
+                            </>
+                          ) : null}
+                        </select>
+                      </td>
+                      <td>
+                        <select id='select_dayTripAssign' value={tripDay} onChange={(e) => { settripDay(e.target.value) }}>
+                          <option defaultChecked value={""}>---Select a Day---</option>
+                          <option value="Monday">Monday</option>
+                          <option value="Tuesday">Tuesday</option>
+                          <option value="Wednesday">Wednesday</option>
+                          <option value="Thursday">Thursday</option>
+                          <option value="Friday">Friday</option>
+                          <option value="Saturday">Saturday</option>
+                          <option value="Sunday">Sunday</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input type='text' value={tripTime} onChange={(e) => { settripTime(e.target.value) }} className='input_tripAssign' placeholder='ex: 6:00 AM - 12:30 PM' />
+                      </td>
+                      <td>
+                        <input type='text' value={tripInterval} onChange={(e) => { settripInterval(e.target.value) }} className='input_tripAssign' placeholder='ex: 30 minutes' />
+                      </td>
+                      <td>
+                        <button onClick={() => {
+                          saveTripSchedule()
+                        }}
+                        className='btns_list'><CheckIcon style={{fontSize: "15px"}} /></button>
+                        <button className='btns_list' onClick={() => {
+                          clearTripForm()
+                        }}><UncheckIcon style={{fontSize: "15px"}} /></button>
+                      </td>
+                    </tr>
+                    {/* Time Interval Data */}
+                    {tripscheduleslist.map((tsl, i) => {
+                      return(
+                        <tr key={i}>
+                            <td className='td_tripschedulelist' onClick={() => {  }}>{tsl.tripDestination}</td>
+                            <td className='td_tripschedulelist' onClick={() => {  }}>{tsl.tripDay}</td>
+                            <td className='td_tripschedulelist'>{tsl.tripTime}</td>
+                            <td className='td_tripschedulelist'>{tsl.tripInterval}</td>
+                            <td>
+                              <button className='btns_list' onClick={() => { 
+                                  deleteTripSchedule(tsl.tripID)
+                               }}><DeleteIcon style={{fontSize: "15px"}} /></button>
+                            </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </li>
+          </nav>
         </li>
         <li>
           <nav id='nav_details_page'>
