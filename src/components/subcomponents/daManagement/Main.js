@@ -31,6 +31,7 @@ function Main() {
     fetchCompanyList()
     fetchAllDrivers()
     initPublicRoutesList()
+    initDriversInRoutesList()
 
     return () => {
       dispatch({ type: SET_DA_COMPANY_LIST, dacompanylist: [] })
@@ -90,6 +91,20 @@ function Main() {
       }
     }).catch((err) => {
       console.log(err);
+    })
+  }
+
+  const initDriversInRoutesList = () => {
+    Axios.get(`${URL}/admin/getDriversinRoute`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        setdriversInRoutesList(response.data.result)
+      }
+    }).catch((err) => {
+      console.log(err)
     })
   }
 
@@ -215,7 +230,7 @@ function Main() {
                         return(
                           <tr key={i} className='tr_indv'>
                             <td>{data.routeID}</td>
-                            <td style={{textAlign: "left", paddingLeft: "10px", paddingRight: "10px"}}>{data.routeName}</td>
+                            <td className='td_routeName'>{data.routeName}</td>
                             <td>
                               {/* <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button> */}
                               <button className='btn_company_list_navs' onClick={() => {  }}><DownIcon style={{ fontSize: "15px" }} /></button>
@@ -243,8 +258,8 @@ function Main() {
                         return(
                           <tr key={i} className='tr_indv'>
                             <td>{dadrv.userID}</td>
-                            <td>0</td>
-                            <td>...</td>
+                            <td>{dadrv.bus.busNo? dadrv.bus.busNo : "unassigned"}</td>
+                            <td className='td_routeName'>{dadrv.routeData.routeName}</td>
                             <td>{dadrv.firstName} {dadrv.middleName != "N/A"? dadrv.middleName : ""} {dadrv.lastName}</td>
                             <td>...</td>
                           </tr>

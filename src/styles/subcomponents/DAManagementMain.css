@@ -370,3 +370,9 @@
     cursor: pointer;
     border: none;
 }
+
+.td_routeName{
+    text-align: left; 
+    padding-left: 10px; 
+    padding-right: 10px;
+}
