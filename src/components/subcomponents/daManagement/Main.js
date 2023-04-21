@@ -13,6 +13,10 @@ import RightIcon from '@material-ui/icons/KeyboardArrowRightTwoTone'
 import DownIcon from '@material-ui/icons/KeyboardArrowDownTwoTone'
 import DAIcon from '@material-ui/icons/DirectionsBus'
 import ReloadListIcon from '@material-ui/icons/Refresh'
+import AssignIcon from '@material-ui/icons/AssignmentReturn'
+import ResetIcon from '@material-ui/icons/SyncProblem'
+import AssignPerDriverIcon from '@material-ui/icons/AssignmentInd'
+import ResetPerDriverIcon from '@material-ui/icons/SyncDisabled'
 
 function Main() {
 
@@ -138,11 +142,107 @@ function Main() {
       }
     }).then((response) => {
       if(response.data.status){
+        // console.log("OK")
         setselectedRouteList({
           routeID: routeIDprop,
           routeName: routeNameprop
         })
         setdriversInRoutesList(response.data.result)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const autoAssignBusNumbering = (routeIDprop, routeNameprop) => {
+    Axios.post(`${URL}/admin/autoAssignBusNumbering`,{
+      routeID: routeIDprop
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        //success
+        if(selectedRouteList.routeID == ""){
+          initDriversInRoutesList()
+        }
+        else{
+          fetchDriversListInRouteID(routeIDprop, routeNameprop)
+        }
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const resetBusNumbering = (routeIDprop, routeNameprop) => {
+    Axios.post(`${URL}/admin/resetBusNumbering`,{
+      routeID: routeIDprop
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        //success
+        if(selectedRouteList.routeID == ""){
+          initDriversInRoutesList()
+        }
+        else{
+          fetchDriversListInRouteID(routeIDprop, routeNameprop)
+        }
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const manualAssigningPerDriver = (routeIDprop, companyIDprop, userIDprop, busNoprop) => {
+    if(busNoprop > 0){
+      alert("Bus already have a number")
+    }
+    else{
+      Axios.post(`${URL}/admin/manualAssigningPerDriver`,{
+        routeID: routeIDprop,
+        companyID: companyIDprop,
+        driverID: userIDprop
+      },{
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((response) => {
+        if(response.data.status){
+          //success
+          if(selectedRouteList.routeID == ""){
+            initDriversInRoutesList()
+          }
+          else{
+            fetchDriversListInRouteID(selectedRouteList.routeID, selectedRouteList.routeName)
+          }
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+  }
+
+  const manualResetPerDriver = (driverIDprop) => {
+    Axios.post(`${URL}/admin/manualResetPerDriver`,{
+      driverID: driverIDprop
+    },{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        //success
+        if(selectedRouteList.routeID == ""){
+          initDriversInRoutesList()
+        }
+        else{
+          fetchDriversListInRouteID(selectedRouteList.routeID, selectedRouteList.routeName)
+        }
       }
     }).catch((err) => {
       console.log(err)
@@ -257,7 +357,8 @@ function Main() {
                             <td>{data.routeID}</td>
                             <td className='td_routeName'>{data.routeName}</td>
                             <td>
-                              {/* <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button> */}
+                              <button className='btn_company_list_navs' title='(In Development) Automatically Assign Numbering of Buses in this Route' onClick={() => { /**autoAssignBusNumbering(data.routeID, data.routeName)*/ }}><AssignIcon style={{ fontSize: "15px" }} /></button>
+                              <button className='btn_company_list_navs' title='Reset Bus Numbering in this Route' onClick={() => { resetBusNumbering(data.routeID, data.routeName) }}><ResetIcon style={{ fontSize: "15px" }} /></button>
                               <button className='btn_company_list_navs' onClick={() => { fetchDriversListInRouteID(data.routeID, data.routeName) }}><DownIcon style={{ fontSize: "15px" }} /></button>
                             </td>
                           </tr>
@@ -283,10 +384,13 @@ function Main() {
                         return(
                           <tr key={i} className='tr_indv'>
                             <td>{dadrv.userID}</td>
-                            <td>{dadrv.bus.busNo? dadrv.bus.busNo : "unassigned"}</td>
+                            <td>{dadrv.bus.busNo? dadrv.bus.busNo != 0? dadrv.bus.busNo : "unassigned" : "unassigned"}</td>
                             <td className='td_routeName'>{dadrv.routeData.routeName}</td>
                             <td>{dadrv.firstName} {dadrv.middleName != "N/A"? dadrv.middleName : ""} {dadrv.lastName}</td>
-                            <td>...</td>
+                            <td>
+                              <button className='btn_company_list_navs' title='Manually Assign Bus Number' onClick={() => { manualAssigningPerDriver(dadrv.routeData.routeID, dadrv.companyID, dadrv.userID, dadrv.bus.busNo) }}><AssignPerDriverIcon style={{ fontSize: "15px" }} /></button>
+                              <button className='btn_company_list_navs' title='Reset Bus Number' onClick={() => { manualResetPerDriver(dadrv.userID) }}><ResetPerDriverIcon style={{ fontSize: "15px" }} /></button>
+                            </td>
                           </tr>
                         )
                       })}
