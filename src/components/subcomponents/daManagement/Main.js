@@ -22,7 +22,10 @@ function Main() {
   const dispatch = useDispatch()
 
   const [selectedDriversList, setselectedDriversList] = useState("All");
-  const [selectedRouteList, setselectedRouteList] = useState("All");
+  const [selectedRouteList, setselectedRouteList] = useState({
+    routeID: "",
+    routeName: "All"
+  });
 
   const [routeList, setrouteList] = useState([]);
   const [driversInRoutesList, setdriversInRoutesList] = useState([])
@@ -95,6 +98,10 @@ function Main() {
   }
 
   const initDriversInRoutesList = () => {
+    setselectedRouteList({
+      routeID: "",
+      routeName: "All"
+    })
     Axios.get(`${URL}/admin/getDriversinRoute`, {
       headers:{
         "x-access-token": localStorage.getItem("token")
@@ -121,6 +128,24 @@ function Main() {
       }
     }).catch((err) => {
       console.log(err);
+    })
+  }
+
+  const fetchDriversListInRouteID = (routeIDprop, routeNameprop) => {
+    Axios.get(`${URL}/admin/getDriversinRouteID/${routeIDprop}`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        setselectedRouteList({
+          routeID: routeIDprop,
+          routeName: routeNameprop
+        })
+        setdriversInRoutesList(response.data.result)
+      }
+    }).catch((err) => {
+      console.log(err)
     })
   }
 
@@ -233,7 +258,7 @@ function Main() {
                             <td className='td_routeName'>{data.routeName}</td>
                             <td>
                               {/* <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button> */}
-                              <button className='btn_company_list_navs' onClick={() => {  }}><DownIcon style={{ fontSize: "15px" }} /></button>
+                              <button className='btn_company_list_navs' onClick={() => { fetchDriversListInRouteID(data.routeID, data.routeName) }}><DownIcon style={{ fontSize: "15px" }} /></button>
                             </td>
                           </tr>
                         )
@@ -243,7 +268,7 @@ function Main() {
                 </div>
               </div>
               <div className='div_list_sections_routes_container'>
-                <p onClick={() => {  }} className='p_each_list_label'>Drivers From ({selectedRouteList})</p>
+                <p onClick={() => { initDriversInRoutesList() }} className='p_each_list_label'>Drivers From ({selectedRouteList.routeName})</p>
                 <div className='div_list_sections'>
                   <table className='tbl_lists'>
                     <tbody>
