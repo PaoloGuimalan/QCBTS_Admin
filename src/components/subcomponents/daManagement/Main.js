@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { SET_DA_COMPANY_LIST, SET_DA_DRIVER_LIST } from '../../../redux/types'
 import InfoIcon from '@material-ui/icons/Info'
 import RightIcon from '@material-ui/icons/KeyboardArrowRightTwoTone'
+import DownIcon from '@material-ui/icons/KeyboardArrowDownTwoTone'
 import DAIcon from '@material-ui/icons/DirectionsBus'
 import ReloadListIcon from '@material-ui/icons/Refresh'
 
@@ -21,10 +22,15 @@ function Main() {
   const dispatch = useDispatch()
 
   const [selectedDriversList, setselectedDriversList] = useState("All");
+  const [selectedRouteList, setselectedRouteList] = useState("All");
+
+  const [routeList, setrouteList] = useState([]);
+  const [driversInRoutesList, setdriversInRoutesList] = useState([])
 
   useEffect(() => {
     fetchCompanyList()
     fetchAllDrivers()
+    initPublicRoutesList()
 
     return () => {
       dispatch({ type: SET_DA_COMPANY_LIST, dacompanylist: [] })
@@ -68,6 +74,25 @@ function Main() {
     })
   }
 
+  const initPublicRoutesList = () => {
+    Axios.get(`${URL}/company/publicRouteList`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // console.log(response.data.result)
+        // dispatch({ type: SET_PUBLIC_ROUTE_LIST, publicroutelist: response.data.result })
+        setrouteList(response.data.result)
+      }
+      else{
+        console.log(response.data.result.message)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
   const getCompanyDriversList = (companyIDprop, companyName) => {
     setselectedDriversList(companyName)
     Axios.get(`${URL}/admin/driverList/${companyIDprop}`, {
@@ -99,7 +124,7 @@ function Main() {
              <button onClick={() => { navigate("/home/notifications") }} className='btn_notifbar_da'><BellIcon style={{fontSize: "20px", color: "#4B4B4B"}} /></button>
             </div>
         </div>
-        <div id='div_da_main_container'>
+        <div className='div_da_main_container'>
             <div id='div_da_main_header'>
               <div id='div_header_handler'>
                 <p className='p_header_label_cont'>Company / Operator & Drivers List</p>
@@ -156,6 +181,70 @@ function Main() {
                                 )
                               }
                             })}
+                            <td>{dadrv.firstName} {dadrv.middleName != "N/A"? dadrv.middleName : ""} {dadrv.lastName}</td>
+                            <td>...</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div className='div_da_main_route_container'>
+            <div id='div_da_main_header'>
+              <div id='div_header_handler'>
+                <p className='p_header_label_cont'>Routes & Drivers List</p>
+                <p className='p_header_label_cont'>Manage Driver/Bus Numbering per Route here</p>
+              </div>
+            </div>
+            <hr id='hr_divider'/>
+            <div id='div_main_routes_lists'>
+              <div className='div_list_sections_routes_container'>
+                <p className='p_each_list_label'>Routes</p>
+                <div className='div_list_sections'>
+                  <table className='tbl_lists'>
+                    <tbody>
+                      <tr>
+                        <th className='tbl_th_routes'>Route ID</th>
+                        <th className='tbl_th_routes'>Route Name</th>
+                        <th className='tbl_th_routes'>Navigations</th>
+                      </tr>
+                      {routeList.map((data, i) => {
+                        return(
+                          <tr key={i} className='tr_indv'>
+                            <td>{data.routeID}</td>
+                            <td style={{textAlign: "left", paddingLeft: "10px", paddingRight: "10px"}}>{data.routeName}</td>
+                            <td>
+                              {/* <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button> */}
+                              <button className='btn_company_list_navs' onClick={() => {  }}><DownIcon style={{ fontSize: "15px" }} /></button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className='div_list_sections_routes_container'>
+                <p onClick={() => {  }} className='p_each_list_label'>Drivers From ({selectedRouteList})</p>
+                <div className='div_list_sections'>
+                  <table className='tbl_lists'>
+                    <tbody>
+                      <tr>
+                        <th className='tbl_th2_routes'>Driver ID</th>
+                        <th className='tbl_th2_routes'>Bus No.</th>
+                        <th className='tbl_th2_routes'>Route Name</th>
+                        <th className='tbl_th2_routes'>Driver Name</th>
+                        <th className='tbl_th2_routes'>Navigations</th>
+                      </tr>
+                      {driversInRoutesList.map((dadrv, i) => {
+                        return(
+                          <tr key={i} className='tr_indv'>
+                            <td>{dadrv.userID}</td>
+                            <td>0</td>
+                            <td>...</td>
                             <td>{dadrv.firstName} {dadrv.middleName != "N/A"? dadrv.middleName : ""} {dadrv.lastName}</td>
                             <td>...</td>
                           </tr>
