@@ -7,7 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST } from '../../../redux/types/index'
+import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON } from '../../../redux/types/index'
 import { savedroutepathState, selectedAreaInputState, selectedAreaState, selectedDetailsState } from '../../../redux/actions'
 import Axios from 'axios'
 import { EXT_URL, URL } from '../../../json/urlconfig'
@@ -31,6 +31,8 @@ function Index() {
   const routemakerlist = useSelector(state => state.routemakerlist);
   const routepath = useSelector(state => state.routepath);
   const savedroutepath = useSelector(state => state.savedroutepath);
+  
+  const livemapicon = useSelector(state => state.livemapicon);
   
   const [routename, setroutename] = useState("");
   const [routePrivacy, setroutePrivacy] = useState(false);
@@ -650,7 +652,7 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
             </li>
             <li>
               <div id='div_menu_btns'>
-                <button className='btn_menu_navigations'>Live Map</button>
+                <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_LIVEMAP_ICON, livemapicon: !livemapicon }) }}>Live Map</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "bus_stops" }) }}>Bus Stops</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "routes" }) }}>Routes</button>
                 {/* <button className='btn_menu_navigations'>Traffic</button> */}

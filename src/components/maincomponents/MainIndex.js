@@ -30,6 +30,7 @@ function Map(){
   const livebuslist = useSelector(state => state.livebuslist)
   const selectedlivebus = useSelector(state => state.selectedlivebus);
   const publicroutelist = useSelector(state => state.publicroutelist)
+  const livemapicon = useSelector(state => state.livemapicon);
   const dispatch = useDispatch()
 
   const google = window.google;
@@ -194,7 +195,7 @@ function Map(){
         minZoom: 12,
         disableDefaultUI: true,
         style: IconsDisplay,
-        mapTypeId: 'satellite' //roadmap, satellite, terrain, hybrid
+        mapTypeId: livemapicon? google.maps.MapTypeId.HYBRID : 'satellite' //roadmap, satellite, terrain, hybrid
       }}
       onClick={(data) => {
         // reverseGeoAPICall(data)
