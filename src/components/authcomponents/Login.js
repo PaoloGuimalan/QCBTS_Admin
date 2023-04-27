@@ -77,7 +77,7 @@ function Login() {
             </li>
             <li className='li_login'>
                 <p id='label_title'>BUS TRACK</p>
-                <p id='label_desctitle'>Quezon City Bus Tracking System</p>
+                <p id='label_desctitle'>City Bus Traveling and Information System for Quezon City</p>
             </li>
         </nav>
     </div>

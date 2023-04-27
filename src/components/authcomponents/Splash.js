@@ -10,7 +10,7 @@ function Splash() {
         <div>
             <img src={IconImg} id='img_icon' />
             <p id='p_splash_label'>Bus Track</p>
-            <p id='p_splash_label_2'>Quezon City Bus Tracking System</p>
+            <p id='p_splash_label_2'>City Bus Traveling and Information System for Quezon City</p>
             <div id='div_loading_container'>
                 <motion.div
                 id='div_loadingIcon_rotate' 
