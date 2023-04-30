@@ -7,7 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER } from '../../../redux/types/index'
+import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER, SET_SELECTED_LIVE_BUS } from '../../../redux/types/index'
 import { savedroutepathState, selectedAreaInputState, selectedAreaState, selectedDetailsState } from '../../../redux/actions'
 import Axios from 'axios'
 import { EXT_URL, URL } from '../../../json/urlconfig'
@@ -662,7 +662,7 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
             </li>
             <li>
               <div id='div_menu_btns'>
-              <button className='btn_menu_navigations' onClick={() => {  }}>Active Drivers/Buses</button>
+              <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "active_drivers_buses" }) }}>Active Drivers/Buses</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "bus_stops" }) }}>Bus Stops</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "routes" }) }}>Routes</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_OPTIONS, mapoptions: !mapoptions }) }}>Map Options</button>
@@ -916,6 +916,54 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
               </div>
             </div>
           </div>
+        </motion.div>
+        <motion.div
+        animate={{
+          right: mapmode == "active_drivers_buses"? "10px" : "-360px"
+        }}
+        id='div_active_db_menu' className='absolute_divs_map'>
+          <nav id='nav_bus_stops_menu'>
+            <li id='li_bus_stops_menu_header'>
+              <div id='div_bus_stops_header'>
+                <p id='div_bus_stops_label'>Active Drivers/Buses</p>
+                <button id='btn_bus_stops_close' onClick={() => { 
+                  dispatch({ type: SET_MAP_MODE, mapmode: "none" })
+                  dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
+                }}><CloseIcon /></button>
+              </div>
+            </li>
+            <li id='li_bus_stops_data_holder'>
+              <nav id='nav_bus_stops_data_section'>
+                <li className='li_active_db_data_section'>
+                  <div id='div_bus_stops_list'>
+                    <div id='div_bus_stops_list_container'>
+                      <table id='tbl_bus_stops_list'>
+                        <tbody>
+                          <tr id='tr_header_bus_stops_list'>
+                            <th className='th_header_active_db_list'>Bus ID</th>
+                            <th className='th_header_active_db_list'>Full Name</th>
+                            <th className='th_header_active_db_list'>Route</th>
+                          </tr>
+                          {livebuslist.map((list, i) => {
+                            return(
+                              <tr onClick={() => {
+                                dispatch({ type: SET_CENTER_MAP, centermap: { lat: parseFloat(list.latitude), lng: parseFloat(list.longitude) }})
+                                dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: list.userID })
+                              }} key={i} className='tr_content_bus_stops_list'>
+                                <td className='td_active_db_data'>{list.busID}</td>
+                                <td className='td_active_db_data'>{list.firstName} {list.middleName == "N/A"? "" : list.middleName} {list.lastName}</td>
+                                <td className='td_active_db_data'>{list.routeName}</td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </li>
+              </nav>
+            </li>
+          </nav>
         </motion.div>
         <motion.div
         animate={{
