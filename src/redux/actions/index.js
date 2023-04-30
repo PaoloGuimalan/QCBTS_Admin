@@ -1,4 +1,4 @@
-import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_AUTH, SET_BUS_LIST, SET_BUS_STOPS_LIST, SET_BUS_STOP_INFO, SET_CENTER_MAP, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_DA_COMPANY_LIST, SET_DA_DRIVER_LIST, SET_DRIVERS_LIST, SET_LIVEMAP_ICON, SET_LIVE_BUST_LIST, SET_MAP_MODE, SET_POSTS_LIST, SET_PUBLIC_ROUTE_LIST, SET_ROUTES_SELECTION_LIST, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_PATH, SET_ROUTE_STATUS_LOADER, SET_SAVED_ROUTE_PATH, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_CONVID, SET_SELECTED_DETAILS, SET_SELECTED_LIVE_BUS, SET_SELECTED_MARKER, SET_SELECTED_TYPE, SET_SYSTEM_ACTIVITIES_LIST, SET_TRIP_SCHEDULES_LIST } from "../types";
+import { SET_ALERT, SET_ASSIGNED_ROUTES, SET_AUTH, SET_BUS_LIST, SET_BUS_STOPS_LIST, SET_BUS_STOP_INFO, SET_CENTER_MAP, SET_CHECKBOX_FILTER, SET_COMPADMIN_DETAILS, SET_COMPANY_DETAILS, SET_COMPANY_LIST, SET_COMPANY_RECORD, SET_COMPANY_REG_LIST, SET_CONVERSATION_DATA, SET_CONVERSATION_LIST, SET_DA_COMPANY_LIST, SET_DA_DRIVER_LIST, SET_DRIVERS_LIST, SET_LIVEMAP_ICON, SET_LIVE_BUST_LIST, SET_MAP_MODE, SET_MAP_OPTIONS, SET_POSTS_LIST, SET_PUBLIC_ROUTE_LIST, SET_ROUTES_SELECTION_LIST, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_PATH, SET_ROUTE_STATUS_LOADER, SET_SAVED_ROUTE_PATH, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_CONVID, SET_SELECTED_DETAILS, SET_SELECTED_LIVE_BUS, SET_SELECTED_MARKER, SET_SELECTED_TYPE, SET_SELECT_LAYOUT, SET_SYSTEM_ACTIVITIES_LIST, SET_TRIP_SCHEDULES_LIST } from "../types";
 
 const userAuthState = {
     userID: "",
@@ -440,6 +440,42 @@ export const setlivemapicon = (state = false, action) => {
     switch(action.type){
         case SET_LIVEMAP_ICON:
             return action.livemapicon;
+        default:
+            return state;
+    }
+}
+
+export const setmapoptions = (state = false, action) => {
+    switch(action.type){
+        case SET_MAP_OPTIONS:
+            return action.mapoptions;
+        default:
+            return state;
+    }
+}
+
+export const setselectlayout = (state = 'satellite', action) => {
+    switch(action.type){
+        case SET_SELECT_LAYOUT:
+            return action.selectlayout;
+        default:
+            return state;
+    }
+}
+
+export const checkboxfilterstate = {
+    activeBuses: true,
+    openedStops: true,
+    closedStops: true,
+    routes: true,
+    createroutepreview: true,
+    selectedbusroutepreview: true
+}
+
+export const setcheckboxfilter = (state = checkboxfilterstate, action) => {
+    switch(action.type){
+        case SET_CHECKBOX_FILTER:
+            return action.checkboxfilter;
         default:
             return state;
     }

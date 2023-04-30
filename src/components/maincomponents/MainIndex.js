@@ -31,6 +31,8 @@ function Map(){
   const selectedlivebus = useSelector(state => state.selectedlivebus);
   const publicroutelist = useSelector(state => state.publicroutelist)
   const livemapicon = useSelector(state => state.livemapicon);
+  const selectlayout = useSelector(state => state.selectlayout);
+  const checkboxfilter = useSelector(state => state.checkboxfilter);
   const dispatch = useDispatch()
 
   const google = window.google;
@@ -195,134 +197,215 @@ function Map(){
         minZoom: 12,
         disableDefaultUI: true,
         style: IconsDisplay,
-        mapTypeId: livemapicon? google.maps.MapTypeId.HYBRID : 'satellite' //roadmap, satellite, terrain, hybrid
+        mapTypeId: selectlayout
+        // mapTypeId: 'satellite'
+        // mapTypeId: livemapicon? google.maps.MapTypeId.HYBRID : 'satellite' //roadmap, satellite, terrain, hybrid
       }}
       onClick={(data) => {
         // reverseGeoAPICall(data)
         clickMapArea(data)
       }}
     >
-      {livebuslist.map((lbs, i) => {
-        return(
-          <Marker
-            icon={{
-              url: LiveBusIcon,
-              anchor: new google.maps.Point(25, 25),
-              scaledSize: new google.maps.Size(25, 25),
-            }}
-            onClick={() => { dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: lbs.userID }) }}
-            key={i}
-            position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
-          >
-            {selectedlivebus == lbs.userID? (
-              <InfoWindow onCloseClick={() => {
-                dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
-              }}>
-                <div className='div_infowindow_live_bs'>
-                  <LiveBusComponent lbs={lbs} />
-                </div>
-              </InfoWindow>
-            ) : null}
-          </Marker>
-        )
-      })}
-
-      {livebuslist.map((lbs, i) => {
-        if(selectedlivebus == lbs.userID){
+      {checkboxfilter.activeBuses? (
+        livebuslist.map((lbs, i) => {
           return(
-            publicroutelist.map((pblrl, j) => {
-              if(pblrl.routeID == lbs.routeID){
-                // console.log(pblrl.routePath)
-                return(
-                  <Polyline
-                    draggable={false}
-                    editable={false}
-                    path={pblrl.routePath}
-                    options={{
-                      fillColor: "transparent",
-                      strokeColor: "yellow",
-                      strokeWeight: 4
-                    }}
-                  />
-                )
-              }
-            })
+            <Marker
+              icon={{
+                url: LiveBusIcon,
+                anchor: new google.maps.Point(25, 25),
+                scaledSize: new google.maps.Size(25, 25),
+              }}
+              onClick={() => { dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: lbs.userID }) }}
+              key={i}
+              position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
+            >
+              {selectedlivebus == lbs.userID? (
+                <InfoWindow onCloseClick={() => {
+                  dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
+                }}>
+                  <div className='div_infowindow_live_bs'>
+                    <LiveBusComponent lbs={lbs} />
+                  </div>
+                </InfoWindow>
+              ) : null}
+            </Marker>
           )
-        }
-      })}
+        })
+      ) : null}
+
+      {checkboxfilter.selectedbusroutepreview? (
+        livebuslist.map((lbs, i) => {
+          if(selectedlivebus == lbs.userID){
+            return(
+              publicroutelist.map((pblrl, j) => {
+                if(pblrl.routeID == lbs.routeID){
+                  // console.log(pblrl.routePath)
+                  return(
+                    <Polyline
+                      draggable={false}
+                      editable={false}
+                      path={pblrl.routePath}
+                      options={{
+                        fillColor: "transparent",
+                        strokeColor: "yellow",
+                        strokeWeight: 4
+                      }}
+                    />
+                  )
+                }
+              })
+            )
+          }
+        })
+      ) : null}
 
       {busstopslist.map((data, i) => {
-        return(
-          <Marker
-            icon={{
-              url: data.status? OpennedIcon : ClosedIcon,
-              anchor: new google.maps.Point(25, 25),
-              scaledSize: new google.maps.Size(25, 25),
-            }}
-            onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
-            key={i}
-            position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
-          >
-            {selectedMarker == data.busStopID? (
-              <InfoWindow onCloseClick={() => {
-                dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
-              }}>
-                <div className='div_infowindow_existing_bs'>
-                  <p id='p_stationName'>{data.stationName}</p>
-                  <table id='table_existing_bs'>
-                    <tbody>
-                      <tr>
-                        <th>Bus Stop ID</th>
-                        <td>{data.busStopID}</td>
-                      </tr>
-                      <tr>
-                        <th>Status</th>
-                        <motion.td
+        if(data.status){
+          return(checkboxfilter.openedStops? (
+              <Marker
+                icon={{
+                  url: data.status? OpennedIcon : ClosedIcon,
+                  anchor: new google.maps.Point(25, 25),
+                  scaledSize: new google.maps.Size(25, 25),
+                }}
+                onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                key={i}
+                position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+              >
+                {selectedMarker == data.busStopID? (
+                  <InfoWindow onCloseClick={() => {
+                    dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                  }}>
+                    <div className='div_infowindow_existing_bs'>
+                      <p id='p_stationName'>{data.stationName}</p>
+                      <table id='table_existing_bs'>
+                        <tbody>
+                          <tr>
+                            <th>Bus Stop ID</th>
+                            <td>{data.busStopID}</td>
+                          </tr>
+                          <tr>
+                            <th>Status</th>
+                            <motion.td
+                            animate={{
+                              color: data.status? "lime" : "red"
+                            }}
+                            >{data.status? "Open" : "Closed"}</motion.td>
+                          </tr>
+                          <tr>
+                            <th>Date Added</th>
+                            <td>{data.dateAdded}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div id='div_btns_infowinfow'>
+                        {data.status? (
+                          <motion.button
+                          animate={{
+                            backgroundColor: "lime",
+                            display: mapmode == "routes"? "block" : "none"
+                          }}
+                          className='btn_infoWindow_existing_bs' onClick={() => { 
+                            dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                            ...routemakerlist,
+                            {
+                              pendingID: Math.floor(Math.random() * 100000),
+                              stationID: data.busStopID,
+                              stationName: data.stationName,
+                              coordinates: [
+                                data.coordinates.longitude,
+                                data.coordinates.latitude
+                              ]
+                            }] }) 
+                            dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                          }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                        ) : null}
+                        <motion.button
                         animate={{
-                          color: data.status? "lime" : "red"
+                          backgroundColor: data.status? "red" : "lime"
                         }}
-                        >{data.status? "Open" : "Closed"}</motion.td>
-                      </tr>
-                      <tr>
-                        <th>Date Added</th>
-                        <td>{data.dateAdded}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div id='div_btns_infowinfow'>
-                    {data.status? (
-                      <motion.button
-                      animate={{
-                        backgroundColor: "lime",
-                        display: mapmode == "routes"? "block" : "none"
-                      }}
-                      className='btn_infoWindow_existing_bs' onClick={() => { 
-                        dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
-                        ...routemakerlist,
-                        {
-                          pendingID: Math.floor(Math.random() * 100000),
-                          stationID: data.busStopID,
-                          stationName: data.stationName,
-                          coordinates: [
-                            data.coordinates.longitude,
-                            data.coordinates.latitude
-                          ]
-                        }] }) 
-                        dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
-                      }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
-                    ) : null}
-                    <motion.button
-                    animate={{
-                      backgroundColor: data.status? "red" : "lime"
-                    }}
-                    className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
-                    <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
-                  </div>
-                </div>
-              </InfoWindow>
-            ) : null}
-          </Marker>
-        )
+                        className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                        <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                      </div>
+                    </div>
+                  </InfoWindow>
+                ) : null}
+              </Marker>
+          ) : null)
+        }
+        else{
+          return(checkboxfilter.closedStops? (
+              <Marker
+                icon={{
+                  url: data.status? OpennedIcon : ClosedIcon,
+                  anchor: new google.maps.Point(25, 25),
+                  scaledSize: new google.maps.Size(25, 25),
+                }}
+                onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                key={i}
+                position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+              >
+                {selectedMarker == data.busStopID? (
+                  <InfoWindow onCloseClick={() => {
+                    dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                  }}>
+                    <div className='div_infowindow_existing_bs'>
+                      <p id='p_stationName'>{data.stationName}</p>
+                      <table id='table_existing_bs'>
+                        <tbody>
+                          <tr>
+                            <th>Bus Stop ID</th>
+                            <td>{data.busStopID}</td>
+                          </tr>
+                          <tr>
+                            <th>Status</th>
+                            <motion.td
+                            animate={{
+                              color: data.status? "lime" : "red"
+                            }}
+                            >{data.status? "Open" : "Closed"}</motion.td>
+                          </tr>
+                          <tr>
+                            <th>Date Added</th>
+                            <td>{data.dateAdded}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div id='div_btns_infowinfow'>
+                        {data.status? (
+                          <motion.button
+                          animate={{
+                            backgroundColor: "lime",
+                            display: mapmode == "routes"? "block" : "none"
+                          }}
+                          className='btn_infoWindow_existing_bs' onClick={() => { 
+                            dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                            ...routemakerlist,
+                            {
+                              pendingID: Math.floor(Math.random() * 100000),
+                              stationID: data.busStopID,
+                              stationName: data.stationName,
+                              coordinates: [
+                                data.coordinates.longitude,
+                                data.coordinates.latitude
+                              ]
+                            }] }) 
+                            dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                          }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                        ) : null}
+                        <motion.button
+                        animate={{
+                          backgroundColor: data.status? "red" : "lime"
+                        }}
+                        className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                        <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                      </div>
+                    </div>
+                  </InfoWindow>
+                ) : null}
+              </Marker>
+          ) : null)
+        }
       })}
       {selectedarea.status? 
         (
@@ -364,29 +447,33 @@ function Map(){
           strokeColor: "red"
         }}
       />
-      {routepath.length != 0? (
-        <Polyline
-          draggable={false}
-          editable={false}
-          path={routepath}
-          options={{
-            fillColor: "transparent",
-            strokeColor: "orange",
-            strokeWeight: 4
-          }}
-        />
+      {checkboxfilter.createroutepreview? (
+        routepath.length != 0? (
+          <Polyline
+            draggable={false}
+            editable={false}
+            path={routepath}
+            options={{
+              fillColor: "transparent",
+              strokeColor: "orange",
+              strokeWeight: 4
+            }}
+          />
+        ) : null
       ) : null}
-      {savedroutepath.routePath.length != 0? (
-        <Polyline
-          draggable={false}
-          editable={false}
-          path={savedroutepath.routePath}
-          options={{
-            fillColor: "transparent",
-            strokeColor: !savedroutepath.status? "lime" : "red",
-            strokeWeight: 4
-          }}
-        />
+      {checkboxfilter.routes? (
+        savedroutepath.routePath.length != 0? (
+          <Polyline
+            draggable={false}
+            editable={false}
+            path={savedroutepath.routePath}
+            options={{
+              fillColor: "transparent",
+              strokeColor: !savedroutepath.status? "lime" : "red",
+              strokeWeight: 4
+            }}
+          />
+        ) : null
       ) : null}
     </GoogleMap>
   )

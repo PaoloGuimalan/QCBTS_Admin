@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { setalert, setassignedroutes, setbuslist, setbusstopinfo, setbusstopslist, setcentermap, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setconversationdata, setconversationlist, setdacompanylist, setdadriverlist, setdriverslist, setlivebuslist, setlivemapicon, setmapmode, setpostslist, setpublicroutelist, setroutelist, setroutemakerlist, setroutepath, setroutesselectionlist, setroutestatusloader, setsavedroutepath, setselectedarea, setselectedareainput, setselectedconvID, setselecteddetails, setselectedlivebus, setselectedmarker, setselectedtype, setsystemactivitieslist, settripscheduleslist, userAuth } from '../actions';
+import { setalert, setassignedroutes, setbuslist, setbusstopinfo, setbusstopslist, setcentermap, setcheckboxfilter, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setconversationdata, setconversationlist, setdacompanylist, setdadriverlist, setdriverslist, setlivebuslist, setlivemapicon, setmapmode, setmapoptions, setpostslist, setpublicroutelist, setroutelist, setroutemakerlist, setroutepath, setroutesselectionlist, setroutestatusloader, setsavedroutepath, setselectedarea, setselectedareainput, setselectedconvID, setselecteddetails, setselectedlivebus, setselectedmarker, setselectedtype, setselectlayout, setsystemactivitieslist, settripscheduleslist, userAuth } from '../actions';
 
 const combiner = combineReducers({
     authdetails: userAuth,
@@ -38,7 +38,10 @@ const combiner = combineReducers({
     selectedlivebus: setselectedlivebus,
     systemactivitieslist: setsystemactivitieslist,
     tripscheduleslist: settripscheduleslist,
-    livemapicon: setlivemapicon
+    livemapicon: setlivemapicon,
+    mapoptions: setmapoptions,
+    selectlayout: setselectlayout,
+    checkboxfilter: setcheckboxfilter
 })
 
 const store = createStore(combiner);

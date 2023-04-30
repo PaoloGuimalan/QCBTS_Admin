@@ -7,10 +7,16 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON } from '../../../redux/types/index'
+import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER } from '../../../redux/types/index'
 import { savedroutepathState, selectedAreaInputState, selectedAreaState, selectedDetailsState } from '../../../redux/actions'
 import Axios from 'axios'
 import { EXT_URL, URL } from '../../../json/urlconfig'
+import OpennedIcon from '../../../resources/OpenStop.png'
+import ClosedIcon from '../../../resources/ClosedStop.png'
+import LiveBusIcon from '../../../resources/livebus.png'
+import PrevRouteIcon from '../../../resources/prev_route.png'
+import RouteIcon from '../../../resources/route_icon.png'
+import SelectedBusIcon from '../../../resources/selected_bus_route.png'
 
 function Index() {
 
@@ -33,6 +39,9 @@ function Index() {
   const savedroutepath = useSelector(state => state.savedroutepath);
   
   const livemapicon = useSelector(state => state.livemapicon);
+  const mapoptions = useSelector(state => state.mapoptions);
+  const selectlayout = useSelector(state => state.selectlayout)
+  const checkboxfilter = useSelector(state => state.checkboxfilter);
   
   const [routename, setroutename] = useState("");
   const [routePrivacy, setroutePrivacy] = useState(false);
@@ -67,6 +76,7 @@ function Index() {
       dispatch({ type: SET_SELECTED_AREA_INPUT, selectedareainput: selectedAreaInputState })
       dispatch({ type: SET_CENTER_MAP, centermap: { lat: 14.647296, lng: 121.061376 }})
       dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+      dispatch({ type: SET_MAP_OPTIONS, mapoptions: false })
       cancelAxios.cancel()
     }
   },[])
@@ -652,10 +662,101 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
             </li>
             <li>
               <div id='div_menu_btns'>
-                <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_LIVEMAP_ICON, livemapicon: !livemapicon }) }}>Live Map</button>
+              <button className='btn_menu_navigations' onClick={() => {  }}>Active Drivers/Buses</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "bus_stops" }) }}>Bus Stops</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "routes" }) }}>Routes</button>
+                <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_OPTIONS, mapoptions: !mapoptions }) }}>Map Options</button>
                 {/* <button className='btn_menu_navigations'>Traffic</button> */}
+              </div>
+            </li>
+          </nav>
+        </motion.div>
+        <motion.div
+        animate={{
+          marginLeft: mapoptions? "10px" : "-290px"
+          // marginLeft: "10px"
+        }}
+        id='div_map_options' className='absolute_divs_map'>
+          <nav id='nav_map_options'>
+            <li>
+              <p id='map_options_label'>Map Options</p>
+            </li>
+            <li>
+              <div id='div_map_options_content'>
+                <div id='div_layout_section'>
+                  <p id='p_layout_section_label'>Layout</p>
+                  <select value={selectlayout} onChange={(e) => { 
+                    dispatch({ type: SET_SELECT_LAYOUT, selectlayout: e.target.value }) 
+                  }} id='select_layout_section_selector'>
+                    <option defaultChecked value="satellite">Satellite</option>
+                    <option value="hybrid">Hybrid</option>
+                    <option value="roadmap">Road Map</option>
+                    <option value="terrain">Terrain</option>
+                  </select>
+                </div>
+                <div id='div_filter_section'>
+                  <p id='p_layout_section_label'>Filter Icons</p>
+                  <div className='div_cb_container'>
+                    <input type='checkbox' id='active_bus_cb' checked={checkboxfilter.activeBuses} onChange={(e) => {
+                      dispatch({type: SET_CHECKBOX_FILTER, checkboxfilter: {
+                        ...checkboxfilter,
+                        activeBuses: e.target.checked
+                      }})
+                    }} />
+                    <img src={LiveBusIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Active Buses</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <input type='checkbox' id='active_bus_cb' checked={checkboxfilter.openedStops} onChange={(e) => {
+                      dispatch({type: SET_CHECKBOX_FILTER, checkboxfilter: {
+                        ...checkboxfilter,
+                        openedStops: e.target.checked
+                      }})
+                    }} />
+                    <img src={OpennedIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Opened Bus Stops</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <input type='checkbox' id='active_bus_cb' checked={checkboxfilter.closedStops} onChange={(e) => {
+                      dispatch({type: SET_CHECKBOX_FILTER, checkboxfilter: {
+                        ...checkboxfilter,
+                        closedStops: e.target.checked
+                      }})
+                    }} />
+                    <img src={ClosedIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Closed Bus Stops</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <input type='checkbox' id='active_bus_cb' checked={checkboxfilter.routes} onChange={(e) => {
+                      dispatch({type: SET_CHECKBOX_FILTER, checkboxfilter: {
+                        ...checkboxfilter,
+                        routes: e.target.checked
+                      }})
+                    }} />
+                    <img src={RouteIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Routes</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <input type='checkbox' id='active_bus_cb' checked={checkboxfilter.createroutepreview} onChange={(e) => {
+                      dispatch({type: SET_CHECKBOX_FILTER, checkboxfilter: {
+                        ...checkboxfilter,
+                        createroutepreview: e.target.checked
+                      }})
+                    }} />
+                    <img src={PrevRouteIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Create Route Preview</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <input type='checkbox' id='active_bus_cb' checked={checkboxfilter.selectedbusroutepreview} onChange={(e) => {
+                      dispatch({type: SET_CHECKBOX_FILTER, checkboxfilter: {
+                        ...checkboxfilter,
+                        selectedbusroutepreview: e.target.checked
+                      }})
+                    }} />
+                    <img src={SelectedBusIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Selected Bus' Route</p>
+                  </div>
+                </div>
               </div>
             </li>
           </nav>
