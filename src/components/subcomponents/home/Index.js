@@ -369,7 +369,7 @@ function Index() {
                       </tr>
                       {countAppUsersTotal.recentlyAdded.filter((rac, i) => rac.dateRegistered.split("/")[0] == date.split("/")[0]).map((res, j) => {
                           return(
-                            <tr key={res.userID} className='tr_tbl_data_holder'>
+                            <tr key={res.userID} className='tr_tbl_data_holder'  onClick={() => { navigate(`/home/damanagement/driverdetails/${res.userID}`) }}>
                               <td className='td_labels'>{res.firstName} {res.middleName == "N/A"? "" : res.middleName} {res.lastName}</td>
                               <td className='td_labels'>{res.userID}</td>
                               {/* <td className='td_labels'>{res.email}</td>

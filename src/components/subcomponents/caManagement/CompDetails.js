@@ -777,8 +777,8 @@ function CompDetails() {
                     {driverslist.map((records, i) => {
                       return(
                         <tr key={i}>
-                          <td className='td_adminlist' onClick={() => {  }}>{records.userID}</td>
-                          <td className='td_adminlist' onClick={() => {  }}>{records.firstName} {records.middleName == "N/A"? "" : records.middleName} {records.lastName}</td>
+                          <td className='td_adminlist'  onClick={() => { navigate(`/home/damanagement/driverdetails/${records.userID}`) }}>{records.userID}</td>
+                          <td className='td_adminlist'  onClick={() => { navigate(`/home/damanagement/driverdetails/${records.userID}`) }}>{records.firstName} {records.middleName == "N/A"? "" : records.middleName} {records.lastName}</td>
                           <td className='td_adminlist'>{records.dlicense}</td>
                           <motion.td
                           animate={{

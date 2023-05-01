@@ -308,11 +308,11 @@ function Main() {
                         <th className='tbl_th2 th_first'>Driver ID</th>
                         <th className='tbl_th2'>Company Name</th>
                         <th className='tbl_th2'>Driver Name</th>
-                        <th className='tbl_th2 th_last'>Navigations</th>
+                        {/* <th className='tbl_th2 th_last'>Navigations</th> */}
                       </tr>
                       {dadriverlist.map((dadrv, i) => {
                         return(
-                          <tr key={i} className='tr_indv'>
+                          <tr key={i} className='tr_indv' onClick={() => { navigate(`/home/damanagement/driverdetails/${dadrv.userID}`) }}>
                             <td>{dadrv.userID}</td>
                             {dacompanylist.map((cmp, i) => {
                               if(cmp.companyID == dadrv.companyID){
@@ -322,7 +322,7 @@ function Main() {
                               }
                             })}
                             <td>{dadrv.firstName} {dadrv.middleName != "N/A"? dadrv.middleName : ""} {dadrv.lastName}</td>
-                            <td>...</td>
+                            {/* <td>...</td> */}
                           </tr>
                         )
                       })}

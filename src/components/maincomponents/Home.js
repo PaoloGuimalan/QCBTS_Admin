@@ -25,6 +25,7 @@ import UFIcon from '@material-ui/icons/UpdateRounded'
 import MapMIcon from '@material-ui/icons/MapRounded'
 import CAIcon from '@material-ui/icons/BusinessCenterRounded'
 import DAIcon from '@material-ui/icons/DirectionsBus'
+import DriverDetails from '../subcomponents/daManagement/DriverDetails';
 
 function Home() {
 
@@ -250,6 +251,7 @@ function Home() {
                 <Route path='/messages/*' element={<Messages />} />
                 <Route path='/damanagement/*' element={<Main />} />
                 <Route path='/notifications/*' element={<NotificationsMain />} />
+                <Route path='/damanagement/driverdetails/:driverID' element={<DriverDetails />} />
               </Routes>
             </li>
           </nav>
