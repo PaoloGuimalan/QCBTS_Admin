@@ -58,6 +58,7 @@ function CompDetails() {
   const assignedroutes = useSelector(state => state.assignedroutes)
   const buslist = useSelector(state => state.buslist)
   const tripscheduleslist = useSelector(state => state.tripscheduleslist)
+  const livebuslist = useSelector(state => state.livebuslist)
 
   useEffect(() => {
     // console.log(params["companyID"])
@@ -643,20 +644,20 @@ function CompDetails() {
                 <li className='li_information_section'>
                   <nav id='nav_informations_company'>
                     <li>
-                      <p className='label_informations_company'>Basic Analytics</p>
+                      <p className='label_informations_company'>Basic Reports</p>
                     </li>
                     <li className='li_holder_data'>
                       <div id='div_data_information_holder'>
                       <table id='tbl_data_information'>
                           <tbody>
                             <tr className='tr_data'>
-                              <th className='th_table_information'>Active Admins: </th>
-                              <td className='td_table_information'>none</td>
+                              <th className='th_table_information'>Active Drivers: </th>
+                              <td className='td_table_information'>{livebuslist.filter((lb, i) => lb.companyID == companyID).length} driver/s</td>
                             </tr>
-                            <tr className='tr_data'>
+                            {/* <tr className='tr_data'>
                               <th className='th_table_information'>Active Drivers: </th>
                               <td className='td_table_information'>none</td>
-                            </tr>
+                            </tr> */}
                           </tbody>
                         </table>
                       </div>

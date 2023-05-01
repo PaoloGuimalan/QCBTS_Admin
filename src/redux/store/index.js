@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { setalert, setassignedroutes, setbuslist, setbusstopinfo, setbusstopslist, setcentermap, setcheckboxfilter, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setconversationdata, setconversationlist, setdacompanylist, setdadriverlist, setdriverslist, setlivebuslist, setlivemapicon, setmapmode, setmapoptions, setpostslist, setpublicroutelist, setroutelist, setroutemakerlist, setroutepath, setroutesselectionlist, setroutestatusloader, setsavedroutepath, setselectedarea, setselectedareainput, setselectedconvID, setselecteddetails, setselectedlivebus, setselectedmarker, setselectedtype, setselectlayout, setsystemactivitieslist, settripscheduleslist, userAuth } from '../actions';
+import { setalert, setassignedroutes, setbuslist, setbusstopinfo, setbusstopslist, setcentermap, setcheckboxfilter, setcompadmindetails, setcompanydetails, setcompanylist, setcompanyrecord, setcompanyreglist, setconversationdata, setconversationlist, setdacompanylist, setdadriverlist, setdriverslist, setlivebuslist, setlivemapicon, setmapmode, setmapoptions, setpostslist, setpublicroutelist, setroutelist, setroutemakerlist, setroutepath, setroutesselectionlist, setroutestatusloader, setsavedroutepath, setselectedarea, setselectedareainput, setselectedconvID, setselecteddetails, setselectedlivebus, setselectedmarker, setselectedtype, setselectlayout, setsystemactivitieslist, settripscheduleslist, setuserguide, userAuth } from '../actions';
 
 const combiner = combineReducers({
     authdetails: userAuth,
@@ -41,7 +41,8 @@ const combiner = combineReducers({
     livemapicon: setlivemapicon,
     mapoptions: setmapoptions,
     selectlayout: setselectlayout,
-    checkboxfilter: setcheckboxfilter
+    checkboxfilter: setcheckboxfilter,
+    userguide: setuserguide
 })
 
 const store = createStore(combiner);

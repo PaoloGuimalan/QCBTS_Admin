@@ -286,10 +286,10 @@ function Main() {
                       {dacompanylist.map((data, i) => {
                         return(
                           <tr key={i} className='tr_indv'>
-                            <td>{data.companyID}</td>
-                            <td>{data.companyName}</td>
+                            <td onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}>{data.companyID}</td>
+                            <td onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}>{data.companyName}</td>
                             <td>
-                              <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button>
+                              {/* <button className='btn_company_list_navs' onClick={() => { navigate(`/home/camanagement/companyDetails/${data.companyID}`) }}><InfoIcon style={{ fontSize: "15px" }} /></button> */}
                               <button className='btn_company_list_navs' onClick={() => { getCompanyDriversList(data.companyID, data.companyName) }}><RightIcon style={{ fontSize: "15px" }} /></button>
                             </td>
                           </tr>

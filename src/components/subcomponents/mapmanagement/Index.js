@@ -7,7 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER, SET_SELECTED_LIVE_BUS } from '../../../redux/types/index'
+import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER, SET_SELECTED_LIVE_BUS, SET_USER_GUIDE } from '../../../redux/types/index'
 import { savedroutepathState, selectedAreaInputState, selectedAreaState, selectedDetailsState } from '../../../redux/actions'
 import Axios from 'axios'
 import { EXT_URL, URL } from '../../../json/urlconfig'
@@ -17,6 +17,7 @@ import LiveBusIcon from '../../../resources/livebus.png'
 import PrevRouteIcon from '../../../resources/prev_route.png'
 import RouteIcon from '../../../resources/route_icon.png'
 import SelectedBusIcon from '../../../resources/selected_bus_route.png'
+import BusStopSelectionIcon from '../../../resources/Pan_Blue_Circle.png'
 
 function Index() {
 
@@ -42,6 +43,7 @@ function Index() {
   const mapoptions = useSelector(state => state.mapoptions);
   const selectlayout = useSelector(state => state.selectlayout)
   const checkboxfilter = useSelector(state => state.checkboxfilter);
+  const userguide = useSelector(state => state.userguide)
   
   const [routename, setroutename] = useState("");
   const [routePrivacy, setroutePrivacy] = useState(false);
@@ -665,8 +667,82 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
               <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "active_drivers_buses" }) }}>Active Drivers/Buses</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "bus_stops" }) }}>Bus Stops</button>
                 <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_MODE, mapmode: "routes" }) }}>Routes</button>
-                <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_OPTIONS, mapoptions: !mapoptions }) }}>Map Options</button>
+                <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_MAP_OPTIONS, mapoptions: !mapoptions }); dispatch({ type: SET_USER_GUIDE, userguide: false }) }}>Map Options</button>
+                <button className='btn_menu_navigations' onClick={() => { dispatch({ type: SET_USER_GUIDE, userguide: !userguide }); dispatch({ type: SET_MAP_OPTIONS, mapoptions: false }) }}>User Guide</button>
                 {/* <button className='btn_menu_navigations'>Traffic</button> */}
+              </div>
+            </li>
+          </nav>
+        </motion.div>
+        <motion.div
+        animate={{
+          marginLeft: userguide? "10px" : "-290px"
+          // marginLeft: "10px"
+        }}
+        id='div_map_options' className='absolute_divs_map'>
+          <nav id='nav_map_options'>
+            <li>
+              <div id='div_map_options_header'>
+                <p id='map_options_label'>User Guide</p>
+                <button id='btn_bus_stops_close' onClick={() => { 
+                  dispatch({ type: SET_USER_GUIDE, userguide: false })
+                }}><CloseIcon /></button>
+              </div>
+            </li>
+            <li>
+              <div id='div_user_guide_content'>
+                <div id='div_filter_section'>
+                  <p id='p_layout_section_label'>Map Icons</p>
+                  <div className='div_cb_container'>
+                    <img src={LiveBusIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Active Buses</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <img src={OpennedIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Opened Bus Stops</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <img src={ClosedIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Closed Bus Stops</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <img src={BusStopSelectionIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Add a Station Selected Area</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <img src={RouteIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Routes</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <img src={PrevRouteIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Create Route Preview</p>
+                  </div>
+                  <div className='div_cb_container'>
+                    <img src={SelectedBusIcon} className='img_cb_filter_icon' />
+                    <p className='p_cb_label'>Selected Bus' Route</p>
+                  </div>
+                </div>
+                <div id='div_filter_section'>
+                  <p id='p_layout_section_label'>Map Menu</p>
+                  <div className='div_user_guide_mm_container'>
+                    <p className='p_user_guide_mm_label'>Active Drivers/Buses</p>
+                    <p className='p_user_guide_mm_content_last'>- List of On Trip Drivers/Buses.</p>
+                  </div>
+                  <div className='div_user_guide_mm_container'>
+                    <p className='p_user_guide_mm_label'>Bus Stops</p>
+                    <p className='p_user_guide_mm_content'>- List of All Bus Stops in the system (either Opened or Closed).</p>
+                    <p className='p_user_guide_mm_content_last'>- In this option, new bus stop can be added by clicking anywhere in the map and transfering input data to Add a Station form.</p>
+                  </div>
+                  <div className='div_user_guide_mm_container'>
+                    <p className='p_user_guide_mm_label'>Routes</p>
+                    <p className='p_user_guide_mm_content'>- List of Routes in the system</p>
+                    <p className='p_user_guide_mm_content_last'>- In this option, new routes can be added by clicking desired bus stops to be included by route and by clicking create route or add route.</p>
+                  </div>
+                  <div className='div_user_guide_mm_container'>
+                    <p className='p_user_guide_mm_label'>Map Options</p>
+                    <p className='p_user_guide_mm_content'>- Options for filtering displays in Map</p>
+                  </div>
+                </div>
               </div>
             </li>
           </nav>
