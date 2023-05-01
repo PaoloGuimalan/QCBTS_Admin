@@ -13,6 +13,7 @@ import OpennedIcon from '../../resources/OpenStop.png'
 import ClosedIcon from '../../resources/ClosedStop.png'
 import LiveBusIcon from '../../resources/livebus.png'
 import { URL } from '../../json/urlconfig'
+import { useNavigate } from 'react-router-dom';
 
 function Map(){
 
@@ -34,6 +35,7 @@ function Map(){
   const selectlayout = useSelector(state => state.selectlayout);
   const checkboxfilter = useSelector(state => state.checkboxfilter);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const google = window.google;
 
@@ -482,6 +484,7 @@ function Map(){
 function LiveBusComponent({lbs}){
 
   const [expandLiveBusInfo, setexpandLiveBusInfo] = useState(false)
+  // const navigate = useNavigate()
 
   return(
     <motion.div
@@ -520,8 +523,8 @@ function LiveBusComponent({lbs}){
         </tbody>
       </table>
       <div id='div_btns_infowinfow'>
-        <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Bus Info</button>
-        <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Driver Info</button>
+        {/* <button className='btn_infoWindow_live_bs' onClick={() => {  }}>View Bus Info</button> */}
+        <button className='btn_infoWindow_live_bs'  onClick={() => { window.location.href = `/home/damanagement/driverdetails/${lbs.userID}` }}>View Driver Info</button>
       </div>
     </motion.div>
   )
