@@ -679,7 +679,12 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
         id='div_map_options' className='absolute_divs_map'>
           <nav id='nav_map_options'>
             <li>
-              <p id='map_options_label'>Map Options</p>
+              <div id='div_map_options_header'>
+                <p id='map_options_label'>Map Options</p>
+                <button id='btn_bus_stops_close' onClick={() => { 
+                  dispatch({ type: SET_MAP_OPTIONS, mapoptions: false })
+                }}><CloseIcon /></button>
+              </div>
             </li>
             <li>
               <div id='div_map_options_content'>
