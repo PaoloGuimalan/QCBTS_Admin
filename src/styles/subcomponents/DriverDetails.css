@@ -1,8 +1,128 @@
 #div_driver_details{
-    background-color: white;
+    /* background-color: white; */
+    background-color: #e0e0e0;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
     overflow-y: auto;
+}
+
+#div_dd_header{
+    background-color: transparent;
+    width: calc(100% - 40px);
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#nav_addcompany{
+    display: flex;
+    background-color: transparent;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+#div_addcompany_navigations{
+    background-color: transparent;
+    display: flex;
+    padding: 10px;
+    gap: 5px;
+    align-items: center;
+}
+
+#label_addcompany{
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    margin-top: 12px;
+}
+
+#label_company_details{
+    font-size: 15px;
+    font-weight: bold;
+    color: #404040;
+    margin-top: 12px;
+}
+
+#btn_backicon{
+    width: 40px;
+    cursor: pointer;
+    background-color: transparent;
+    border: solid 0px black;
+}
+
+.div_dd_content_containers{
+    background-color: white;
+    width: 90%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    flex-direction: row;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 2px black;
+}
+
+.div_dd_content_containers:first-of-type{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: calc(90% - 40px);
+    max-width: calc(800px - 20px);
+    gap: 15px;
+    align-items: center;
+}
+
+#img_default_container{
+    width: 80px;
+    height: 80px;
+}
+
+#div_dd_name_container{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.p_dd_name_labels{
+    margin: 0px;
+}
+
+.p_dd_name_labels:first-of-type{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.p_dd_name_labels:last-of-type{
+    font-size: 13px;
+}
+
+#div_dd_button_report_container{
+    background-color: transparent;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#btn_create_report{
+    background-color: #426BFC;
+    height: 30px;
+    width: 120px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
 }

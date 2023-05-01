@@ -573,18 +573,18 @@ function CompDetails() {
   }
 
   return (
-    <div id='div_addcompany'>
+    <div id='div_company_details'>
       <nav id='nav_addcompany'>
         <li>
           <div id='div_addcompany_navigations'>
             <button id='btn_backicon' onClick={() => { 
               navigate(-1) 
-            }} ><BackIcon style={{ fontSize: "35px", color: "white" }} /></button>
-            <p id='label_addcompany'>Company Details</p>
+            }} ><BackIcon style={{ fontSize: "35px", color: "#404040" }} /></button>
+            <p id='label_company_details'>Company Details</p>
           </div>
         </li>
         <li>
-          <nav id='nav_details_page'>
+          <nav id='nav_company_details_page'>
             <li>
               <nav id='nav_header_details'>
                 <li>
