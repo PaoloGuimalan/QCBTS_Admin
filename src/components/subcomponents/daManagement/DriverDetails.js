@@ -88,7 +88,7 @@ function DriverDetails() {
               <p className='p_dd_name_labels'>{driverprofiledata.email}</p>
             </div>
             <div id='div_dd_button_report_container'>
-              <button id='btn_create_report'>Create Report</button>
+              <button id='btn_create_report' onClick={() => { navigate(`/home/damanagement/driverreport/${driverID}`) }}>Create Report</button>
             </div>
           </div>
           <div className='div_dd_content_containers'>
