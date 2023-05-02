@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
 #div_driver_details{
     /* background-color: white; */
     background-color: #e0e0e0;
@@ -6,6 +8,7 @@
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    font-family: 'Roboto', sans-serif;
 }
 
 #div_dd_header{
@@ -82,6 +85,39 @@
     align-items: center;
 }
 
+.div_dd_content_containers:nth-of-type(2){
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: calc(90% - 40px);
+    max-width: calc(800px - 20px);
+    gap: 15px;
+    align-items: center;
+}
+
+.div_dd_content_containers:nth-of-type(3){
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: calc(90% - 40px);
+    max-width: calc(800px - 20px);
+    gap: 15px;
+    align-items: center;
+}
+
+.div_dd_content_containers:nth-of-type(4){
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: calc(90% - 40px);
+    max-width: calc(800px - 20px);
+    gap: 15px;
+    align-items: center;
+}
+
 #img_default_container{
     width: 80px;
     height: 80px;
@@ -125,4 +161,57 @@
     color: white;
     font-size: 13px;
     cursor: pointer;
+}
+
+.p_dd_container_labels{
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+#div_dd_aci_content_main{
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#div_dd_aci_container{
+    background-color: transparent;
+    width: calc(100% - 50px);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+}
+
+.div_dd_aci_per_data_container{
+    width: calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: transparent;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.p_dd_aci_data_labels{
+    margin: 0px;
+    /* font-weight: bold; */
+    font-size: 13px;
+    text-align: left;
+}
+
+.p_dd_aci_data_content{
+    margin: 0px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
 }
