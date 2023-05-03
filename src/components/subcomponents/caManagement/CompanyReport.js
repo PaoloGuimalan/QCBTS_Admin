@@ -35,10 +35,12 @@ function CompanyReport() {
         companyID: "",
         privacy: null,
         status: null
-      }
+      },
+      tripschedules: []
   }
 
   const [companyReportState, setcompanyReportState] = useState(companyReportDefault)
+  const [dateSelected, setdateSelected] = useState("none")
 
   const initCompanyReport = () => {
     Axios.get(`${URL}/admin/getCompanyReport/${companyID}`, {
@@ -104,6 +106,60 @@ function CompanyReport() {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div id='div_driver_info_header'>
+                    <div id='div_driver_reports_header'>
+                        <div id='div_driver_reports_header_labels'>
+                            <p className='p_driver_info_header'>Trip Schedules</p>
+                            <p className='p_driver_info_header_last'>Company's Route Trip Schedule</p>
+                        </div>
+                        <div id='div_driver_reports_header_filter'>
+                            <p className='p_driver_info_header_last'>Show</p>
+                            <select id='select_driver_info_date_sort' value={dateSelected} onChange={(e) => { setdateSelected(e.target.value) }}>
+                                <option value="none" defaultChecked>All</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table id='tbl_trip_reports'>
+                        <tbody>
+                            <tr>
+                                <th className='th_trip_sched_reports'>Trip</th>
+                                <th className='th_trip_sched_reports'>Day</th>
+                                <th className='th_trip_sched_reports'>Time</th>
+                                <th className='th_trip_sched_reports'>Interval</th>
+                            </tr>
+                            {dateSelected == "none"? (
+                              companyReportState.tripschedules?.map((cat, i) => {
+                                return(
+                                  <tr key={i}>
+                                      <td className='td_trip_reports'>{cat.tripDestination}</td>
+                                      <td className='td_trip_reports'>{cat.tripDay}</td>
+                                      <td className='td_trip_reports'>{cat.tripTime}</td>
+                                      <td className='td_trip_reports'>{cat.tripInterval}</td>
+                                  </tr>
+                                )
+                              })
+                            ) : (
+                              companyReportState.tripschedules.filter((catf, i) => catf.tripDay == dateSelected).map((cat, i) => {
+                                return(
+                                  <tr key={i}>
+                                      <td className='td_trip_reports'>{cat.tripDestination}</td>
+                                      <td className='td_trip_reports'>{cat.tripDay}</td>
+                                      <td className='td_trip_reports'>{cat.tripTime}</td>
+                                      <td className='td_trip_reports'>{cat.tripInterval}</td>
+                                  </tr>
+                                )
+                              })
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </li>
