@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+#div_companyreport_main{
+    background-color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    font-family: 'Roboto', sans-serif;
+}
+
+#nav_addcompany{
+    display: flex;
+    background-color: transparent;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+#div_addcompany_navigations{
+    background-color: transparent;
+    display: flex;
+    padding: 10px;
+    gap: 5px;
+    align-items: center;
+}
+
+#btn_backicon{
+    width: 40px;
+    cursor: pointer;
+    background-color: transparent;
+    border: solid 0px black;
+}
+
+#label_company_details{
+    font-size: 15px;
+    font-weight: bold;
+    color: #404040;
+    margin-top: 12px;
+}
+
+.flexed_div{
+    display: flex;
+    flex: 1;
+}
+
+#btn_print{
+    background-color: #426BFC;
+    height: 30px;
+    width: 120px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#div_generated_report{
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#p_driver_generated_report_label{
+    background-color: transparent;
+    width: calc(90% - 0px);
+    max-width: calc(820px - 0px);
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1F1F1F;
+}
+
+#div_driver_info_header{
+    background-color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: calc(90% - 40px);
+    max-width: calc(800px - 20px);
+    gap: 5px;
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0px 0px 2px black;
+    margin-bottom: 20px;
+}
+
+.p_driver_info_header{
+    margin: 0px
+}
+
+.p_driver_info_header:first-of-type{
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.p_driver_info_header:nth-of-type(2){
+    font-size: 13px;
+}
+
+.p_driver_info_header:nth-of-type(3){
+    font-size: 13px;
+}
+
+.p_driver_info_header_last{
+    font-size: 13px;
+    margin: 0px;
+}
+
+#div_driver_reports_header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: transparent;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+#div_driver_reports_header_labels{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#div_driver_reports_header_filter{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+#select_driver_info_date_sort{
+    width: 150px;
+    text-align: center;
+    height: 30px;
+    border-radius: 30px;
+}
+
+#tbl_trip_reports{
+    width: 100%;
+    background-color: #E7E7E7;
+}
+
+.th_trip_reports{
+    font-size: 13px;
+    height: 25px;
+}
+
+.th_trip_reports:first-of-type{
+    width: 10%;
+}
+
+.th_trip_reports:nth-of-type(2){
+    width: 14%;
+}
+
+.th_trip_reports:nth-of-type(3){
+    width: 10%;
+}
+
+.th_trip_reports:nth-of-type(4){
+    width: 10%;
+}
+
+.th_trip_reports:nth-of-type(5){
+    width: 36%;
+}
+
+.th_trip_reports:nth-of-type(6){
+    width: 10%;
+}
+
+.th_trip_reports:nth-of-type(7){
+    width: 10%;
+}
+
+.td_trip_reports{
+    font-size: 11px
+}
+
+#div_bar_graph_container{
+    width: 100%
+}
+
+.p_graph_loader_label{
+    font-size: 13px;
+}

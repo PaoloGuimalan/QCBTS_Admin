@@ -17,6 +17,7 @@ import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import InfoIcon from '@material-ui/icons/Info'
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep'
+import CompRepIcon from '@material-ui/icons/Assessment'
 import { motion } from 'framer-motion'
 
 function CompDetails() {
@@ -604,6 +605,7 @@ function CompDetails() {
                     <button title='Clear Company Data' onClick={() => { formatCompanyData() }} className='btn_header_companydata'><DeleteSweepIcon /></button>
                     <button title='Edit Details' onClick={() => { seteditForm(!editForm); setDefaultEditValues(); }} className='btn_header_companydata'><EditIcon /></button>
                     <button title='Email' className='btn_header_companydata' onClick={() => { window.location.href = `mailto:${companyrecord.companydata.email}` }} ><MailIcon /></button>
+                    <button title='Company Report' className='btn_header_companydata' onClick={() => { navigate(`/home/camanagement/companyReport/${companyID}`) }} ><CompRepIcon /></button>
                   </div>
                 </li>
               </nav>

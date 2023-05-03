@@ -27,6 +27,7 @@ import CAIcon from '@material-ui/icons/BusinessCenterRounded'
 import DAIcon from '@material-ui/icons/DirectionsBus'
 import DriverDetails from '../subcomponents/daManagement/DriverDetails';
 import DriverReport from '../subcomponents/daManagement/DriverReport';
+import CompanyReport from '../subcomponents/caManagement/CompanyReport';
 
 function Home() {
 
@@ -248,6 +249,7 @@ function Home() {
                 <Route path='/camanagement' element={<SubCAManagement />} />
                 <Route path='/camanagement/addcompany' element={<AddCompany />} />
                 <Route path='/camanagement/companyDetails/:companyID' element={<CompDetails />} />
+                <Route path='/camanagement/companyReport/:companyID' element={<CompanyReport />} />
                 <Route path='/camanagement/companyAdminDetails/:companyAdID' element={<CompAdDetails />} />
                 <Route path='/messages/*' element={<Messages />} />
                 <Route path='/damanagement/*' element={<Main />} />

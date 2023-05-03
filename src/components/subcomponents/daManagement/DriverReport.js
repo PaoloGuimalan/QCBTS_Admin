@@ -187,7 +187,11 @@ function DriverReport() {
             <div id='div_generated_report' ref={componentRef}>
                 <p id='p_driver_generated_report_label'>Driver Report</p>
                 <div id='div_driver_info_header'>
-                    <p className='p_driver_info_header'>{driverReportDataState.firstName} {driverReportDataState.middleName == "N/A" || driverReportDataState.middleName == ""? "" : driverReportDataState.middleName} {driverReportDataState.lastName}</p>
+                    {driverReportDataState.userID == ""? (
+                      <p className='p_driver_info_header'>...</p>
+                    ) : (
+                      <p className='p_driver_info_header'>{driverReportDataState.firstName} {driverReportDataState.middleName == "N/A" || driverReportDataState.middleName == ""? "" : driverReportDataState.middleName} {driverReportDataState.lastName} ({driverReportDataState.userID})</p>
+                    )}
                     <p className='p_driver_info_header'>{driverReportDataState.route?.routeName}</p>
                     <p className='p_driver_info_header'>{driverReportDataState.company.companyName}</p>
                 </div>
