@@ -36,11 +36,27 @@ function CompanyReport() {
         privacy: null,
         status: null
       },
-      tripschedules: []
+      tripschedules: [],
+      drivers: [],
+      buses: []
   }
 
   const [companyReportState, setcompanyReportState] = useState(companyReportDefault)
   const [dateSelected, setdateSelected] = useState("none")
+  const [averageTripPerDayTotal, setaverageTripPerDayTotal] = useState(0)
+  const atpd = []
+
+  function calculateAverage(array) {
+    var total = 0;
+    var count = 0;
+
+    array.forEach(function(item, index) {
+        total += item;
+        count++;
+    });
+
+    return total / count;
+}
 
   const initCompanyReport = () => {
     Axios.get(`${URL}/admin/getCompanyReport/${companyID}`, {
@@ -51,6 +67,9 @@ function CompanyReport() {
         if(response.data.status){
             //save state
             setcompanyReportState(response.data.result[0])
+            response.data.result[0].tripschedules.map((da, i) => da.tripDay).forEach(function (x) { atpd[x] = (atpd[x] || 0) + 1; })
+            // console.log(calculateAverage(Object.values(atpd)))
+            setaverageTripPerDayTotal(calculateAverage(Object.values(atpd)))
         }
     }).catch((err) => {
         console.log(err)
@@ -105,6 +124,20 @@ function CompanyReport() {
                                 <p className='p_dd_aci_data_content'>{companyReportState.companyNumber}</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div className='div_company_total_sections'>
+                    <div className='div_company_total_indvs'>
+                      <p className='p_company_total_data'>{companyReportState.drivers.length}</p>
+                      <p className='p_company_total_labels'>No. of Drivers</p>
+                    </div>
+                    <div className='div_company_total_indvs'>
+                      <p className='p_company_total_data'>{companyReportState.buses.length}</p>
+                      <p className='p_company_total_labels'>No. of Buses</p>
+                    </div>
+                    <div className='div_company_total_indvs'>
+                      <p className='p_company_total_data'>{(averageTripPerDayTotal.toFixed(1) * companyReportState.drivers.filter((crs, i) => crs.status == true).length).toFixed(1)}</p>
+                      <p className='p_company_total_labels'>Average Trips per Day</p>
                     </div>
                 </div>
                 <div id='div_driver_info_header'>

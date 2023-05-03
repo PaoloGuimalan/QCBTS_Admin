@@ -92,6 +92,51 @@
     margin-bottom: 20px;
 }
 
+.div_company_total_sections{
+    background-color: transparent;
+    padding-top: 0px;
+    padding-bottom: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
+    width: calc(90% - 0px);
+    max-width: calc(820px - 0px);
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: row;
+    /* box-shadow: 0px 0px 2px black; */
+    margin-bottom: 0px;
+    gap: 5px;
+}
+
+.div_company_total_indvs{
+    width: calc(33.3% - 45px);
+    height: calc(200px - 40px);
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    gap: 10px;
+}
+
+.p_company_total_labels{
+    margin: 0px;
+    font-size: 15px;
+}
+
+.p_company_total_data{
+    margin: 0px;
+    font-size: 60px;
+}
+
 .p_driver_info_header{
     margin: 0px
 }
