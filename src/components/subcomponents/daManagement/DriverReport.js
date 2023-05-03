@@ -59,6 +59,7 @@ function DriverReport() {
 
   const [dateSelected, setdateSelected] = useState("none")
   const [dateSelectedGraph, setdateSelectedGraph] = useState("none")
+  const [loadingGraph, setloadingGraph] = useState(true)
 
   const componentRef = useRef()
 
@@ -95,7 +96,7 @@ function DriverReport() {
 //   })
 
   useEffect(() => {
-    initDriverReportData()
+    // initDriverReportData()
   },[])
 
   useEffect(() => {
@@ -103,6 +104,7 @@ function DriverReport() {
   },[dateSelectedGraph])
 
   const initDriverReportData = () => {
+    setloadingGraph(true)
     Axios.get(`${URL}/admin/getDriverReportData/${driverID}`, {
         headers:{
             "x-access-token": localStorage.getItem("token")
@@ -128,11 +130,13 @@ function DriverReport() {
         response.data.result[0]?.driveractivities.map((da, i) => da.action.stationID).forEach(function (x) { counts[x] = (counts[x] || 0) + 1; })
         setlabels(Object.keys(counts))
         setcountsSorted(Object.values(counts))
+        setloadingGraph(false)
     }
     else{
         response.data.result[0]?.driveractivities.filter((daf, i) => daf.dateCommited.dateRecorded == dateSelectedGraph).map((da, i) => da.action.stationID).forEach(function (x) { counts[x] = (counts[x] || 0) + 1; })
         setlabels(Object.keys(counts))
         setcountsSorted(Object.values(counts))
+        setloadingGraph(false)
     }
   }
 
@@ -267,7 +271,11 @@ function DriverReport() {
                         </div>
                     </div>
                     <div id='div_bar_graph_container'>
-                        <Bar options={options} data={data} style={{height: "100%"}} />
+                        {loadingGraph? (
+                          <p className='p_graph_loader_label'>Loading Graph</p>
+                        ) : (
+                          <Bar options={options} data={data} style={{height: "100%"}} />
+                        )}
                     </div>
                 </div>
             </div>

@@ -191,6 +191,10 @@
     width: 100%
 }
 
+.p_graph_loader_label{
+    font-size: 13px;
+}
+
 @media print {
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
