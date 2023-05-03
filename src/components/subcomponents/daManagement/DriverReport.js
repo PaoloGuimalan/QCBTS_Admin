@@ -5,6 +5,7 @@ import BackIcon from '@material-ui/icons/KeyboardArrowLeft'
 import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useReactToPrint } from 'react-to-print'
+import { Bar } from 'react-chartjs-2';
 
 function DriverReport() {
 
@@ -36,6 +37,7 @@ function DriverReport() {
         companyID: "",
         privacy: null,
         status: null,
+        stationList: []
     },
     company: {
         companyID: "",
@@ -49,6 +51,14 @@ function DriverReport() {
   }
 
   const [driverReportDataState, setdriverReportDataState] = useState(driverReportDataDefault)
+  const [labels, setlabels] = useState([])
+  const [countsSorted, setcountsSorted] = useState([])
+  const [sortedDates, setsortedDates] = useState([])
+  var counts = [];
+  var dateSorts = [];
+
+  const [dateSelected, setdateSelected] = useState("none")
+  const [dateSelectedGraph, setdateSelectedGraph] = useState("none")
 
   const componentRef = useRef()
 
@@ -88,6 +98,10 @@ function DriverReport() {
     initDriverReportData()
   },[])
 
+  useEffect(() => {
+    initDriverReportData()
+  },[dateSelectedGraph])
+
   const initDriverReportData = () => {
     Axios.get(`${URL}/admin/getDriverReportData/${driverID}`, {
         headers:{
@@ -97,12 +111,57 @@ function DriverReport() {
         if(response.data.status){
             // console.log(response.data.result[0])
             setdriverReportDataState(response.data.result[0])
-            // console.log(driverReportDataState)
+            // setlabels(response.data.result[0].route?.stationList.map((st, i) => st.stationID))
+            // console.log(counts)
+            sortGraphData(dateSelectedGraph, response)
+            response.data.result[0]?.driveractivities.map((da, i) => da.dateCommited.dateRecorded).forEach(function (x) { dateSorts[x] = (dateSorts[x] || 0) + 1; })
+            setsortedDates(Object.keys(dateSorts))
+            // console.log(Object.keys(dateSorts))
         }
     }).catch((err) => {
         console.log(err)
     })
   }
+
+  const sortGraphData = (dateSortProp, response) => {
+    if(dateSortProp == "none"){
+        response.data.result[0]?.driveractivities.map((da, i) => da.action.stationID).forEach(function (x) { counts[x] = (counts[x] || 0) + 1; })
+        setlabels(Object.keys(counts))
+        setcountsSorted(Object.values(counts))
+    }
+    else{
+        response.data.result[0]?.driveractivities.filter((daf, i) => daf.dateCommited.dateRecorded == dateSelectedGraph).map((da, i) => da.action.stationID).forEach(function (x) { counts[x] = (counts[x] || 0) + 1; })
+        setlabels(Object.keys(counts))
+        setcountsSorted(Object.values(counts))
+    }
+  }
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      }
+    },
+  };
+
+//   const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Times passed',
+        data: countsSorted,
+        backgroundColor: 'blue',
+      },
+      // {
+      //   label: 'Drivers',
+      //   data: dataPoints.map((dt, i) => dt.y),
+      //   backgroundColor: 'orange',
+      // }
+    ],
+  };
     
   return (
     <div id='div_driverreport_main'>
@@ -136,8 +195,13 @@ function DriverReport() {
                         </div>
                         <div id='div_driver_reports_header_filter'>
                             <p className='p_driver_info_header_last'>Show</p>
-                            <select id='select_driver_info_date_sort'>
-                                <option>All</option>
+                            <select id='select_driver_info_date_sort' value={dateSelected} onChange={(e) => { setdateSelected(e.target.value) }}>
+                                <option value="none" defaultChecked>All</option>
+                                {sortedDates.map((sd, i) => {
+                                    return(
+                                        <option key={i} value={sd}>{sd}</option>
+                                    )
+                                })}
                             </select>
                         </div>
                     </div>
@@ -152,19 +216,35 @@ function DriverReport() {
                                 <th className='th_trip_reports'>Longitude</th>
                                 <th className='th_trip_reports'>Latitude</th>
                             </tr>
-                            {driverReportDataState.driveractivities?.map((da, i) => {
-                                return(
-                                    <tr key={i}>
-                                        <td className='td_trip_reports'>{da.action.stationID}</td>
-                                        <td className='td_trip_reports'>{da.action.stationName}</td>
-                                        <td className='td_trip_reports'>{da.action.actionType}</td>
-                                        <td className='td_trip_reports'>{da.dateCommited.dateRecorded}<br />{da.dateCommited.timeRecorded}</td>
-                                        <td className='td_trip_reports'>{da.action.address}</td>
-                                        <td className='td_trip_reports'>{da.action.longitude}</td>
-                                        <td className='td_trip_reports'>{da.action.latitude}</td>
-                                    </tr>
-                                )
-                            })}
+                            {dateSelected == "none"? (
+                                driverReportDataState.driveractivities?.map((da, i) => {
+                                    return(
+                                        <tr key={i}>
+                                            <td className='td_trip_reports'>{da.action.stationID}</td>
+                                            <td className='td_trip_reports'>{da.action.stationName}</td>
+                                            <td className='td_trip_reports'>{da.action.actionType}</td>
+                                            <td className='td_trip_reports'>{da.dateCommited.dateRecorded}<br />{da.dateCommited.timeRecorded}</td>
+                                            <td className='td_trip_reports'>{da.action.address}</td>
+                                            <td className='td_trip_reports'>{da.action.longitude}</td>
+                                            <td className='td_trip_reports'>{da.action.latitude}</td>
+                                        </tr>
+                                    )
+                                })
+                            ) : (
+                                driverReportDataState.driveractivities?.filter((daf, i) => daf.dateCommited.dateRecorded == dateSelected).map((da, i) => {
+                                    return(
+                                        <tr key={i}>
+                                            <td className='td_trip_reports'>{da.action.stationID}</td>
+                                            <td className='td_trip_reports'>{da.action.stationName}</td>
+                                            <td className='td_trip_reports'>{da.action.actionType}</td>
+                                            <td className='td_trip_reports'>{da.dateCommited.dateRecorded}<br />{da.dateCommited.timeRecorded}</td>
+                                            <td className='td_trip_reports'>{da.action.address}</td>
+                                            <td className='td_trip_reports'>{da.action.longitude}</td>
+                                            <td className='td_trip_reports'>{da.action.latitude}</td>
+                                        </tr>
+                                    )
+                                })
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -176,13 +256,18 @@ function DriverReport() {
                         </div>
                         <div id='div_driver_reports_header_filter'>
                             <p className='p_driver_info_header_last'>Show</p>
-                            <select id='select_driver_info_date_sort'>
-                                <option>All</option>
+                            <select id='select_driver_info_date_sort' value={dateSelectedGraph} onChange={(e) => { setdateSelectedGraph(e.target.value) }}>
+                                <option value="none" defaultChecked>All</option>
+                                {sortedDates.map((sd, i) => {
+                                    return(
+                                        <option key={i} value={sd}>{sd}</option>
+                                    )
+                                })}
                             </select>
                         </div>
                     </div>
-                    <div>
-                        <p>Graph Area</p>
+                    <div id='div_bar_graph_container'>
+                        <Bar options={options} data={data} style={{height: "100%"}} />
                     </div>
                 </div>
             </div>
