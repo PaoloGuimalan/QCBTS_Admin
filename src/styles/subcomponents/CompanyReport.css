@@ -127,6 +127,50 @@
     gap: 10px;
 }
 
+.div_company_graphs:first-of-type{
+    width: calc(100% - 40px);
+    height: calc(500px - 40px);
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    gap: 0px;
+}
+
+.div_company_graphs:nth-of-type(2){
+    width: calc(40% - 45px);
+    height: calc(300px - 40px);
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    gap: 10px;
+}
+
+#div_bar_graph_container{
+    background-color: transparent;
+    width: 100%;
+    flex: 1;
+}
+
+.p_bar_graph_label{
+    margin: 0px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
 .p_company_total_labels{
     margin: 0px;
     font-size: 15px;
@@ -234,7 +278,7 @@
 }
 
 .td_trip_reports{
-    font-size: 11px
+    font-size: 11px;
 }
 
 #div_bar_graph_container{

@@ -43,8 +43,18 @@ function CompanyReport() {
 
   const [companyReportState, setcompanyReportState] = useState(companyReportDefault)
   const [dateSelected, setdateSelected] = useState("none")
+  const [dateSelectedGraph, setdateSelectedGraph] = useState("none")
   const [averageTripPerDayTotal, setaverageTripPerDayTotal] = useState(0)
+  const [labels, setlabels] = useState([])
+  const [waitingcommutersdata, setwaitingcommutersdata] = useState([])
+  const [waitingCommutersCount, setwaitingCommutersCount] = useState([])
+  const [dateListingArray, setdateListingArray] = useState([])
   const atpd = []
+  const wcc = []
+  const finaldataforgraph = []
+  const dateListing = []
+
+  const [loadingGraph, setloadingGraph] = useState(true);
 
   function calculateAverage(array) {
     var total = 0;
@@ -58,6 +68,85 @@ function CompanyReport() {
     return total / count;
 }
 
+useEffect(() => {
+  initWaitingCommutersData(dateSelectedGraph)
+},[labels, dateSelectedGraph])
+
+  const initWaitingCommutersData = (sortStatus) => {
+    // setloadingGraph(true)
+    Axios.get(`${URL}/admin/getWaitingCommutersPerBusStop`, {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // console.log(response.data.result.map((uawc, i) => ({
+        //   ...uawc,
+        //   _id: uawc.action.split(" ")[4]
+        // })))
+        // setwaitingcommutersdata(response.data.result.map((uawc, i) => ({
+        //   ...uawc,
+        //   _id: uawc.action.split(" ")[4]
+        // })))
+        // console.log(labels.map((lbs, i) => ))
+        if(sortStatus == "none"){
+          response.data.result.map((da, i) => da.action.split(" ")[4]).forEach(function (x) { wcc[x] = (wcc[x] || 0) + 1; })
+          response.data.result.map((da, i) => da.dateCommited.dateRecorded).forEach(function (x) { dateListing[x] = (dateListing[x] || 0) + 1; })
+          setdateListingArray(Object.keys(dateListing))
+          // console.log(response.data.result)
+          setwaitingcommutersdata(wcc)
+          labels?.map((lbs, i) => {
+            if(waitingcommutersdata[lbs] == undefined){
+              finaldataforgraph.push(
+                {
+                  _id: lbs,
+                  count: 0
+                })
+            }
+            else{
+              finaldataforgraph.push({
+                _id: lbs,
+                count: waitingcommutersdata[lbs]
+              })
+            }
+          })
+          setwaitingCommutersCount(finaldataforgraph)
+          // console.log(finaldataforgraph)
+          // setwaitingcommutersdata(wcc)
+          setloadingGraph(false)
+        }
+        else{
+          response.data.result.filter((rdrf, i) => rdrf.dateCommited.dateRecorded == sortStatus).map((da, i) => da.action.split(" ")[4]).forEach(function (x) { wcc[x] = (wcc[x] || 0) + 1; })
+          response.data.result.map((da, i) => da.dateCommited.dateRecorded).forEach(function (x) { dateListing[x] = (dateListing[x] || 0) + 1; })
+          setdateListingArray(Object.keys(dateListing))
+          // console.log(response.data.result)
+          setwaitingcommutersdata(wcc)
+          labels?.map((lbs, i) => {
+            if(waitingcommutersdata[lbs] == undefined){
+              finaldataforgraph.push(
+                {
+                  _id: lbs,
+                  count: 0
+                })
+            }
+            else{
+              finaldataforgraph.push({
+                _id: lbs,
+                count: waitingcommutersdata[lbs]
+              })
+            }
+          })
+          setwaitingCommutersCount(finaldataforgraph)
+          // console.log(finaldataforgraph)
+          // setwaitingcommutersdata(wcc)
+          setloadingGraph(false)
+          }
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
   const initCompanyReport = () => {
     Axios.get(`${URL}/admin/getCompanyReport/${companyID}`, {
         headers:{
@@ -70,11 +159,41 @@ function CompanyReport() {
             response.data.result[0].tripschedules.map((da, i) => da.tripDay).forEach(function (x) { atpd[x] = (atpd[x] || 0) + 1; })
             // console.log(calculateAverage(Object.values(atpd)))
             setaverageTripPerDayTotal(calculateAverage(Object.values(atpd)))
+            setlabels(response.data.result[0]?.route?.stationList?.map((stlf, i) =>  stlf.stationID))
+            // console.log(response.data.result[0]?.route?.stationList?.map((stlf, i) =>  stlf.stationID))
+            // setloadingGraph(false)
         }
     }).catch((err) => {
         console.log(err)
     })
   }
+
+  // const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Waiting Commuters',
+        data: waitingCommutersCount.map((wccm, i) => wccm.count),
+        backgroundColor: 'blue',
+      },
+      // {
+      //   label: 'Drivers',
+      //   data: dataPoints.map((dt, i) => dt.y),
+      //   backgroundColor: 'orange',
+      // }
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+  };
 
   return (
     <div id='div_companyreport_main'>
@@ -125,6 +244,40 @@ function CompanyReport() {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className='div_company_total_sections'>
+                  <div className='div_company_graphs'>
+                    <div id='div_driver_reports_header'>
+                        <div id='div_driver_reports_header_labels'>
+                            <p className='p_bar_graph_label'>No. of Waiting Commuters per Bus Stop</p>
+                        </div>
+                        <div id='div_driver_reports_header_filter'>
+                            <p className='p_driver_info_header_last'>Show</p>
+                            <select id='select_driver_info_date_sort' value={dateSelectedGraph} onChange={(e) => { 
+                              setdateSelectedGraph(e.target.value)
+                              initCompanyReport() 
+                              initWaitingCommutersData(e.target.value)
+                            }}>
+                                <option value="none" defaultChecked>All</option>
+                                {dateListingArray.map((dla, i) => {
+                                  return(
+                                    <option key={i} value={dla}>{dla}</option>
+                                  )
+                                })}
+                            </select>
+                        </div>
+                    </div>
+                    <div id='div_bar_graph_container'>
+                      {loadingGraph? (
+                        <p className='p_graph_loader_label'>Loading Graph</p>
+                      ) : (
+                      <Bar data={data} options={options} style={{height: "100%", width: "100%"}} />
+                      )}
+                    </div>
+                  </div>
+                  {/* <div className='div_company_graphs'>
+                    <p>Hello World</p>
+                  </div> */}
                 </div>
                 <div className='div_company_total_sections'>
                     <div className='div_company_total_indvs'>
