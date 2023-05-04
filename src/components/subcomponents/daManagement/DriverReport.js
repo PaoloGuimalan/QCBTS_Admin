@@ -6,6 +6,7 @@ import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useReactToPrint } from 'react-to-print'
 import { Bar } from 'react-chartjs-2';
+import { useScreenshot, createFileName } from 'use-react-screenshot'
 
 function DriverReport() {
 
@@ -62,6 +63,10 @@ function DriverReport() {
   const [loadingGraph, setloadingGraph] = useState(true)
 
   const componentRef = useRef()
+  const [image, takeScreenshot] = useScreenshot({
+    type: "image/png",
+    quality: 1.0
+  })
 
   function PrintElemWindow(elem){
     var mywindow = window.open('', 'PRINT', 'height=500,width=700');
@@ -166,6 +171,17 @@ function DriverReport() {
       // }
     ],
   };
+
+  const printElem = (elem) => {
+    takeScreenshot(componentRef.current).then(download)
+  }
+
+  const download = (image, { name = `${driverID} Report`, extension = "png" } = {}) => {
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = createFileName(extension, name);
+    a.click();
+  };
     
   return (
     <div id='div_driverreport_main'>
@@ -179,7 +195,7 @@ function DriverReport() {
             <div className='flexed_div'></div>
             <button id='btn_print' onClick={() => { 
             //   navigate(-1) 
-                PrintElemWindow("div_generated_report")
+                printElem("div_generated_report")
             }} >Print</button>
           </div>
         </li>

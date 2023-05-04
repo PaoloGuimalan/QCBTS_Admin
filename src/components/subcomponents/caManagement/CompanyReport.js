@@ -6,6 +6,7 @@ import Axios from 'axios'
 import { URL } from '../../../json/urlconfig'
 import { useReactToPrint } from 'react-to-print'
 import { Bar } from 'react-chartjs-2';
+import { useScreenshot, createFileName } from 'use-react-screenshot'
 
 function CompanyReport() {
 
@@ -55,6 +56,11 @@ function CompanyReport() {
   const dateListing = []
 
   const [loadingGraph, setloadingGraph] = useState(true);
+  const [image, takeScreenshot] = useScreenshot({
+    type: "image/png",
+    quality: 1.0
+  })
+  const printReportRef = useRef(null)
 
   function calculateAverage(array) {
     var total = 0;
@@ -195,6 +201,17 @@ useEffect(() => {
     },
   };
 
+  const printElem = (elem) => {
+    takeScreenshot(printReportRef.current).then(download)
+  }
+
+  const download = (image, { name = `${companyID} Report`, extension = "png" } = {}) => {
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = createFileName(extension, name);
+    a.click();
+  };
+
   return (
     <div id='div_companyreport_main'>
       <nav id='nav_addcompany'>
@@ -207,11 +224,12 @@ useEffect(() => {
             <div className='flexed_div'></div>
             <button id='btn_print' onClick={() => { 
             //   navigate(-1) 
+              printElem("div_generated_report")
             }} >Print</button>
           </div>
         </li>
         <li>
-            <div id='div_generated_report'>
+            <div id='div_generated_report' ref={printReportRef}>
                 <p id='p_driver_generated_report_label'>Company Report</p>
                 <div id='div_driver_info_header'>
                     {companyReportState.companyID == ""? (
