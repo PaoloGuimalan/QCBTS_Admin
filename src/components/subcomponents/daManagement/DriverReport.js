@@ -173,7 +173,18 @@ function DriverReport() {
   };
 
   const printElem = (elem) => {
-    takeScreenshot(componentRef.current).then(download)
+    document.querySelectorAll(".li_home").forEach((a, i) => {
+      if(i == 0){
+        a.style.width = "0px"
+      }
+      else{
+        a.style.width = "100%"
+      }
+    })
+
+    setTimeout(() => {
+      takeScreenshot(componentRef.current).then(download)
+    },1000)
   }
 
   const download = (image, { name = `${driverID} Report`, extension = "png" } = {}) => {
@@ -181,6 +192,17 @@ function DriverReport() {
     a.href = image;
     a.download = createFileName(extension, name);
     a.click();
+
+    setTimeout(() => {
+      document.querySelectorAll(".li_home").forEach((a, i) => {
+        if(i == 0){
+          a.style.width = "350px"
+        }
+        else{
+          a.style.width = "calc(100% - 350px)"
+        }
+      })
+    },1000)
   };
     
   return (

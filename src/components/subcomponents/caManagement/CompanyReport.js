@@ -58,7 +58,7 @@ function CompanyReport() {
   const [loadingGraph, setloadingGraph] = useState(true);
   const [image, takeScreenshot] = useScreenshot({
     type: "image/png",
-    quality: 1.0
+    quality: 3.0
   })
   const printReportRef = useRef(null)
 
@@ -202,7 +202,18 @@ useEffect(() => {
   };
 
   const printElem = (elem) => {
-    takeScreenshot(printReportRef.current).then(download)
+    document.querySelectorAll(".li_home").forEach((a, i) => {
+      if(i == 0){
+        a.style.width = "0px"
+      }
+      else{
+        a.style.width = "100%"
+      }
+    })
+
+    setTimeout(() => {
+      takeScreenshot(printReportRef.current).then(download)
+    },1000)
   }
 
   const download = (image, { name = `${companyID} Report`, extension = "png" } = {}) => {
@@ -210,6 +221,17 @@ useEffect(() => {
     a.href = image;
     a.download = createFileName(extension, name);
     a.click();
+
+    setTimeout(() => {
+      document.querySelectorAll(".li_home").forEach((a, i) => {
+        if(i == 0){
+          a.style.width = "350px"
+        }
+        else{
+          a.style.width = "calc(100% - 350px)"
+        }
+      })
+    },1000)
   };
 
   return (
