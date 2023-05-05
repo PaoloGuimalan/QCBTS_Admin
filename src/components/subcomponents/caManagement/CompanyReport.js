@@ -220,7 +220,7 @@ useEffect(() => {
     const a = document.createElement("a");
     a.href = image;
     a.download = createFileName(extension, name);
-    a.click();
+    // a.click();
 
     setTimeout(() => {
       document.querySelectorAll(".li_home").forEach((a, i) => {
@@ -232,7 +232,31 @@ useEffect(() => {
         }
       })
     },1000)
+
+    PrintElemWindow(a)
   };
+
+  function PrintElemWindow(elem){
+    var mywindow = window.open('', 'PRINT', 'height=500,width=700');
+    var styles = "<style  type='text/css' media='print'>@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap'); #div_driverreport_main{ /* background-color: white; */ background-color: #e0e0e0; display: flex; flex-direction: column; width: 100%; height: 100%; overflow-y: auto; font-family: 'Roboto', sans-serif; } #nav_addcompany{ display: flex; background-color: transparent; flex-direction: column; overflow-y: auto; padding-bottom: 20px; } #div_addcompany_navigations{ background-color: transparent; display: flex; padding: 10px; gap: 5px; align-items: center; } #btn_backicon{ width: 40px; cursor: pointer; background-color: transparent; border: solid 0px black; } #label_company_details{ font-size: 15px; font-weight: bold; color: #404040; margin-top: 12px; } .flexed_div{ display: flex; flex: 1; } #btn_print{ background-color: #426BFC; height: 30px; width: 120px; border-radius: 10px; border: none; color: white; font-size: 13px; cursor: pointer; } #div_generated_report{ background-color: green; width: 100%; }</style>"
+
+    mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+    // mywindow.document.write(styles);
+    mywindow.document.write('</head><body>');
+    // mywindow.document.write('<h1>Hello World</h1>');
+    mywindow.document.write(`<img src=${elem} style="width: 100%; margin-top: 0px; background-color: green;" />`);
+    // mywindow.document.write(elem);
+    // mywindow.document.write('</body></html>');
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    // mywindow.print();
+    setTimeout(function(){mywindow.print();},1000);
+    // mywindow.close();
+
+    return true;
+  }
 
   return (
     <div id='div_companyreport_main'>
