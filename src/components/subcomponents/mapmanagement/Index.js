@@ -5,6 +5,7 @@ import MapIcon from '@material-ui/icons/Map'
 import InfoIcon from '@material-ui/icons/Info'
 import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
+import ModeIcon from '@material-ui/icons/Edit'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
 import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER, SET_SELECTED_LIVE_BUS, SET_USER_GUIDE } from '../../../redux/types/index'
@@ -596,6 +597,24 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
             <button id='btn_info' onClick={() => { setmenutrigger(!menutrigger) }}><MenuIcon /></button>
           </div>
         </div>
+        <motion.div
+        animate={{
+          top: mapmode != "none"? "10px" : "-100px"
+        }}
+        id='div_map_mode_header' className='absolute_divs_map'>
+          <div id='div_iconheader_holder'>
+            <ModeIcon />
+            <p>Mode:</p>
+          </div>
+          <div id='div_mapmode_holder'>
+            {
+              mapmode == "none"? "" : 
+              mapmode == "active_drivers_buses"? (<p>Active Buses</p>) : 
+              mapmode == "bus_stops"? (<p>Bus Stops</p>) : 
+              mapmode == "routes"? (<p>Routes</p>) : ""
+            }
+          </div>
+        </motion.div>
         <motion.div
         animate={{
           right: savedroutepath.routeID != null? "10px" : "-470px"
