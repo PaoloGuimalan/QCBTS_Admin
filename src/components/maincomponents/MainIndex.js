@@ -34,6 +34,7 @@ function Map(){
   const livemapicon = useSelector(state => state.livemapicon);
   const selectlayout = useSelector(state => state.selectlayout);
   const checkboxfilter = useSelector(state => state.checkboxfilter);
+  const focusonselectedroute = useSelector(state => state.focusonselectedroute);
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -210,28 +211,82 @@ function Map(){
     >
       {checkboxfilter.activeBuses? (
         livebuslist.map((lbs, i) => {
-          return(
-            <Marker
-              icon={{
-                url: LiveBusIcon,
-                anchor: new google.maps.Point(25, 25),
-                scaledSize: new google.maps.Size(25, 25),
-              }}
-              onClick={() => { dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: lbs.userID }) }}
-              key={i}
-              position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
-            >
-              {selectedlivebus == lbs.userID? (
-                <InfoWindow onCloseClick={() => {
-                  dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
-                }}>
-                  <div className='div_infowindow_live_bs'>
-                    <LiveBusComponent lbs={lbs} />
-                  </div>
-                </InfoWindow>
-              ) : null}
-            </Marker>
-          )
+          if(mapmode == "routes"){
+            if(focusonselectedroute){
+              if(savedroutepath.routeID == lbs.routeID){
+                return(
+                  <Marker
+                    icon={{
+                      url: LiveBusIcon,
+                      anchor: new google.maps.Point(25, 25),
+                      scaledSize: new google.maps.Size(25, 25),
+                    }}
+                    onClick={() => { dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: lbs.userID }) }}
+                    key={i}
+                    position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
+                  >
+                    {selectedlivebus == lbs.userID? (
+                      <InfoWindow onCloseClick={() => {
+                        dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
+                      }}>
+                        <div className='div_infowindow_live_bs'>
+                          <LiveBusComponent lbs={lbs} />
+                        </div>
+                      </InfoWindow>
+                    ) : null}
+                  </Marker>
+                )
+              }
+            }
+            else{
+              return(
+                <Marker
+                  icon={{
+                    url: LiveBusIcon,
+                    anchor: new google.maps.Point(25, 25),
+                    scaledSize: new google.maps.Size(25, 25),
+                  }}
+                  onClick={() => { dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: lbs.userID }) }}
+                  key={i}
+                  position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
+                >
+                  {selectedlivebus == lbs.userID? (
+                    <InfoWindow onCloseClick={() => {
+                      dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
+                    }}>
+                      <div className='div_infowindow_live_bs'>
+                        <LiveBusComponent lbs={lbs} />
+                      </div>
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+              )
+            }
+          }
+          else{
+            return(
+              <Marker
+                icon={{
+                  url: LiveBusIcon,
+                  anchor: new google.maps.Point(25, 25),
+                  scaledSize: new google.maps.Size(25, 25),
+                }}
+                onClick={() => { dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: lbs.userID }) }}
+                key={i}
+                position={{lat: parseFloat(lbs.latitude), lng: parseFloat(lbs.longitude)}}
+              >
+                {selectedlivebus == lbs.userID? (
+                  <InfoWindow onCloseClick={() => {
+                    dispatch({ type: SET_SELECTED_LIVE_BUS, selectedlivebus: "" })
+                  }}>
+                    <div className='div_infowindow_live_bs'>
+                      <LiveBusComponent lbs={lbs} />
+                    </div>
+                  </InfoWindow>
+                ) : null}
+              </Marker>
+            )
+          }
         })
       ) : null}
 
@@ -262,152 +317,447 @@ function Map(){
       ) : null}
 
       {busstopslist.map((data, i) => {
-        if(data.status){
-          return(checkboxfilter.openedStops? (
-              <Marker
-                icon={{
-                  url: data.status? OpennedIcon : ClosedIcon,
-                  anchor: new google.maps.Point(25, 25),
-                  scaledSize: new google.maps.Size(25, 25),
-                }}
-                onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
-                key={i}
-                position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
-              >
-                {selectedMarker == data.busStopID? (
-                  <InfoWindow onCloseClick={() => {
-                    dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
-                  }}>
-                    <div className='div_infowindow_existing_bs'>
-                      <p id='p_stationName'>{data.stationName}</p>
-                      <table id='table_existing_bs'>
-                        <tbody>
-                          <tr>
-                            <th>Bus Stop ID</th>
-                            <td>{data.busStopID}</td>
-                          </tr>
-                          <tr>
-                            <th>Status</th>
-                            <motion.td
+        return(
+          mapmode == "routes"? (focusonselectedroute? (
+            savedroutepath.stationList.map((stl) => {
+              if(stl.stationID == data.busStopID){
+                if(data.status){
+                  return(checkboxfilter.openedStops? (
+                      <Marker
+                        icon={{
+                          url: data.status? OpennedIcon : ClosedIcon,
+                          anchor: new google.maps.Point(25, 25),
+                          scaledSize: new google.maps.Size(25, 25),
+                        }}
+                        onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                        key={i}
+                        position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                      >
+                        {selectedMarker == data.busStopID? (
+                          <InfoWindow onCloseClick={() => {
+                            dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                          }}>
+                            <div className='div_infowindow_existing_bs'>
+                              <p id='p_stationName'>{data.stationName}</p>
+                              <table id='table_existing_bs'>
+                                <tbody>
+                                  <tr>
+                                    <th>Bus Stop ID</th>
+                                    <td>{data.busStopID}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Status</th>
+                                    <motion.td
+                                    animate={{
+                                      color: data.status? "lime" : "red"
+                                    }}
+                                    >{data.status? "Open" : "Closed"}</motion.td>
+                                  </tr>
+                                  <tr>
+                                    <th>Date Added</th>
+                                    <td>{data.dateAdded}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <div id='div_btns_infowinfow'>
+                                {data.status? (
+                                  <motion.button
+                                  animate={{
+                                    backgroundColor: "lime",
+                                    display: mapmode == "routes"? "block" : "none"
+                                  }}
+                                  className='btn_infoWindow_existing_bs' onClick={() => { 
+                                    dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                                    ...routemakerlist,
+                                    {
+                                      pendingID: Math.floor(Math.random() * 100000),
+                                      stationID: data.busStopID,
+                                      stationName: data.stationName,
+                                      coordinates: [
+                                        data.coordinates.longitude,
+                                        data.coordinates.latitude
+                                      ]
+                                    }] }) 
+                                    dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                                  }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                                ) : null}
+                                <motion.button
+                                animate={{
+                                  backgroundColor: data.status? "red" : "lime"
+                                }}
+                                className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                                <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                              </div>
+                            </div>
+                          </InfoWindow>
+                        ) : null}
+                      </Marker>
+                  ) : null)
+                }
+                else{
+                  return(checkboxfilter.closedStops? (
+                      <Marker
+                        icon={{
+                          url: data.status? OpennedIcon : ClosedIcon,
+                          anchor: new google.maps.Point(25, 25),
+                          scaledSize: new google.maps.Size(25, 25),
+                        }}
+                        onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                        key={i}
+                        position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                      >
+                        {selectedMarker == data.busStopID? (
+                          <InfoWindow onCloseClick={() => {
+                            dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                          }}>
+                            <div className='div_infowindow_existing_bs'>
+                              <p id='p_stationName'>{data.stationName}</p>
+                              <table id='table_existing_bs'>
+                                <tbody>
+                                  <tr>
+                                    <th>Bus Stop ID</th>
+                                    <td>{data.busStopID}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Status</th>
+                                    <motion.td
+                                    animate={{
+                                      color: data.status? "lime" : "red"
+                                    }}
+                                    >{data.status? "Open" : "Closed"}</motion.td>
+                                  </tr>
+                                  <tr>
+                                    <th>Date Added</th>
+                                    <td>{data.dateAdded}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <div id='div_btns_infowinfow'>
+                                {data.status? (
+                                  <motion.button
+                                  animate={{
+                                    backgroundColor: "lime",
+                                    display: mapmode == "routes"? "block" : "none"
+                                  }}
+                                  className='btn_infoWindow_existing_bs' onClick={() => { 
+                                    dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                                    ...routemakerlist,
+                                    {
+                                      pendingID: Math.floor(Math.random() * 100000),
+                                      stationID: data.busStopID,
+                                      stationName: data.stationName,
+                                      coordinates: [
+                                        data.coordinates.longitude,
+                                        data.coordinates.latitude
+                                      ]
+                                    }] }) 
+                                    dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                                  }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                                ) : null}
+                                <motion.button
+                                animate={{
+                                  backgroundColor: data.status? "red" : "lime"
+                                }}
+                                className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                                <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                              </div>
+                            </div>
+                          </InfoWindow>
+                        ) : null}
+                      </Marker>
+                  ) : null)
+                }
+              }
+            })
+        ) : (
+          data.status? (
+            checkboxfilter.openedStops? (
+                <Marker
+                  icon={{
+                    url: data.status? OpennedIcon : ClosedIcon,
+                    anchor: new google.maps.Point(25, 25),
+                    scaledSize: new google.maps.Size(25, 25),
+                  }}
+                  onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                  key={i}
+                  position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                >
+                  {selectedMarker == data.busStopID? (
+                    <InfoWindow onCloseClick={() => {
+                      dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                    }}>
+                      <div className='div_infowindow_existing_bs'>
+                        <p id='p_stationName'>{data.stationName}</p>
+                        <table id='table_existing_bs'>
+                          <tbody>
+                            <tr>
+                              <th>Bus Stop ID</th>
+                              <td>{data.busStopID}</td>
+                            </tr>
+                            <tr>
+                              <th>Status</th>
+                              <motion.td
+                              animate={{
+                                color: data.status? "lime" : "red"
+                              }}
+                              >{data.status? "Open" : "Closed"}</motion.td>
+                            </tr>
+                            <tr>
+                              <th>Date Added</th>
+                              <td>{data.dateAdded}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div id='div_btns_infowinfow'>
+                          {data.status? (
+                            <motion.button
                             animate={{
-                              color: data.status? "lime" : "red"
+                              backgroundColor: "lime",
+                              display: mapmode == "routes"? "block" : "none"
                             }}
-                            >{data.status? "Open" : "Closed"}</motion.td>
-                          </tr>
-                          <tr>
-                            <th>Date Added</th>
-                            <td>{data.dateAdded}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <div id='div_btns_infowinfow'>
-                        {data.status? (
+                            className='btn_infoWindow_existing_bs' onClick={() => { 
+                              dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                              ...routemakerlist,
+                              {
+                                pendingID: Math.floor(Math.random() * 100000),
+                                stationID: data.busStopID,
+                                stationName: data.stationName,
+                                coordinates: [
+                                  data.coordinates.longitude,
+                                  data.coordinates.latitude
+                                ]
+                              }] }) 
+                              dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                            }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                          ) : null}
                           <motion.button
                           animate={{
-                            backgroundColor: "lime",
-                            display: mapmode == "routes"? "block" : "none"
+                            backgroundColor: data.status? "red" : "lime"
                           }}
-                          className='btn_infoWindow_existing_bs' onClick={() => { 
-                            dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
-                            ...routemakerlist,
-                            {
-                              pendingID: Math.floor(Math.random() * 100000),
-                              stationID: data.busStopID,
-                              stationName: data.stationName,
-                              coordinates: [
-                                data.coordinates.longitude,
-                                data.coordinates.latitude
-                              ]
-                            }] }) 
-                            dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
-                          }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
-                        ) : null}
-                        <motion.button
-                        animate={{
-                          backgroundColor: data.status? "red" : "lime"
-                        }}
-                        className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
-                        <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                          className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                          <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                        </div>
                       </div>
-                    </div>
-                  </InfoWindow>
-                ) : null}
-              </Marker>
-          ) : null)
-        }
-        else{
-          return(checkboxfilter.closedStops? (
-              <Marker
-                icon={{
-                  url: data.status? OpennedIcon : ClosedIcon,
-                  anchor: new google.maps.Point(25, 25),
-                  scaledSize: new google.maps.Size(25, 25),
-                }}
-                onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
-                key={i}
-                position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
-              >
-                {selectedMarker == data.busStopID? (
-                  <InfoWindow onCloseClick={() => {
-                    dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
-                  }}>
-                    <div className='div_infowindow_existing_bs'>
-                      <p id='p_stationName'>{data.stationName}</p>
-                      <table id='table_existing_bs'>
-                        <tbody>
-                          <tr>
-                            <th>Bus Stop ID</th>
-                            <td>{data.busStopID}</td>
-                          </tr>
-                          <tr>
-                            <th>Status</th>
-                            <motion.td
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+            ) : null) : (
+             checkboxfilter.closedStops? (
+                <Marker
+                  icon={{
+                    url: data.status? OpennedIcon : ClosedIcon,
+                    anchor: new google.maps.Point(25, 25),
+                    scaledSize: new google.maps.Size(25, 25),
+                  }}
+                  onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                  key={i}
+                  position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                >
+                  {selectedMarker == data.busStopID? (
+                    <InfoWindow onCloseClick={() => {
+                      dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                    }}>
+                      <div className='div_infowindow_existing_bs'>
+                        <p id='p_stationName'>{data.stationName}</p>
+                        <table id='table_existing_bs'>
+                          <tbody>
+                            <tr>
+                              <th>Bus Stop ID</th>
+                              <td>{data.busStopID}</td>
+                            </tr>
+                            <tr>
+                              <th>Status</th>
+                              <motion.td
+                              animate={{
+                                color: data.status? "lime" : "red"
+                              }}
+                              >{data.status? "Open" : "Closed"}</motion.td>
+                            </tr>
+                            <tr>
+                              <th>Date Added</th>
+                              <td>{data.dateAdded}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div id='div_btns_infowinfow'>
+                          {data.status? (
+                            <motion.button
                             animate={{
-                              color: data.status? "lime" : "red"
+                              backgroundColor: "lime",
+                              display: mapmode == "routes"? "block" : "none"
                             }}
-                            >{data.status? "Open" : "Closed"}</motion.td>
-                          </tr>
-                          <tr>
-                            <th>Date Added</th>
-                            <td>{data.dateAdded}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <div id='div_btns_infowinfow'>
-                        {data.status? (
+                            className='btn_infoWindow_existing_bs' onClick={() => { 
+                              dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                              ...routemakerlist,
+                              {
+                                pendingID: Math.floor(Math.random() * 100000),
+                                stationID: data.busStopID,
+                                stationName: data.stationName,
+                                coordinates: [
+                                  data.coordinates.longitude,
+                                  data.coordinates.latitude
+                                ]
+                              }] }) 
+                              dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                            }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                          ) : null}
                           <motion.button
                           animate={{
-                            backgroundColor: "lime",
-                            display: mapmode == "routes"? "block" : "none"
+                            backgroundColor: data.status? "red" : "lime"
                           }}
-                          className='btn_infoWindow_existing_bs' onClick={() => { 
-                            dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
-                            ...routemakerlist,
-                            {
-                              pendingID: Math.floor(Math.random() * 100000),
-                              stationID: data.busStopID,
-                              stationName: data.stationName,
-                              coordinates: [
-                                data.coordinates.longitude,
-                                data.coordinates.latitude
-                              ]
-                            }] }) 
-                            dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
-                          }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
-                        ) : null}
-                        <motion.button
-                        animate={{
-                          backgroundColor: data.status? "red" : "lime"
-                        }}
-                        className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
-                        <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                          className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                          <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                        </div>
                       </div>
-                    </div>
-                  </InfoWindow>
-                ) : null}
-              </Marker>
-          ) : null)
-        }
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+            ) : null)
+        )) : (
+          data.status? (
+            checkboxfilter.openedStops? (
+                <Marker
+                  icon={{
+                    url: data.status? OpennedIcon : ClosedIcon,
+                    anchor: new google.maps.Point(25, 25),
+                    scaledSize: new google.maps.Size(25, 25),
+                  }}
+                  onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                  key={i}
+                  position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                >
+                  {selectedMarker == data.busStopID? (
+                    <InfoWindow onCloseClick={() => {
+                      dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                    }}>
+                      <div className='div_infowindow_existing_bs'>
+                        <p id='p_stationName'>{data.stationName}</p>
+                        <table id='table_existing_bs'>
+                          <tbody>
+                            <tr>
+                              <th>Bus Stop ID</th>
+                              <td>{data.busStopID}</td>
+                            </tr>
+                            <tr>
+                              <th>Status</th>
+                              <motion.td
+                              animate={{
+                                color: data.status? "lime" : "red"
+                              }}
+                              >{data.status? "Open" : "Closed"}</motion.td>
+                            </tr>
+                            <tr>
+                              <th>Date Added</th>
+                              <td>{data.dateAdded}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div id='div_btns_infowinfow'>
+                          {data.status? (
+                            <motion.button
+                            animate={{
+                              backgroundColor: "lime",
+                              display: mapmode == "routes"? "block" : "none"
+                            }}
+                            className='btn_infoWindow_existing_bs' onClick={() => { 
+                              dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                              ...routemakerlist,
+                              {
+                                pendingID: Math.floor(Math.random() * 100000),
+                                stationID: data.busStopID,
+                                stationName: data.stationName,
+                                coordinates: [
+                                  data.coordinates.longitude,
+                                  data.coordinates.latitude
+                                ]
+                              }] }) 
+                              dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                            }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                          ) : null}
+                          <motion.button
+                          animate={{
+                            backgroundColor: data.status? "red" : "lime"
+                          }}
+                          className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                          <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                        </div>
+                      </div>
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+            ) : null) : (
+             checkboxfilter.closedStops? (
+                <Marker
+                  icon={{
+                    url: data.status? OpennedIcon : ClosedIcon,
+                    anchor: new google.maps.Point(25, 25),
+                    scaledSize: new google.maps.Size(25, 25),
+                  }}
+                  onClick={() => { dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) }}
+                  key={i}
+                  position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                >
+                  {selectedMarker == data.busStopID? (
+                    <InfoWindow onCloseClick={() => {
+                      dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                    }}>
+                      <div className='div_infowindow_existing_bs'>
+                        <p id='p_stationName'>{data.stationName}</p>
+                        <table id='table_existing_bs'>
+                          <tbody>
+                            <tr>
+                              <th>Bus Stop ID</th>
+                              <td>{data.busStopID}</td>
+                            </tr>
+                            <tr>
+                              <th>Status</th>
+                              <motion.td
+                              animate={{
+                                color: data.status? "lime" : "red"
+                              }}
+                              >{data.status? "Open" : "Closed"}</motion.td>
+                            </tr>
+                            <tr>
+                              <th>Date Added</th>
+                              <td>{data.dateAdded}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div id='div_btns_infowinfow'>
+                          {data.status? (
+                            <motion.button
+                            animate={{
+                              backgroundColor: "lime",
+                              display: mapmode == "routes"? "block" : "none"
+                            }}
+                            className='btn_infoWindow_existing_bs' onClick={() => { 
+                              dispatch({ type: SET_ROUTE_MAKER_LIST, routemakerlist: [
+                              ...routemakerlist,
+                              {
+                                pendingID: Math.floor(Math.random() * 100000),
+                                stationID: data.busStopID,
+                                stationName: data.stationName,
+                                coordinates: [
+                                  data.coordinates.longitude,
+                                  data.coordinates.latitude
+                                ]
+                              }] }) 
+                              dispatch({ type: SET_SELECTED_MARKER, selectedmarker: null })
+                            }}>{routemakerlist.length == 0? "Create Route" : "Add to Routes"}</motion.button>
+                          ) : null}
+                          <motion.button
+                          animate={{
+                            backgroundColor: data.status? "red" : "lime"
+                          }}
+                          className='btn_infoWindow_existing_bs' onClick={() => { updateBSStatus(data.busStopID, data.status? false : true) }}>{data.status? "Close Station" : "Open Station"}</motion.button>
+                          <button className='btn_infoWindow_existing_bs' onClick={() => { setSelectedDetailsWindow(data.busStopID) }}>View Details</button>
+                        </div>
+                      </div>
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+            ) : null)
+        ))
       })}
       {selectedarea.status? 
         (

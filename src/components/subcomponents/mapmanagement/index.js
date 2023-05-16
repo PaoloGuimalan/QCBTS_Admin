@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import ModeIcon from '@material-ui/icons/Edit'
 import { motion, useVisualElementContext } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER, SET_SELECTED_LIVE_BUS, SET_USER_GUIDE } from '../../../redux/types/index'
+import { SET_ROUTE_PATH, SET_PUBLIC_ROUTE_LIST, SET_ALERT, SET_BUS_STOPS_LIST, SET_CENTER_MAP, SET_MAP_MODE, SET_SELECTED_AREA, SET_SELECTED_AREA_INPUT, SET_SELECTED_DETAILS, SET_SELECTED_MARKER, SET_SAVED_ROUTE_PATH, SET_ROUTE_LIST, SET_ROUTE_MAKER_LIST, SET_ROUTE_STATUS_LOADER, SET_BUS_STOP_INFO, SET_LIVE_BUST_LIST, SET_LIVEMAP_ICON, SET_MAP_OPTIONS, SET_SELECT_LAYOUT, SET_CHECKBOX_FILTER, SET_SELECTED_LIVE_BUS, SET_USER_GUIDE, SET_FOCUS_ON_SELECTED_ROUTE } from '../../../redux/types/index'
 import { savedroutepathState, selectedAreaInputState, selectedAreaState, selectedDetailsState } from '../../../redux/actions'
 import Axios from 'axios'
 import { EXT_URL, URL } from '../../../json/urlconfig'
@@ -45,6 +45,8 @@ function Index() {
   const selectlayout = useSelector(state => state.selectlayout)
   const checkboxfilter = useSelector(state => state.checkboxfilter);
   const userguide = useSelector(state => state.userguide)
+
+  const focusonselectedroute = useSelector(state => state.focusonselectedroute)
   
   const [routename, setroutename] = useState("");
   const [routePrivacy, setroutePrivacy] = useState(false);
@@ -613,6 +615,21 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
               mapmode == "bus_stops"? (<p>Bus Stops</p>) : 
               mapmode == "routes"? (<p>Routes</p>) : ""
             }
+          </div>
+        </motion.div>
+        <motion.div
+        animate={{
+          top: mapmode != "none"? mapmode == "routes"? "65px" : "-100px" : "-100px"
+        }}
+        id='div_map_mode_header_options' className='absolute_divs_map'>
+          <div id='div_iconheader_options_holder'>
+            <p id='p_iconheader_options_label'>Filter Icons</p>
+            <div className='div_cb_container'>
+              <input type='checkbox' id='active_bus_cb' checked={focusonselectedroute}  onChange={(e) => {
+                dispatch({type: SET_FOCUS_ON_SELECTED_ROUTE, focusonselectedroute: !focusonselectedroute})
+              }} />
+              <p className='p_cb_label'>Focus on Selected Route</p>
+            </div>
           </div>
         </motion.div>
         <motion.div
