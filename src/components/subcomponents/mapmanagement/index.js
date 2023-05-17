@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import MainIndex from '../../maincomponents/MainIndex'
 import '../../../styles/subcomponents/Mapmanagement.css'
 import MapIcon from '@material-ui/icons/Map'
@@ -19,6 +19,19 @@ import PrevRouteIcon from '../../../resources/prev_route.png'
 import RouteIcon from '../../../resources/route_icon.png'
 import SelectedBusIcon from '../../../resources/selected_bus_route.png'
 import BusStopSelectionIcon from '../../../resources/Pan_Blue_Circle.png'
+
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
 
 function Index() {
 
@@ -47,6 +60,8 @@ function Index() {
   const userguide = useSelector(state => state.userguide)
 
   const focusonselectedroute = useSelector(state => state.focusonselectedroute)
+
+  const [screenwidth, screenheight] = useWindowSize();
   
   const [routename, setroutename] = useState("");
   const [routePrivacy, setroutePrivacy] = useState(false);
@@ -601,7 +616,7 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
         </div>
         <motion.div
         animate={{
-          top: mapmode != "none"? "10px" : "-100px"
+          top: mapmode != "none"? screenwidth <= 1420? "70px" : "10px" : "-100px"
         }}
         id='div_map_mode_header' className='absolute_divs_map'>
           <div id='div_iconheader_holder'>
@@ -615,11 +630,12 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
               mapmode == "bus_stops"? (<p>Bus Stops</p>) : 
               mapmode == "routes"? (<p>Routes</p>) : ""
             }
+            {/* {screenheight} {screenwidth} */}
           </div>
         </motion.div>
         <motion.div
         animate={{
-          top: mapmode != "none"? mapmode == "routes"? "65px" : "-100px" : "-100px"
+          top: mapmode != "none"? mapmode == "routes"? screenwidth <= 1420? "125px" : "65px" : "-100px" : "-100px"
         }}
         id='div_map_mode_header_options' className='absolute_divs_map'>
           <div id='div_iconheader_options_holder'>

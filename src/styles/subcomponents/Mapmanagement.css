@@ -1410,3 +1410,13 @@
   padding: 0px 10px 0px 10px;
   gap: 10px;
 }
+
+@media screen and (max-width: 1420px) {
+  #div_map_mode_header{
+    margin-left: 240px;
+  }
+  
+  #div_map_mode_header_options{
+    margin-left: 240px;
+  }
+}
