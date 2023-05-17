@@ -605,7 +605,11 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
 
   return (
     <div id='div_submap'>
-        <div id='div_map_header' className='absolute_divs_map'>
+        <motion.div
+        animate={{
+          maxWidth: screenwidth <= 1420? "410px" : "350px"
+        }}
+        id='div_map_header' className='absolute_divs_map'>
           <div id='div_iconheader_holder'>
             <MapIcon />
             <p>Welcome | Map Management</p>
@@ -613,7 +617,7 @@ const updateBusStopInformation = (busStopIDProp, stationNameProp, stationAddress
           <div id='info_div'>
             <button id='btn_info' onClick={() => { setmenutrigger(!menutrigger) }}><MenuIcon /></button>
           </div>
-        </div>
+        </motion.div>
         <motion.div
         animate={{
           top: mapmode != "none"? screenwidth <= 1420? "70px" : "10px" : "-100px"
