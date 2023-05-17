@@ -14,7 +14,7 @@ import RegIcon from '@material-ui/icons/SignalCellular4Bar'
 import UpIcon from '@material-ui/icons/TrendingUp'
 import DownIcon from '@material-ui/icons/TrendingDown'
 import { EXT_URL, URL } from '../../../json/urlconfig'
-import { SET_LIVE_BUST_LIST } from '../../../redux/types'
+import { SET_LIVE_BUST_LIST, SET_SYSTEM_ACTIVITIES_LIST } from '../../../redux/types'
 import Axios from 'axios'
 import {
   Chart as ChartJS,
@@ -44,7 +44,8 @@ ChartJS.register(
 function Index() {
 
   const authdetails = useSelector(state => state.authdetails);
-  const livebuslist = useSelector(state => state.livebuslist)
+  const livebuslist = useSelector(state => state.livebuslist);
+  const systemactivitieslist = useSelector(state => state.systemactivitieslist);
 
   const [date, setdate] = useState("");
   const [time, settime] = useState("");
@@ -57,6 +58,57 @@ function Index() {
   })
 
   const [dataPoints, setdataPoints] = useState(
+    [
+      { _id: 1, label: "Jan",  count: 0  },
+      { _id: 2, label: "Feb", count: 0  },
+      { _id: 3, label: "Mar", count: 0  },
+      { _id: 4, label: "Apr",  count: 0  },
+      { _id: 5, label: "May",  count: 0  },
+      { _id: 6, label: "Jun",  count: 0  },
+      { _id: 7, label: "Jul",  count: 0  },
+      { _id: 8, label: "Aug",  count: 0  },
+      { _id: 9, label: "Sep",  count: 0  },
+      { _id: 10, label: "Oct",  count: 0  },
+      { _id: 11, label: "Nov",  count: 0  },
+      { _id: 12, label: "Dec",  count: 0  }
+    ]
+  )
+
+  const [commuterDataPoints, setcommuterDataPoints] = useState(
+    [
+      { _id: 1, label: "Jan",  count: 0  },
+      { _id: 2, label: "Feb", count: 0  },
+      { _id: 3, label: "Mar", count: 0  },
+      { _id: 4, label: "Apr",  count: 0  },
+      { _id: 5, label: "May",  count: 0  },
+      { _id: 6, label: "Jun",  count: 0  },
+      { _id: 7, label: "Jul",  count: 0  },
+      { _id: 8, label: "Aug",  count: 0  },
+      { _id: 9, label: "Sep",  count: 0  },
+      { _id: 10, label: "Oct",  count: 0  },
+      { _id: 11, label: "Nov",  count: 0  },
+      { _id: 12, label: "Dec",  count: 0  }
+    ]
+  )
+
+  const [systemadminDataPoints, setsystemadminDataPoints] = useState(
+    [
+      { _id: 1, label: "Jan",  count: 0  },
+      { _id: 2, label: "Feb", count: 0  },
+      { _id: 3, label: "Mar", count: 0  },
+      { _id: 4, label: "Apr",  count: 0  },
+      { _id: 5, label: "May",  count: 0  },
+      { _id: 6, label: "Jun",  count: 0  },
+      { _id: 7, label: "Jul",  count: 0  },
+      { _id: 8, label: "Aug",  count: 0  },
+      { _id: 9, label: "Sep",  count: 0  },
+      { _id: 10, label: "Oct",  count: 0  },
+      { _id: 11, label: "Nov",  count: 0  },
+      { _id: 12, label: "Dec",  count: 0  }
+    ]
+  )
+
+  const [driverDataPoints, setdriverDataPoints] = useState(
     [
       { _id: 1, label: "Jan",  count: 0  },
       { _id: 2, label: "Feb", count: 0  },
@@ -92,6 +144,7 @@ function Index() {
   // }
 
   const options = {
+    maintainAspectRatio: false,
     responsive: true,
     plugins: {
       legend: {
@@ -118,6 +171,27 @@ function Index() {
     ],
   };
 
+  const datasysact = {
+    labels,
+    datasets: [
+      {
+        label: 'Commuters',
+        data: commuterDataPoints.map((dt, i) => dt.count),
+        backgroundColor: '#0B1D78',
+      },
+      {
+        label: 'System Admins',
+        data: systemadminDataPoints.map((dt, i) => dt.count),
+        backgroundColor: '#008AC5',
+      },
+      {
+        label: 'Drivers',
+        data: driverDataPoints.map((dt, i) => dt.count),
+        backgroundColor: '#1FE074',
+      }
+    ],
+  };
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -127,6 +201,7 @@ function Index() {
     // initBusLiveNumber()
     initCountAppUsers()
     initMonthlyActiveStatistics()
+    initSystemActivities()
 
     const interval = setInterval(() => {
       setdate(`${dateGetter()}`)
@@ -135,6 +210,7 @@ function Index() {
 
     return () => {
       clearInterval(interval);
+      dispatch({type: SET_SYSTEM_ACTIVITIES_LIST, systemactivitieslist: []})
     }
   },[])
 
@@ -250,6 +326,72 @@ function Index() {
           }
         })
         setdataPoints(arrayFinal)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const initSystemActivities = () => {
+    Axios.get(`${URL}/admin/getSystemActivitiesStatistics`,{
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        // dispatch({type: SET_SYSTEM_ACTIVITIES_LIST, systemactivitieslist: response.data.result})
+        // console.log(response.data.result)
+        var arrayFinalcommuter = []
+        labels.map((lb, i) => {
+          if(response.data.result.commuters.some(item => item.label === lb)){
+            // console.log(response.data.result.find(item => item.label === lb))
+            arrayFinalcommuter.push(response.data.result.commuters.find(item => item.label === lb))
+          }
+          else{
+            // console.log(lb, i + 1)
+            arrayFinalcommuter.push({
+              _id: i + 1,
+              label: lb,
+              count: 0
+            })
+          }
+        })
+        setcommuterDataPoints(arrayFinalcommuter)
+
+        var arrayFinalsystemadmin = []
+        labels.map((lb, i) => {
+          if(response.data.result.systemadmin.some(item => item.label === lb)){
+            // console.log(response.data.result.systemadmin.find(item => item.label === lb))
+            arrayFinalsystemadmin.push(response.data.result.systemadmin.find(item => item.label === lb))
+          }
+          else{
+            // console.log(lb, i + 1)
+            arrayFinalsystemadmin.push({
+              _id: i + 1,
+              label: lb,
+              count: 0
+            })
+          }
+        })
+        setsystemadminDataPoints(arrayFinalsystemadmin)
+
+        var arrayFinaldrivers = []
+        labels.map((lb, i) => {
+          if(response.data.result.drivers.some(item => item.label === lb)){
+            // console.log(response.data.result.drivers.find(item => item.label === lb))
+            arrayFinaldrivers.push(response.data.result.drivers.find(item => item.label === lb))
+          }
+          else{
+            // console.log(lb, i + 1)
+            arrayFinaldrivers.push({
+              _id: i + 1,
+              label: lb,
+              count: 0
+            })
+          }
+        })
+        // console.log(arrayFinaldrivers)
+        setdriverDataPoints(arrayFinaldrivers)
       }
     }).catch((err) => {
       console.log(err)
@@ -407,6 +549,21 @@ function Index() {
               </div>
             </div>
           </div>
+          <div className='div_advanced_analytics_data_system_activities'>
+                <div id='div_label_analytics_data'>
+                  <p>System Activities</p>
+                </div>
+                <div id='div_recently_active_container'>
+                  <select id='select_date_range_system_activities'>
+                    <option value="all">All</option>
+                  </select>
+                  <div id='div_recently_active_graph'>
+                    <Bar options={options} data={datasysact} style={{height: "100%"}} />
+                    {/* <CanvasJSChart options={options} /> */}
+                    {/* <p>Graph Area</p> */}
+                  </div>
+                </div>
+              </div>
         </div>
       </div>
     </div>
